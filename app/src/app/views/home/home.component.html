@@ -1,0 +1,54 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #sidenav
+    class="sidenav"
+    [mode]="isScreenSmall ? 'over' : 'side'"
+    [opened]="!isScreenSmall"
+  >
+    <div class="sidenav-header">
+      <h1 class="logo">GenDB</h1>
+    </div>
+    <mat-nav-list class="nav-list">
+      <a
+        mat-list-item
+        class="nav-list-item"
+        routerLink="/dashboard"
+        routerLinkActive="active-link"
+      >
+        Dashboard
+      </a>
+      <a
+        mat-list-item
+        class="nav-list-item"
+        routerLink="/settings"
+        routerLinkActive="active-link"
+      >
+        Settings
+      </a>
+      <a
+        mat-list-item
+        class="nav-list-item"
+        routerLink="/profile"
+        routerLinkActive="active-link"
+      >
+        Profile
+      </a>
+    </mat-nav-list>
+    <div class="sidenav-footer">
+      <button (click)="auth.logout()">Logout</button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <button
+      mat-icon-button
+      class="menu-button"
+      *ngIf="isScreenSmall"
+      (click)="sidenav.toggle()"
+      aria-label="Toggle menu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

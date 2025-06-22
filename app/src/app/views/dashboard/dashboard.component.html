@@ -1,0 +1,36 @@
+<div class="dashboard-container">
+  <mat-card class="card">
+    <mat-card-header class="card-header">
+      <div class="card-header-text">
+        <mat-card-title>Welcome Back!</mat-card-title>
+        <mat-card-subtitle
+          >Here's an overview of your account,
+          <span class="user-email">{{ userEmail }}</span></mat-card-subtitle
+        >
+      </div>
+    </mat-card-header>
+    <mat-card-content> </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Recent Activity</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>No recent activity to display.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-value">4</span>
+        <span class="stat-label">Databases</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">12</span>
+        <span class="stat-label">Tables</span>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,111 @@
+@use "@angular/material" as mat;
+
+
+:root {
+  --primary: #f0f2f5;
+  --secondary: #ffffff;
+  --tertiary: #00162e;
+  --quaternary: #000000;
+  --quinary: #000000;
+  --grayish-blue: #dce1e6;
+  --orange-red: #ff4500;
+  --light-gray: #f0f2f5;
+  --french-violet: #800080;
+  --light-blue: #007bff;
+  --dark-blue: #00162e;
+  --bright-blue: oklch(51.01% 0.274 263.83);
+
+  --background-dark: #0d1117;
+  --card-dark: #161b22;
+  --text-primary-dark: #c9d1d9;
+  --text-secondary-dark: #8b949e;
+  --border-dark: #30363d;
+  --accent-dark: #58a6ff;
+}
+
+html {
+  color-scheme:  dark;
+  @include mat.theme((
+    color: mat.$azure-palette,
+    density: 0,
+    
+  ));
+}
+:host {
+  --primary: #f0f2f5;
+  --bright-blue: oklch(51.01% 0.274 263.83);
+  --electric-violet: oklch(53.18% 0.28 296.97);
+  --french-violet: oklch(47.66% 0.246 305.88);
+  --vivid-pink: oklch(69.02% 0.277 332.77);
+  --hot-red: oklch(61.42% 0.238 15.34);
+  --orange-red: oklch(63.32% 0.24 31.68);
+
+  --gray-900: oklch(19.37% 0.006 300.98);
+  --gray-700: oklch(36.98% 0.014 302.71);
+  --gray-400: oklch(70.9% 0.015 304.04);
+
+  --red-to-pink-to-purple-vertical-gradient: linear-gradient(
+    180deg,
+    var(--orange-red) 0%,
+    var(--vivid-pink) 50%,
+    var(--electric-violet) 100%
+  );
+
+  --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
+    90deg,
+    var(--orange-red) 0%,
+    var(--vivid-pink) 50%,
+    var(--electric-violet) 100%
+  );
+
+  --pill-accent: var(--bright-blue);
+
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  color: var(--gray-400);
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.125rem;
+  margin: 0;
+  font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+}
+
+input {
+  border: 1px solid var(--gray-400);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--secondary);
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  color: var(--orange-red);
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--primary);
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+a {
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  text-decoration: none;
+  color: var(--mat-sys-on-surface);
+}
+p {
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  margin: 0;
+  padding: 0;
+
+}
