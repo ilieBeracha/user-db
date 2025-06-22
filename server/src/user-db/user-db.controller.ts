@@ -1,12 +1,18 @@
-import { Controller, Post, Body, UseGuards, Get } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Get,
+  Req,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from "@nestjs/common";
 import { UserDbService } from "./user-db.service";
 import { CreateUserDbDto } from "./dto/create-user-db.dto";
-import {
-  ApiOperation,
-  ApiBody,
-  ApiResponse,
-  ApiBearerAuth,
-} from "@nestjs/swagger";
+import { ApiOperation, ApiBody, ApiResponse } from "@nestjs/swagger";
+import { User } from "src/user/entities/user.entity";
+import { AuthGuard } from "@nestjs/passport";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Controller("user-db")
@@ -17,7 +23,9 @@ export class UserDbController {
   @ApiOperation({ summary: "Connect to user database" })
   @ApiBody({ type: CreateUserDbDto })
   @ApiResponse({ status: 200, description: "Connected to user database" })
-  async connect(@Body() dto: CreateUserDbDto) {
+  @UseGuards(JwtAuthGuard)
+  async connect(@Body() dto: CreateUserDbDto, @Req() req: any) {
+    const user = req?.user as User;
     const ds = await this.dbService.connectToUserDb(dto);
 
     return {
@@ -27,14 +35,36 @@ export class UserDbController {
       port: ds.port,
       user: ds.user,
       ssl: ds.ssl,
+      user_id: user.id,
     };
   }
 
   @Get("get-tables")
   @ApiOperation({ summary: "Get all tables from user database" })
   @ApiResponse({ status: 200, description: "All tables from user database" })
-  async getTables(@Body() dto: CreateUserDbDto) {
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getTables(@Body() dto: CreateUserDbDto, @Req() req: any) {
+    const user = req?.user as User;
     const tables = await this.dbService.getTables(dto);
-    return tables;
+
+    return {
+      tables: tables,
+      count: tables.length,
+    };
+  }
+
+  @Get("get-all-databases")
+  @ApiOperation({ summary: "Get all databases from user database" })
+  @ApiResponse({ status: 200, description: "All databases from user database" })
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getAllDatabases(@Body() dto: CreateUserDbDto) {
+    const databases = await this.dbService.getAllDatabasesInServer(dto);
+
+    return {
+      databases: databases,
+      count: databases.length,
+    };
   }
 }

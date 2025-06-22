@@ -29,4 +29,8 @@ export class CreateUserDbDto {
   @IsBoolean()
   @IsOptional()
   ssl?: boolean = false;
+
+  @IsString()
+  @IsOptional()
+  user_id?: string;
 }

@@ -4,6 +4,8 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { Auth } from './core/auth';
+import { UserDb } from './core/user-db';
+import { DbUserService } from '../services/dbUserService';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,5 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     Auth,
+    UserDb,
+    DbUserService,
   ],
 };

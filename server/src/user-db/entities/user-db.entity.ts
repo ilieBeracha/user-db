@@ -22,4 +22,7 @@ export class UserDb {
 
   @Column()
   ssl: boolean;
+
+  @Column({ nullable: true })
+  user_id: string;
 }

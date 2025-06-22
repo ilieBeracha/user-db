@@ -68,6 +68,24 @@ export class UserDbService {
     };
   }
 
+  async getAllDatabasesInServer(dto: CreateUserDbDto) {
+    await this.initializeConnection(dto);
+
+    const databases = await this.connection
+      .createQueryRunner()
+      .query(`SELECT datname FROM pg_database`);
+
+    return databases;
+  }
+
+  async getDatabasesInServer(dto: CreateUserDbDto) {
+    await this.initializeConnection(dto);
+
+    const databases = await this.connection
+      .createQueryRunner()
+      .query(`SELECT datname FROM pg_database`);
+  }
+
   async getTables(dto: CreateUserDbDto) {
     await this.initializeConnection(dto);
 

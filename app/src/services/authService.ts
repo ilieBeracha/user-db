@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../types/user';
 import { jwtDecode } from 'jwt-decode';
+import { API_URL } from '../app/cosnts';
 
 interface AuthResponse {
   user: User;
@@ -15,11 +16,10 @@ interface AuthResponse {
 })
 export class AuthService {
   protected router = inject(Router);
-  protected BASE_URL = 'http://localhost:8000';
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
-    return this.http.post<AuthResponse>(`${this.BASE_URL}/auth/login`, {
+    return this.http.post<AuthResponse>(`${API_URL}/auth/login`, {
       email,
       password,
     });

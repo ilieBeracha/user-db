@@ -66,6 +66,10 @@ export class Auth {
     this.router.navigate(['/login'], { replaceUrl: true });
   }
 
+  getAccessToken() {
+    return this.accessToken();
+  }
+
   getUser() {
     return this.user();
   }

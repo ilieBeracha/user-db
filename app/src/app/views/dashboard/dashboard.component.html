@@ -7,9 +7,11 @@
           >Here's an overview of your account,
           <span class="user-email">{{ userEmail }}</span></mat-card-subtitle
         >
+        <mat-card-content>
+          <button matButton (click)="openDialog()">Open dialog</button>
+        </mat-card-content>
       </div>
     </mat-card-header>
-    <mat-card-content> </mat-card-content>
   </mat-card>
 
   <mat-card class="card">
