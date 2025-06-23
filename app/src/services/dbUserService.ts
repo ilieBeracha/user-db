@@ -17,13 +17,19 @@ export interface connectUserDbDto {
 })
 export class DbUserService {
   private auth = inject(Auth);
-  private accessToken = this.auth.getAccessToken();
   constructor(private readonly http: HttpClient) {}
+
+  getConnection() {
+    return this.http.get<connectUserDbDto>(
+      `${API_URL}/user-db/connection`,
+      this.getHeaders()
+    );
+  }
 
   private getHeaders() {
     return {
       headers: {
-        Authorization: `Bearer ${this.accessToken}`,
+        Authorization: `Bearer ${this.auth.getAccessToken()}`,
       },
     };
   }

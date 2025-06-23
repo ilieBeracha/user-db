@@ -1,7 +1,8 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { DbUserService } from '../../services/dbUserService';
 import { tap } from 'rxjs';
 import { connectUserDbDto } from '../../services/dbUserService';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,16 @@ import { connectUserDbDto } from '../../services/dbUserService';
 export class UserDb {
   private dbUserService = inject(DbUserService);
   private userDbConnection = signal<any>(null);
+  private router = inject(Router);
+
+  getConnection() {
+    return this.dbUserService.getConnection().pipe(
+      tap((response) => {
+        this.userDbConnection.set(response);
+        return response;
+      })
+    );
+  }
 
   connect(dto: connectUserDbDto) {
     return this.dbUserService.connect(dto).pipe(
@@ -18,5 +29,9 @@ export class UserDb {
         return response;
       })
     );
+  }
+
+  getConnectionValue() {
+    return computed(() => !!this.userDbConnection());
   }
 }

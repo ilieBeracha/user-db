@@ -12,12 +12,25 @@ import { UserDbService } from "./user-db.service";
 import { CreateUserDbDto } from "./dto/create-user-db.dto";
 import { ApiOperation, ApiBody, ApiResponse } from "@nestjs/swagger";
 import { User } from "src/user/entities/user.entity";
-import { AuthGuard } from "@nestjs/passport";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Controller("user-db")
 export class UserDbController {
   constructor(private readonly dbService: UserDbService) {}
+
+  @Get("connection")
+  @ApiOperation({ summary: "Get user database connection" })
+  @ApiResponse({
+    status: 200,
+    description: "Returns true if connected, false otherwise",
+  })
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getConnection(@Req() req: any) {
+    const user = req?.user as User;
+    const connection = await this.dbService.getUserDb(user.id);
+    return connection;
+  }
 
   @Post("connect")
   @ApiOperation({ summary: "Connect to user database" })
@@ -46,7 +59,7 @@ export class UserDbController {
   @UseInterceptors(ClassSerializerInterceptor)
   async getTables(@Body() dto: CreateUserDbDto, @Req() req: any) {
     const user = req?.user as User;
-    const tables = await this.dbService.getTables(dto);
+    const tables = await this.dbService.getTables(user.id);
 
     return {
       tables: tables,
@@ -59,8 +72,9 @@ export class UserDbController {
   @ApiResponse({ status: 200, description: "All databases from user database" })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async getAllDatabases(@Body() dto: CreateUserDbDto) {
-    const databases = await this.dbService.getAllDatabasesInServer(dto);
+  async getAllDatabases(@Req() req: any) {
+    const user = req?.user as User;
+    const databases = await this.dbService.getAllDatabasesInServer(user.id);
 
     return {
       databases: databases,

@@ -1,23 +1,21 @@
 // src/app/auth-guard.guard.ts
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Auth } from './core/auth';
+import { Auth } from '../core/auth';
 
 export const AuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const auth = inject(Auth);
 
   if (auth.isAuthenticated()) {
-    // If trying to access login page while authenticated, redirect to home
     if (state.url.includes('/auth')) {
-      router.navigate(['/dashboard']);
+      router.navigate(['/dashboard'], { replaceUrl: true });
       return false;
     }
-    return true; // Authorized
+    return true;
   } else {
-    // If not authenticated and not on the login page, redirect to login
     if (!state.url.includes('/auth')) {
-      router.navigate(['/auth']);
+      router.navigate(['/auth'], { replaceUrl: true });
       return false;
     }
     return true; // Allow access to login page

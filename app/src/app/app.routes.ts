@@ -1,6 +1,6 @@
-// src/app/routes.ts
 import { Routes } from '@angular/router';
-import { AuthGuard } from './auth-guard.guard';
+import { AuthGuard } from './guards/auth-guard.guard';
+import { DbConnectionGuard } from './guards/db-connection.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +22,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
+        canActivate: [DbConnectionGuard],
         loadComponent: () =>
           import('./views/dashboard/dashboard.component').then(
             (m) => m.DashboardComponent
@@ -29,6 +30,14 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'init-connection',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./views/init-connection/init-connection.component').then(
+        (m) => m.InitConnectionComponent
+      ),
+  },
 
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: 'auth' },
 ];

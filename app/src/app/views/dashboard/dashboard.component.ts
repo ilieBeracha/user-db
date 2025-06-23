@@ -5,7 +5,7 @@ import { Auth } from '../../core/auth';
 import { User } from '../../../types/user';
 import { UserDb } from '../../core/user-db';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { UserDbDialogComponentComponent } from '../../user-db-dialog-component/user-db-dialog-component.component';
+import { UserDbDialogComponentComponent } from '../../components/user-db-dialog-component/user-db-dialog-component.component';
 
 @Component({
   selector: 'app-dashboard',

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDbDto } from "./dto/create-user-db.dto";
 import { InjectRepository } from "@nestjs/typeorm";
-import { createConnection, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { UserDb } from "./entities/user-db.entity";
 import * as bcrypt from "bcrypt";
 import { DataSource } from "typeorm";
@@ -14,6 +14,16 @@ export class UserDbService {
   ) {}
 
   private connection: DataSource;
+
+  async getUserDb(user_id: string) {
+    const userDb = await this.userDbRepo.findOne({ where: { user_id } });
+    return userDb;
+  }
+
+  private async getUserDbConnection(user_id: string) {
+    const userDb = await this.getUserDb(user_id);
+    await this.initializeConnection(userDb as CreateUserDbDto);
+  }
 
   async initializeConnection(dto: CreateUserDbDto) {
     this.connection = new DataSource({
@@ -68,8 +78,8 @@ export class UserDbService {
     };
   }
 
-  async getAllDatabasesInServer(dto: CreateUserDbDto) {
-    await this.initializeConnection(dto);
+  async getAllDatabasesInServer(user_id: string) {
+    await this.getUserDbConnection(user_id);
 
     const databases = await this.connection
       .createQueryRunner()
@@ -78,16 +88,18 @@ export class UserDbService {
     return databases;
   }
 
-  async getDatabasesInServer(dto: CreateUserDbDto) {
-    await this.initializeConnection(dto);
+  async getDatabasesInServer(user_id: string) {
+    await this.getUserDbConnection(user_id);
 
     const databases = await this.connection
       .createQueryRunner()
       .query(`SELECT datname FROM pg_database`);
+
+    return databases;
   }
 
-  async getTables(dto: CreateUserDbDto) {
-    await this.initializeConnection(dto);
+  async getTables(user_id: string) {
+    await this.getUserDbConnection(user_id);
 
     const tables = await this.connection
       .createQueryRunner()
