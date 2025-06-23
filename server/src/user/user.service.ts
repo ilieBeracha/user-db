@@ -59,7 +59,7 @@ export class UserService {
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ["id", "email", "first_name", "last_name"],
+      select: ["id", "email", "password", "first_name", "last_name"],
     });
     return user;
   }
@@ -67,7 +67,7 @@ export class UserService {
   async findOne(id: string) {
     return this.userRepository.findOne({
       where: { id },
-      select: ["id", "email", "first_name", "last_name"],
+      select: ["id", "email", "password", "first_name", "last_name"],
     });
   }
 
