@@ -38,7 +38,7 @@ export class UserDbService {
     await this.connection.initialize();
   }
 
-  async connectToUserDb(dto: CreateUserDbDto) {
+  async connectToUserDb(dto: CreateUserDbDto, user_id: string) {
     const testConnection = new DataSource({
       type: "postgres",
       host: dto.host,
@@ -64,6 +64,7 @@ export class UserDbService {
       password: hashedPassword,
       database: dto.database,
       ssl: dto.ssl,
+      user_id: user_id,
     });
 
     const result = await this.userDbRepo.save(saved);

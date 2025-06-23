@@ -39,7 +39,7 @@ export class UserDbController {
   @UseGuards(JwtAuthGuard)
   async connect(@Body() dto: CreateUserDbDto, @Req() req: any) {
     const user = req?.user as User;
-    const ds = await this.dbService.connectToUserDb(dto);
+    const ds = await this.dbService.connectToUserDb(dto, user.id);
 
     return {
       connected: true,

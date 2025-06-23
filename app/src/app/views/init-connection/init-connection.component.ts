@@ -1,16 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDb } from '../../core/user-db';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-init-connection',
-  imports: [ReactiveFormsModule],
+  imports: [FormsModule],
   templateUrl: './init-connection.component.html',
   styleUrl: './init-connection.component.css',
 })
@@ -20,14 +16,12 @@ export class InitConnectionComponent implements OnInit {
   protected fb = inject(FormBuilder);
   protected router = inject(Router);
 
-  protected form: FormGroup = this.fb.group({
-    host: ['', Validators.required],
-    port: [5432, Validators.required],
-    user: ['', Validators.required],
-    password: ['', Validators.required],
-    database: ['', Validators.required],
-    ssl: [false],
-  });
+  host = '';
+  port = 5432;
+  user = '';
+  password = '';
+  database = '';
+  ssl = false;
 
   ngOnInit(): void {
     // Check if connection already exists without triggering navigation
@@ -39,12 +33,21 @@ export class InitConnectionComponent implements OnInit {
   }
 
   protected onSubmit() {
-    if (this.form.valid) {
-      this.userDb.connect(this.form.value).subscribe((response) => {
-        if (response) {
-          this.router.navigate(['/dashboard'], { replaceUrl: true });
-        }
-      });
+    if (this.host && this.port && this.user && this.password && this.database) {
+      this.userDb
+        .connect({
+          host: this.host,
+          port: this.port,
+          user: this.user,
+          password: this.password,
+          database: this.database,
+          ssl: this.ssl,
+        })
+        .subscribe((response) => {
+          if (response) {
+            this.router.navigate(['/dashboard'], { replaceUrl: true });
+          }
+        });
     }
   }
 }

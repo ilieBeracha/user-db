@@ -25,7 +25,6 @@ export class UserDb {
     return this.dbUserService.connect(dto).pipe(
       tap((response) => {
         this.userDbConnection.set(response);
-        console.log(this.userDbConnection());
         return response;
       })
     );

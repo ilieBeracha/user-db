@@ -50,6 +50,7 @@
             id="host"
             name="host"
             type="text"
+            [(ngModel)]="host"
             required
             class="mt-2 w-full rounded-md border border-zinc-300 px-4 py-2 text-base text-zinc-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -64,6 +65,7 @@
             name="port"
             type="number"
             value="5432"
+            [(ngModel)]="port"
             required
             class="mt-2 w-full rounded-md border border-zinc-300 px-4 py-2 text-base text-zinc-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -77,6 +79,7 @@
             id="user"
             name="user"
             type="text"
+            [(ngModel)]="user"
             required
             class="mt-2 w-full rounded-md border border-zinc-300 px-4 py-2 text-base text-zinc-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -90,6 +93,7 @@
             id="password"
             name="password"
             type="password"
+            [(ngModel)]="password"
             required
             class="mt-2 w-full rounded-md border border-zinc-300 px-4 py-2 text-base text-zinc-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -103,6 +107,7 @@
             id="database"
             name="database"
             type="text"
+            [(ngModel)]="database"
             required
             class="mt-2 w-full rounded-md border border-zinc-300 px-4 py-2 text-base text-zinc-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -110,6 +115,7 @@
 
         <div class="md:col-span-2 flex items-center gap-2">
           <input
+            [(ngModel)]="ssl"
             id="ssl"
             name="ssl"
             type="checkbox"
@@ -120,7 +126,8 @@
 
         <div class="md:col-span-2">
           <button
-            type="submit"
+            (click)="onSubmit()"
+            type="button"
             class="w-full bg-blue-600 text-white text-lg font-semibold py-3 rounded-md hover:bg-blue-700 transition"
           >
             Connect
