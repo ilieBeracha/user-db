@@ -10,8 +10,7 @@ import { Router } from '@angular/router';
 export class UserDb {
   private dbUserService = inject(DbUserService);
   private userDbConnection = signal<any>(null);
-  private router = inject(Router);
-
+  private tablesInDatabase = signal<any[]>([]);
   getConnection() {
     return this.dbUserService.getConnection().pipe(
       tap((response) => {
@@ -32,5 +31,24 @@ export class UserDb {
 
   getConnectionValue() {
     return computed(() => !!this.userDbConnection());
+  }
+
+  getDatabasesInServer() {
+    return this.dbUserService.getDatabasesInServer().pipe(
+      tap((response) => {
+        console.log(response.databases);
+        return response;
+      })
+    );
+  }
+
+  getTablesInDatabase(database: string) {
+    return this.dbUserService.getTablesInDatabase(database).pipe(
+      tap((response) => {
+        console.log(response.tables);
+        this.tablesInDatabase.set(response.tables);
+        return response;
+      })
+    );
   }
 }

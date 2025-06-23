@@ -7,6 +7,7 @@ import {
   Req,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from "@nestjs/common";
 import { UserDbService } from "./user-db.service";
 import { CreateUserDbDto } from "./dto/create-user-db.dto";
@@ -52,14 +53,17 @@ export class UserDbController {
     };
   }
 
-  @Get("get-tables")
+  @Get("tables")
   @ApiOperation({ summary: "Get all tables from user database" })
   @ApiResponse({ status: 200, description: "All tables from user database" })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async getTables(@Body() dto: CreateUserDbDto, @Req() req: any) {
+  async getTables(@Query() query: any, @Req() req: any) {
     const user = req?.user as User;
-    const tables = await this.dbService.getTables(user.id);
+    const tables = await this.dbService.getTablesInDatabase(
+      user.id,
+      query.database as string
+    );
 
     return {
       tables: tables,
@@ -67,7 +71,7 @@ export class UserDbController {
     };
   }
 
-  @Get("get-all-databases")
+  @Get("server-databases")
   @ApiOperation({ summary: "Get all databases from user database" })
   @ApiResponse({ status: 200, description: "All databases from user database" })
   @UseGuards(JwtAuthGuard)

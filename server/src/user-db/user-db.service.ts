@@ -5,6 +5,9 @@ import { Repository } from "typeorm";
 import { UserDb } from "./entities/user-db.entity";
 import * as bcrypt from "bcrypt";
 import { DataSource } from "typeorm";
+import { GET_ALL_DATABASES_IN_SERVER_QUERY } from "./queries/server-level";
+import { GET_TABLES_QUERY } from "./queries/tables-level";
+import { GET_COLUMNS_QUERY } from "./queries/tables-level";
 
 @Injectable()
 export class UserDbService {
@@ -20,9 +23,16 @@ export class UserDbService {
     return userDb;
   }
 
-  private async getUserDbConnection(user_id: string) {
+  private async getUserDbConnection(user_id: string, overrideDb?: string) {
     const userDb = await this.getUserDb(user_id);
-    await this.initializeConnection(userDb as CreateUserDbDto);
+    const dbConfig = { ...userDb } as CreateUserDbDto;
+
+    if (overrideDb) {
+      dbConfig.database = overrideDb; // force the database override
+    }
+
+    await this.initializeConnection(dbConfig);
+    return this.connection;
   }
 
   async initializeConnection(dto: CreateUserDbDto) {
@@ -84,31 +94,40 @@ export class UserDbService {
 
     const databases = await this.connection
       .createQueryRunner()
-      .query(`SELECT datname FROM pg_database`);
+      .query(GET_ALL_DATABASES_IN_SERVER_QUERY);
 
     return databases;
   }
 
-  async getDatabasesInServer(user_id: string) {
-    await this.getUserDbConnection(user_id);
+  async getTablesInDatabase(user_id: string, database: string) {
+    await this.getUserDbConnection(user_id, database);
 
-    const databases = await this.connection
-      .createQueryRunner()
-      .query(`SELECT datname FROM pg_database`);
+    const tables: { table_schema: string; table_name: string }[] =
+      await this.connection.createQueryRunner().query(GET_TABLES_QUERY);
 
-    return databases;
-  }
+    const columns: {
+      table_schema: string;
+      table_name: string;
+      column_name: string;
+      data_type: string;
+    }[] = await this.connection.createQueryRunner().query(GET_COLUMNS_QUERY);
 
-  async getTables(user_id: string) {
-    await this.getUserDbConnection(user_id);
-
-    const tables = await this.connection
-      .createQueryRunner()
-      .query(
-        `SELECT table_name FROM information_schema.tables WHERE table_schema = $1`,
-        ["public"]
+    const tableMap = tables.map((table) => {
+      const tableCols = columns.filter(
+        (col) =>
+          col.table_schema === table.table_schema &&
+          col.table_name === table.table_name
       );
 
-    return tables;
+      return {
+        ...table,
+        columns: tableCols.map(({ column_name, data_type }) => ({
+          name: column_name,
+          type: data_type,
+        })),
+      };
+    });
+
+    return tableMap;
   }
 }

@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { Auth } from '../../core/auth';
+import { UserDb } from '../../core/user-db';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,7 @@ import { Auth } from '../../core/auth';
 })
 export class HomeComponent {
   protected auth = inject(Auth);
-
+  protected userDb = inject(UserDb);
   isScreenSmall = false;
 
   mode = new FormControl<MatDrawerMode>('side');
@@ -43,5 +44,20 @@ export class HomeComponent {
       .subscribe((matches) => {
         this.isScreenSmall = matches;
       });
+
+    this.getDatabasesInServer();
+    this.getTablesInDatabase('cms-editor');
+  }
+
+  protected getDatabasesInServer() {
+    this.userDb.getDatabasesInServer().subscribe((databases) => {
+      console.log(databases);
+    });
+  }
+
+  protected getTablesInDatabase(database: string) {
+    this.userDb.getTablesInDatabase(database).subscribe((tables) => {
+      console.log(tables);
+    });
   }
 }

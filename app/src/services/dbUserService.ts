@@ -43,9 +43,17 @@ export class DbUserService {
     return response;
   }
 
-  getDatabases() {
+  getTablesInDatabase(database: string) {
     const response = this.http.get<any>(
-      `${API_URL}/user-db/databases`,
+      `${API_URL}/user-db/tables?database=${database}`,
+      this.getHeaders()
+    );
+    return response;
+  }
+
+  getDatabasesInServer() {
+    const response = this.http.get<any>(
+      `${API_URL}/user-db/server-databases`,
       this.getHeaders()
     );
     return response;
