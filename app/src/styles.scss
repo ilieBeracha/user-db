@@ -128,15 +128,6 @@ h1 {
     "Segoe UI Symbol";
 }
 
-input {
-  border: 1px solid var(--gray-400);
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--secondary);
-  font-size: clamp(0.6rem, 1vw, 0.75rem);
-  color: var(--orange-red);
-}
-
 html,
 body {
   height: 100%;

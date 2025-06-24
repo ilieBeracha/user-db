@@ -6,7 +6,13 @@ import { UserDb } from "./entities/user-db.entity";
 import * as bcrypt from "bcrypt";
 import { DataSource } from "typeorm";
 import { GET_ALL_DATABASES_IN_SERVER_QUERY } from "./queries/server-level";
-import { GET_TABLES_QUERY } from "./queries/tables-level";
+import {
+  GET_TABLES_QUERY,
+  DEAD_TUPLES_TOP_1,
+  LARGEST_DATABASE_TOP_1,
+  CONNECTION_DB_TOP_1,
+  GET_RECENT_ACTIVITY_QUERY,
+} from "./queries/tables-level";
 import { GET_COLUMNS_QUERY } from "./queries/tables-level";
 import { KILL_STALE_CONNECTIONS_QUERY } from "./queries/tables-level";
 import { withDbRescue } from "../../common/utils/with-db-rescue";
@@ -19,6 +25,7 @@ export class UserDbService {
   ) {}
 
   private connection: DataSource;
+  private connectionInitPromise: Promise<DataSource> | null = null;
 
   async getUserDb(user_id: string) {
     const userDb = await this.userDbRepo.findOne({ where: { user_id } });
@@ -30,24 +37,60 @@ export class UserDbService {
     const dbConfig = { ...userDb } as CreateUserDbDto;
 
     if (overrideDb) {
-      dbConfig.database = overrideDb; // force the database override
+      dbConfig.database = overrideDb;
     }
 
-    await this.initializeConnection(dbConfig);
+    if (this.connection?.isInitialized) {
+      return this.connection;
+    }
+
+    if (!this.connectionInitPromise) {
+      this.connection = new DataSource({
+        type: "postgres",
+        host: dbConfig.host,
+        port: dbConfig.port,
+        username: dbConfig.user,
+        password: dbConfig.password,
+        database: dbConfig.database,
+        ssl: dbConfig.ssl ? { rejectUnauthorized: false } : false,
+      });
+
+      this.connectionInitPromise = this.connection.initialize(); // ✅ DON'T await here
+    }
+
+    try {
+      await this.connectionInitPromise;
+    } catch (err) {
+      this.connectionInitPromise = null;
+      throw new Error("❌ Failed to initialize DB connection: " + err.message);
+    }
+
     return this.connection;
   }
 
   async initializeConnection(dto: CreateUserDbDto) {
-    this.connection = new DataSource({
-      type: "postgres",
-      host: dto.host,
-      port: dto.port,
-      username: dto.user,
-      password: dto.password,
-      database: dto.database,
-      ssl: dto.ssl ? { rejectUnauthorized: false } : false,
-    });
-    await this.connection.initialize();
+    if (this.connection?.isInitialized) return;
+
+    if (!this.connectionInitPromise) {
+      this.connection = new DataSource({
+        type: "postgres",
+        host: dto.host,
+        port: dto.port,
+        username: dto.user,
+        password: dto.password,
+        database: dto.database,
+        ssl: dto.ssl ? { rejectUnauthorized: false } : false,
+      });
+
+      this.connectionInitPromise = this.connection.initialize();
+    }
+
+    try {
+      await this.connectionInitPromise;
+    } catch (err) {
+      this.connectionInitPromise = null;
+      throw new Error("❌ Failed to initialize DB: " + err.message);
+    }
   }
 
   async connectToUserDb(dto: CreateUserDbDto, user_id: string) {
@@ -155,13 +198,113 @@ export class UserDbService {
 
   async killStaleConnections(user_id: string) {
     const userDb = await this.getUserDb(user_id);
-    const dbConfig = { ...userDb } as CreateUserDbDto;
+    await this.initializeConnection({ ...userDb } as CreateUserDbDto);
 
-    await this.initializeConnection(dbConfig);
+    const runner = this.connection.createQueryRunner();
 
-    const staleConnections = await this.connection
+    try {
+      await runner.query(KILL_STALE_CONNECTIONS_QUERY);
+    } finally {
+      await runner.release();
+    }
+  }
+
+  async getUserDbStats(user_id: string) {
+    return withDbRescue(
+      user_id,
+      async () => {
+        await this.getUserDbConnection(user_id);
+
+        const [top1DeadTuples, top1DbSizes, top1ConnectionCounts] =
+          await Promise.all([
+            this.connection.query(DEAD_TUPLES_TOP_1),
+            this.connection.query(LARGEST_DATABASE_TOP_1),
+            this.connection.query(CONNECTION_DB_TOP_1),
+          ]);
+
+        return {
+          top1DeadTuples,
+          top1DbSizes,
+          top1ConnectionCounts,
+        };
+      },
+      this.killStaleConnections.bind(this)
+    );
+  }
+
+  async getRecentQueryFeed(user_id: string, limit: number = 20) {
+    return withDbRescue(
+      user_id,
+      async () => {
+        await this.getUserDbConnection(user_id);
+
+        const recentQueryStats = await this.connection
+          .createQueryRunner()
+          .query(GET_RECENT_ACTIVITY_QUERY, [limit]);
+
+        return recentQueryStats;
+      },
+      this.killStaleConnections.bind(this)
+    );
+  }
+
+  async getRecentUserActivity(user_id: string, limit: number = 20) {
+    return withDbRescue(
+      user_id,
+      async () => {
+        await this.getUserDbConnection(user_id);
+
+        const recentActivity = await this.connection
+          .createQueryRunner()
+          .query(GET_RECENT_ACTIVITY_QUERY, [limit]);
+
+        return recentActivity;
+      },
+      this.killStaleConnections.bind(this)
+    );
+  }
+
+  async enableExtension(user_id: string) {
+    return withDbRescue(
+      user_id,
+      async () => {
+        await this.getUserDbConnection(user_id);
+
+        const alreadyEnabled = await this.hasPgStatStatements();
+
+        if (alreadyEnabled) {
+          return { message: "Extension is already enabled." };
+        }
+
+        try {
+          await this.connection
+            .createQueryRunner()
+            .query(`CREATE EXTENSION IF NOT EXISTS pg_stat_statements;`);
+
+          return { message: "Extension created successfully." };
+        } catch (err: any) {
+          if (
+            typeof err.message === "string" &&
+            err.message.includes("permission denied")
+          ) {
+            return {
+              error:
+                "pg_stat_statements requires superuser privileges. Please enable it manually.",
+            };
+          }
+
+          throw err; // rethrow unexpected errors
+        }
+      },
+      this.killStaleConnections.bind(this)
+    );
+  }
+
+  private async hasPgStatStatements(): Promise<boolean> {
+    const result = await this.connection
       .createQueryRunner()
-      .query(KILL_STALE_CONNECTIONS_QUERY);
-    console.log(staleConnections);
+      .query(`SELECT 1 FROM pg_extension WHERE extname = 'pg_stat_statements'`);
+
+    return result.length > 0;
   }
 }

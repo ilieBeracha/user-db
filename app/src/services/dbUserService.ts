@@ -58,4 +58,20 @@ export class DbUserService {
     );
     return response;
   }
+
+  getUserDbStats() {
+    const response = this.http.get<any>(
+      `${API_URL}/user-db/query-stats`,
+      this.getHeaders()
+    );
+    return response;
+  }
+
+  getRecentQueryFeed() {
+    const response = this.http.get<any>(
+      `${API_URL}/user-db/recent-query-feed`,
+      this.getHeaders()
+    );
+    return response;
+  }
 }

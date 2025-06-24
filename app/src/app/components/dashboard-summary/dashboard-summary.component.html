@@ -1,0 +1,188 @@
+<div class="max-w-7xl mx-auto p-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Database Overview</h1>
+    <p class="text-gray-600">
+      Monitor your database performance and health metrics
+    </p>
+  </div>
+
+  <!-- Stats Grid -->
+  <dl class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 mb-8">
+    <!-- Largest Database Card -->
+    <div
+      class="bg-white rounded-xl p-6 border flex flex-col justify-between border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full pb-10"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <dt class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+          Largest Database
+        </dt>
+        <div
+          class="w-10 h-10 rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center"
+        >
+          <svg
+            class="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <dd class="text-2xl font-bold text-gray-900 mb-1">
+        {{ stats?.top1DbSizes?.[0]?.datname || 'N/A' }}
+      </dd>
+
+      <dd class="flex items-center text-sm font-medium text-green-600 mb-4">
+        <div class="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
+        {{ stats?.top1DbSizes?.[0]?.size || 'N/A' }}
+      </dd>
+      <!-- Progress indicator -->
+      <div class="">
+        <div class="flex justify-between text-xs text-gray-500">
+          <span>Storage Usage</span>
+          <span
+            >{{ ((stats?.top1DbSizes?.[0]?.size_bytes || 0) / (100*1024*1024) * 100) | number:'1.0-1'
+
+
+
+
+
+
+
+
+
+
+            }}%</span
+          >
+        </div>
+        <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-1000"
+            [style.width]="((stats?.top1DbSizes?.[0]?.size_bytes || 0) / (100*1024*1024) * 100) + '%'"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Most Connections Card -->
+    <div
+      class="bg-white rounded-xl p-6 border flex flex-col justify-between border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full pb-10"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <dt class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+          Active Connections
+        </dt>
+        <div
+          class="w-10 h-10 rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center"
+        >
+          <svg
+            class="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <dd class="text-2xl font-bold text-gray-900 mb-1">
+        {{ stats?.top1ConnectionCounts?.[0]?.datname || 'N/A' }}
+      </dd>
+
+      <dd class="flex items-center text-sm font-medium text-indigo-600 mb-4">
+        <div class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></div>
+        {{ stats?.top1ConnectionCounts?.[0]?.connection_count || 0 }}
+        connections
+      </dd>
+
+      <!-- Connection status -->
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs text-gray-500">
+          <span>Active</span>
+          <span>Idle</span>
+          <span>Available</span>
+        </div>
+        <div class="flex space-x-1">
+          <div class="flex-1 h-2 bg-green-500 rounded-full"></div>
+          <div class="flex-1 h-2 bg-yellow-400 rounded-full"></div>
+          <div class="flex-1 h-2 bg-gray-200 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Most Bloated Table Card -->
+    <div
+      class="bg-white rounded-xl p-6 border flex flex-col justify-between border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full pb-10"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <dt class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+          Table Health
+        </dt>
+        <div
+          class="w-10 h-10 rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center"
+        >
+          <svg
+            class="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <dd class="text-2xl font-bold text-gray-900 mb-1 truncate">
+        {{ stats?.top1DeadTuples?.[0]?.table || 'N/A' }}
+      </dd>
+
+      <dd class="flex items-center text-sm font-medium text-red-600 mb-4">
+        <div class="w-2 h-2 rounded-full bg-red-500 mr-2"></div>
+        {{ stats?.top1DeadTuples?.[0]?.dead_ratio_percent || '0' }}% dead rows
+      </dd>
+
+      <!-- Health status -->
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs text-gray-500">
+          <span>Health Score</span>
+          <span class="font-semibold"
+            >{{ (100 - (stats?.top1DeadTuples?.[0]?.dead_ratio_percent || 0)) | number:'1.0-1'
+
+
+
+
+
+
+
+            }}%</span
+          >
+        </div>
+        <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            class="h-full bg-gradient-to-r from-red-500 to-orange-500 rounded-full transition-all duration-1000"
+            [style.width]="(stats?.top1DeadTuples?.[0]?.dead_ratio_percent || 0) + '%'"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </dl>
+</div>

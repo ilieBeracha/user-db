@@ -4,9 +4,10 @@ import { UserDb } from '../../core/user-db';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-init-connection',
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './init-connection.component.html',
   styleUrl: './init-connection.component.css',
 })

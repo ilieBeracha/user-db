@@ -30,7 +30,6 @@ import { UserDb } from '../../core/user-db';
     ReactiveFormsModule,
     MatIconModule,
     MatListModule,
-    NgIf,
     RouterLink,
     RouterLinkActive,
   ],
@@ -53,6 +52,8 @@ export class HomeComponent {
 
     this.getDatabasesInServer();
     this.getTablesInDatabase('cms-editor');
+    this.getUserDbStats();
+    this.getRecentQueryFeed();
   }
 
   protected getDatabasesInServer() {
@@ -64,6 +65,18 @@ export class HomeComponent {
   protected getTablesInDatabase(database: string) {
     this.userDb.getTablesInDatabase(database).subscribe((tables) => {
       console.log(tables);
+    });
+  }
+
+  protected getUserDbStats() {
+    this.userDb.getUserDbStats().subscribe((stats) => {
+      console.log(stats);
+    });
+  }
+
+  protected getRecentQueryFeed() {
+    this.userDb.getRecentQueryFeed().subscribe((feed) => {
+      console.log(feed);
     });
   }
 }

@@ -30,6 +30,7 @@ export class UserDbController {
   async getConnection(@Req() req: any) {
     const user = req?.user as User;
     const connection = await this.dbService.getUserDb(user.id);
+    console.log(connection);
     return connection;
   }
 
@@ -93,5 +94,29 @@ export class UserDbController {
   async killStaleConnections(@Req() req: any) {
     const user = req?.user as User;
     await this.dbService.killStaleConnections(user.id);
+  }
+
+  @Get("query-stats")
+  @ApiOperation({ summary: "Get query stats" })
+  @ApiResponse({ status: 200, description: "Query stats" })
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getQueryStats(@Req() req: any) {
+    const user = req?.user as User;
+    const longRunningQueries = await this.dbService.getUserDbStats(user.id);
+
+    return longRunningQueries;
+  }
+
+  @Get("recent-query-feed")
+  @ApiOperation({ summary: "Get recent query feed" })
+  @ApiResponse({ status: 200, description: "Recent query feed" })
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getRecentQueryFeed(@Req() req: any) {
+    const user = req?.user as User;
+    const recentQueryFeed = await this.dbService.getRecentQueryFeed(user.id);
+
+    return recentQueryFeed;
   }
 }
