@@ -37,19 +37,24 @@
       </div>
 
       <dd class="text-2xl font-bold text-gray-900 mb-1">
-        {{ stats?.top1DbSizes?.[0]?.datname || 'N/A' }}
+        {{ selectedDatabases()?.[0]?.datname || 'N/A' }}
       </dd>
 
       <dd class="flex items-center text-sm font-medium text-green-600 mb-4">
         <div class="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-        {{ stats?.top1DbSizes?.[0]?.size || 'N/A' }}
+        {{ selectedDatabases()?.[0]?.size || 'N/A' }}
       </dd>
       <!-- Progress indicator -->
       <div class="">
         <div class="flex justify-between text-xs text-gray-500">
           <span>Storage Usage</span>
           <span
-            >{{ ((stats?.top1DbSizes?.[0]?.size_bytes || 0) / (100*1024*1024) * 100) | number:'1.0-1'
+            >{{ ((selectedDatabases()?.[0]?.size_bytes || 0) / (100*1024*1024) * 100) | number:'1.0-1'
+
+
+
+
+
 
 
 
@@ -66,7 +71,7 @@
         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
             class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-1000"
-            [style.width]="((stats?.top1DbSizes?.[0]?.size_bytes || 0) / (100*1024*1024) * 100) + '%'"
+            [style.width]="((selectedDatabases()?.[0]?.size_bytes || 0) / (100*1024*1024) * 100) + '%'"
           ></div>
         </div>
       </div>
@@ -100,12 +105,12 @@
       </div>
 
       <dd class="text-2xl font-bold text-gray-900 mb-1">
-        {{ stats?.top1ConnectionCounts?.[0]?.datname || 'N/A' }}
+        {{ selectedDatabases()?.[0]?.datname || 'N/A' }}
       </dd>
 
       <dd class="flex items-center text-sm font-medium text-indigo-600 mb-4">
         <div class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></div>
-        {{ stats?.top1ConnectionCounts?.[0]?.connection_count || 0 }}
+        {{ selectedDatabases()?.[0]?.connection_count || 0 }}
         connections
       </dd>
 
@@ -152,12 +157,12 @@
       </div>
 
       <dd class="text-2xl font-bold text-gray-900 mb-1 truncate">
-        {{ stats?.top1DeadTuples?.[0]?.table || 'N/A' }}
+        {{ selectedDatabases()?.[0]?.table || 'N/A' }}
       </dd>
 
       <dd class="flex items-center text-sm font-medium text-red-600 mb-4">
         <div class="w-2 h-2 rounded-full bg-red-500 mr-2"></div>
-        {{ stats?.top1DeadTuples?.[0]?.dead_ratio_percent || '0' }}% dead rows
+        {{ selectedDatabases()?.[0]?.dead_ratio_percent || '0' }}% dead rows
       </dd>
 
       <!-- Health status -->
@@ -165,7 +170,12 @@
         <div class="flex justify-between text-xs text-gray-500">
           <span>Health Score</span>
           <span class="font-semibold"
-            >{{ (100 - (stats?.top1DeadTuples?.[0]?.dead_ratio_percent || 0)) | number:'1.0-1'
+            >{{ (100 - (selectedDatabases()?.[0]?.dead_ratio_percent || 0)) | number:'1.0-1'
+
+
+
+
+
 
 
 
@@ -179,7 +189,7 @@
         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
             class="h-full bg-gradient-to-r from-red-500 to-orange-500 rounded-full transition-all duration-1000"
-            [style.width]="(stats?.top1DeadTuples?.[0]?.dead_ratio_percent || 0) + '%'"
+            [style.width]="(selectedDatabases()?.[0]?.dead_ratio_percent || 0) + '%'"
           ></div>
         </div>
       </div>

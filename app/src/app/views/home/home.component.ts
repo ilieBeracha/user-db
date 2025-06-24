@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { MatDrawerMode, MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
@@ -12,6 +12,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { Auth } from '../../core/auth';
@@ -38,8 +39,10 @@ import { UserDb } from '../../core/user-db';
 export class HomeComponent {
   protected auth = inject(Auth);
   protected userDb = inject(UserDb);
+  protected databasesInServer = toSignal(this.userDb.getDatabasesInServer());
   isScreenSmall = false;
   protected router = inject(Router);
+  // readonly databasesInServer = this.userDb.readDatabasesInServer();
   mode = new FormControl<MatDrawerMode>('side');
 
   constructor(private breakpointObserver: BreakpointObserver) {
@@ -50,33 +53,8 @@ export class HomeComponent {
         this.isScreenSmall = matches;
       });
 
-    this.getDatabasesInServer();
-    this.getTablesInDatabase('cms-editor');
-    this.getUserDbStats();
-    this.getRecentQueryFeed();
-  }
-
-  protected getDatabasesInServer() {
-    this.userDb.getDatabasesInServer().subscribe((databases) => {
-      console.log(databases);
-    });
-  }
-
-  protected getTablesInDatabase(database: string) {
-    this.userDb.getTablesInDatabase(database).subscribe((tables) => {
-      console.log(tables);
-    });
-  }
-
-  protected getUserDbStats() {
-    this.userDb.getUserDbStats().subscribe((stats) => {
-      console.log(stats);
-    });
-  }
-
-  protected getRecentQueryFeed() {
-    this.userDb.getRecentQueryFeed().subscribe((feed) => {
-      console.log(feed);
+    effect(() => {
+      console.log(this.databasesInServer());
     });
   }
 }

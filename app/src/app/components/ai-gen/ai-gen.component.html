@@ -1,0 +1,208 @@
+<section class="min-h-screen bg-gradient-to-br from-background to-foreground">
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 space-y-16">
+    <!-- Card -->
+    <div class="bg-white dark:bg-foreground rounded-2xl shadow-lg">
+      <div class="p-8 space-y-10">
+        <!-- Configuration Grid -->
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Database Type -->
+          <div>
+            <label
+              class="block text-sm font-semibold text-foreground dark:bacground mb-2"
+              >Database Type</label
+            >
+            <select
+              class="w-full px-4 py-3 rounded-lg border border-border dark:border-slate-600 bg-foreground dark:bg-slate-700 text-foreground dark:bacground focus:ring-2 focus:ring-blue-500 transition"
+            >
+              <option value="">Select Type</option>
+              <option value="postgresql">PostgreSQL</option>
+              <option value="mysql">MySQL</option>
+              <option value="sqlite">SQLite</option>
+              <option value="mongodb">MongoDB</option>
+            </select>
+          </div>
+
+          <!-- Complexity -->
+          <div>
+            <label
+              class="block text-sm font-semibold text-foreground dark:bacground mb-2"
+              >Complexity</label
+            >
+            <select
+              class="w-full px-4 py-3 rounded-lg border border-border dark:border-slate-600 bg-foreground dark:bg-slate-700 text-foreground dark:bacground focus:ring-2 focus:ring-blue-500 transition"
+            >
+              <option value="">Select Complexity</option>
+              <option value="simple">Simple</option>
+              <option value="medium">Medium</option>
+              <option value="complex">Complex</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+          </div>
+
+          <!-- Include Features -->
+          <div>
+            <label
+              class="block text-sm font-semibold text-foreground dark:bacground mb-2"
+              >Include Features</label
+            >
+            <select
+              class="w-full px-4 py-3 rounded-lg border border-border dark:border-slate-600 bg-foreground dark:bg-slate-700 text-foreground dark:bacground focus:ring-2 focus:ring-blue-500 transition"
+            >
+              <option value="basic">Basic Schema</option>
+              <option value="advanced">Advanced Features</option>
+              <option value="full">Full Stack</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Description Input -->
+        <div>
+          <label
+            for="description"
+            class="block text-sm font-semibold text-foreground dark:bacground mb-2"
+          >
+            Describe your database requirements
+          </label>
+          <div class="relative">
+            <textarea
+              id="description"
+              rows="6"
+              maxlength="2600"
+              class="w-full h-[400px] rounded-xl border border-border dark:border-slate-600 bg-foreground dark:bg-slate-700 p-4 text-foreground dark:bacground placeholder:text-gray-400 dark:placeholder:text-gray-500 resize-none focus:ring-2 focus:ring-blue-500 transition"
+              placeholder="e.g., A database for an e-commerce platform with users, products, orders, and inventory..."
+            ></textarea>
+            <div
+              class="absolute bottom-3 right-4 text-xs text-muted-foreground"
+            >
+              {{ description?.length || 0 }}/2000
+            </div>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="flex justify-center pt-4">
+          <button
+            type="button"
+            (click)="generateDatabase()"
+            [disabled]="isGenerating || !description?.trim()"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <svg
+              *ngIf="!isGenerating"
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            <svg
+              *ngIf="isGenerating"
+              class="w-5 h-5 animate-spin"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            <span>{{
+              isGenerating ? "Generating..." : "Generate Database"
+            }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="grid md:grid-cols-3 gap-6">
+      <div
+        class="bg-white dark:bg-foreground p-6 rounded-xl shadow-sm hover:shadow-md transition"
+      >
+        <div
+          class="w-12 h-12 flex items-center justify-center bg-blue-100 dark:bg-blue-900 rounded-lg mb-4"
+        >
+          <svg
+            class="w-6 h-6 text-blue-600 dark:text-blue-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
+            />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Smart Schema Design</h3>
+        <p class="text-sm text-muted-foreground">
+          AI creates optimized schemas with proper relationships and indexing.
+        </p>
+      </div>
+
+      <div
+        class="bg-white dark:bg-foreground p-6 rounded-xl shadow-sm hover:shadow-md transition"
+      >
+        <div
+          class="w-12 h-12 flex items-center justify-center bg-purple-100 dark:bg-purple-900 rounded-lg mb-4"
+        >
+          <svg
+            class="w-6 h-6 text-purple-600 dark:text-purple-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Multi-DB Support</h3>
+        <p class="text-sm text-muted-foreground">
+          Works with PostgreSQL, MySQL, SQLite, and MongoDB out of the box.
+        </p>
+      </div>
+
+      <div
+        class="bg-white dark:bg-foreground p-6 rounded-xl shadow-sm hover:shadow-md transition"
+      >
+        <div
+          class="w-12 h-12 flex items-center justify-center bg-green-100 dark:bg-green-900 rounded-lg mb-4"
+        >
+          <svg
+            class="w-6 h-6 text-green-600 dark:text-green-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Instant Results</h3>
+        <p class="text-sm text-muted-foreground">
+          Generate schemas in seconds — ready for implementation and scaling.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

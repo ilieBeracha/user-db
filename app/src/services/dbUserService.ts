@@ -43,35 +43,10 @@ export class DbUserService {
     return response;
   }
 
-  getTablesInDatabase(database: string) {
-    const response = this.http.get<any>(
-      `${API_URL}/user-db/tables?database=${database}`,
-      this.getHeaders()
-    );
-    return response;
-  }
-
   getDatabasesInServer() {
-    const response = this.http.get<any>(
+    return this.http.get<any>(
       `${API_URL}/user-db/server-databases`,
       this.getHeaders()
     );
-    return response;
-  }
-
-  getUserDbStats() {
-    const response = this.http.get<any>(
-      `${API_URL}/user-db/query-stats`,
-      this.getHeaders()
-    );
-    return response;
-  }
-
-  getRecentQueryFeed() {
-    const response = this.http.get<any>(
-      `${API_URL}/user-db/recent-query-feed`,
-      this.getHeaders()
-    );
-    return response;
   }
 }

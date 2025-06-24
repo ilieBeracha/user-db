@@ -1,6 +1,18 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  Input,
+  OnInit,
+  signal,
+  Signal,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { UserDb } from '../../core/user-db';
 @Component({
   selector: 'app-dashboard-summary',
   imports: [MatCardModule, CommonModule],
@@ -8,5 +20,15 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard-summary.component.css',
 })
 export class DashboardSummaryComponent {
-  @Input() stats: any;
+  protected userDb = inject(UserDb);
+  protected selectedDatabases = toSignal(this.userDb.getDatabasesInServer());
+  protected top1DbSizes = computed(
+    () => this.selectedDatabases()?.[0]?.size_bytes
+  );
+
+  constructor() {
+    effect(() => {
+      console.log(this.selectedDatabases());
+    });
+  }
 }
