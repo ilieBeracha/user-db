@@ -28,6 +28,14 @@ export const routes: Routes = [
             (m) => m.DashboardComponent
           ),
       },
+      {
+        path: 'settings',
+        canActivate: [DbConnectionGuard],
+        loadComponent: () =>
+          import('./views/settings/settings.component').then(
+            (m) => m.SettingsComponent
+          ),
+      },
     ],
   },
   {

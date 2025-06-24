@@ -12,3 +12,10 @@ export const GET_COLUMNS_QUERY = `
   WHERE table_schema NOT IN ('information_schema', 'pg_catalog')
   ORDER BY table_schema, table_name, ordinal_position
 `;
+
+export const KILL_STALE_CONNECTIONS_QUERY = `
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE state = 'idle' AND pid <> pg_backend_pid();
+
+`;

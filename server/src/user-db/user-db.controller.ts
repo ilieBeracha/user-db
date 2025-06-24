@@ -85,4 +85,13 @@ export class UserDbController {
       count: databases.length,
     };
   }
+
+  @Post("kill-stale-connections")
+  @ApiOperation({ summary: "Kill stale connections" })
+  @ApiResponse({ status: 200, description: "Stale connections killed" })
+  @UseGuards(JwtAuthGuard)
+  async killStaleConnections(@Req() req: any) {
+    const user = req?.user as User;
+    await this.dbService.killStaleConnections(user.id);
+  }
 }

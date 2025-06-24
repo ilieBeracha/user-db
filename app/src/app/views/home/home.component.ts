@@ -3,7 +3,12 @@ import { MatDrawerMode, MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
@@ -25,8 +30,9 @@ import { UserDb } from '../../core/user-db';
     ReactiveFormsModule,
     MatIconModule,
     MatListModule,
-    RouterLink,
     NgIf,
+    RouterLink,
+    RouterLinkActive,
   ],
   standalone: true,
 })
@@ -34,7 +40,7 @@ export class HomeComponent {
   protected auth = inject(Auth);
   protected userDb = inject(UserDb);
   isScreenSmall = false;
-
+  protected router = inject(Router);
   mode = new FormControl<MatDrawerMode>('side');
 
   constructor(private breakpointObserver: BreakpointObserver) {
@@ -59,5 +65,25 @@ export class HomeComponent {
     this.userDb.getTablesInDatabase(database).subscribe((tables) => {
       console.log(tables);
     });
+  }
+
+  protected navigateTo(path: string) {
+    // Check if the route exists in our current routing configuration
+    const validRoutes = ['/dashboard', '/init-connection'];
+
+    if (validRoutes.includes(path)) {
+      this.router.navigate([path]);
+    } else {
+      // For routes that don't exist yet, you can either:
+      // 1. Show a message to the user
+      console.log(`Route ${path} is not implemented yet`);
+      // 2. Or navigate to a default route
+      // this.router.navigate(['/dashboard']);
+
+      // For now, let's show an alert to indicate the route doesn't exist
+      alert(
+        `${path} page is not implemented yet. This feature is coming soon!`
+      );
+    }
   }
 }
