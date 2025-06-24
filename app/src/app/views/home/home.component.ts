@@ -66,24 +66,4 @@ export class HomeComponent {
       console.log(tables);
     });
   }
-
-  protected navigateTo(path: string) {
-    // Check if the route exists in our current routing configuration
-    const validRoutes = ['/dashboard', '/init-connection'];
-
-    if (validRoutes.includes(path)) {
-      this.router.navigate([path]);
-    } else {
-      // For routes that don't exist yet, you can either:
-      // 1. Show a message to the user
-      console.log(`Route ${path} is not implemented yet`);
-      // 2. Or navigate to a default route
-      // this.router.navigate(['/dashboard']);
-
-      // For now, let's show an alert to indicate the route doesn't exist
-      alert(
-        `${path} page is not implemented yet. This feature is coming soon!`
-      );
-    }
-  }
 }
