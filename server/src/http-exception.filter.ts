@@ -15,7 +15,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let error = 'Internal Server Error';
     let details: any = undefined;
 
-    // Log the full exception for debugging
     this.logger.error('Exception caught:', exception);
 
     if (exception instanceof HttpException) {
@@ -29,12 +28,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         message = exceptionResponse as string;
       }
     } else if (exception instanceof QueryFailedError) {
-      // Handle TypeORM query errors
       status = HttpStatus.BAD_REQUEST;
       error = 'Database Query Failed';
       message = 'Database query failed';
       
-      // In development, show more details
       if (process.env.NODE_ENV !== 'production') {
         details = {
           query: exception.query,

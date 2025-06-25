@@ -4,6 +4,7 @@ const config: Config = {
   theme: {
     extend: {
       backgroundColor: {
+        background: 'var(--background)',
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',
         accent: 'var(--accent)',
@@ -11,7 +12,6 @@ const config: Config = {
         border: 'var(--border)',
       },
       colors: {
-        background: 'var(--background)',        
         foreground: 'var(--foreground)',
         primary: 'var(--primary)',
         'primary-foreground': 'var(--primary-foreground)',

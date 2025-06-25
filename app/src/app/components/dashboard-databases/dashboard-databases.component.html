@@ -1,3 +1,18 @@
-<div>
-  <app-ai-gen></app-ai-gen>
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2">
+    <h1 class="text-2xl font-bold">Databases</h1>
+    <p class="text-sm text-gray-500">
+      Here you can see all the databases in your server.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (database of selectedDatabases(); track database.database_name) {
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ database.database_name }}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+      }
+    </div>
+  </div>
 </div>

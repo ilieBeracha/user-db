@@ -40,4 +40,15 @@ export class UserDb {
   readUserDbConnection() {
     return computed(() => this.userDbConnection);
   }
+
+  // Add these methods to your UserDb service
+  async getDatabaseSchema(databaseName: string): Promise<string> {
+    // Implementation to fetch schema from your backend
+    return '';
+  }
+
+  async saveGeneratedSchema(schemaData: any): Promise<void> {
+    // Implementation to save generated schema
+    console.log(schemaData);
+  }
 }

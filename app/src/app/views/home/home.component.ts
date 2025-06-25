@@ -39,7 +39,6 @@ import { UserDb } from '../../core/user-db';
 export class HomeComponent {
   protected auth = inject(Auth);
   protected userDb = inject(UserDb);
-  protected databasesInServer = toSignal(this.userDb.getDatabasesInServer());
   isScreenSmall = false;
   protected router = inject(Router);
   // readonly databasesInServer = this.userDb.readDatabasesInServer();
@@ -52,9 +51,5 @@ export class HomeComponent {
       .subscribe((matches) => {
         this.isScreenSmall = matches;
       });
-
-    effect(() => {
-      console.log(this.databasesInServer());
-    });
   }
 }

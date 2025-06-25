@@ -3,7 +3,7 @@
 
 @layer base {
   :root {
-    --background: hsl(0 0% 100%);
+    --background: #222222;
     --foreground: hsl(222.2 84% 4.9%);
 
     --card: hsl(0 0% 100%);

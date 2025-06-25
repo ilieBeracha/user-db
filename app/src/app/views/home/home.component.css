@@ -1,12 +1,4 @@
 .sidenav-container {
   height: 100vh;
-  background-color: var(--accent);
-}
-
-.sidenav-content {
-  padding: 20px 80px 80px 80px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  background-color: var(--background);
 }

@@ -29,6 +29,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'ai',
+        loadComponent: () =>
+          import('./views/ai/ai.component').then((m) => m.AiComponent),
+      },
+      {
         path: 'settings',
         canActivate: [DbConnectionGuard],
         loadComponent: () =>
