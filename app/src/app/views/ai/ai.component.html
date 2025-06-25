@@ -1,15 +1,29 @@
-<mat-grid-list
-  cols="4"
-  rowHeight="19.92vh"
-  class="w-full max-h-full bg-gray-500 text-white overflow-y-none"
->
-  @for (tile of tiles; track tile) {
-  <mat-grid-tile
-    [colspan]="tile.cols"
-    [rowspan]="tile.rows"
-    class="bg-[#222222] border-1 border-gray-900"
-    [style.background]="tile.color"
-    >{{ tile.text }}</mat-grid-tile
-  >
-  }
-</mat-grid-list>
+<nz-splitter nzLayout="horizontal" class="h-screen w-screen">
+  <!-- Left Column (1 of 4 columns wide) -->
+  <nz-splitter-panel nzDefaultSize="25%" nzMinSize="10%" nzMaxSize="50%">
+    <div class="h-full text-white p-8">One</div>
+  </nz-splitter-panel>
+
+  <nz-splitter-panel nzDefaultSize="75%" nzMinSize="10%" nzMaxSize="90%">
+    <nz-splitter nzLayout="vertical" class="h-full">
+      <nz-splitter-panel nzDefaultSize="60%">
+        <div class="h-full text-white p-4">Two</div>
+      </nz-splitter-panel>
+
+      <!-- Bottom Rows (2 of 5 rows tall) -->
+      <nz-splitter-panel>
+        <nz-splitter nzLayout="horizontal" class="h-full">
+          <!-- Three takes 2 of 3 columns -->
+          <nz-splitter-panel nzDefaultSize="100%">
+            <div class="h-full text-white p-4">Three</div>
+          </nz-splitter-panel>
+
+          <!-- Four takes 1 of 3 columns -->
+          <!-- <nz-splitter-panel nzDefaultSize="20%">
+            <div class="h-full text-white p-4">Four</div>
+          </nz-splitter-panel> -->
+        </nz-splitter>
+      </nz-splitter-panel>
+    </nz-splitter>
+  </nz-splitter-panel>
+</nz-splitter>

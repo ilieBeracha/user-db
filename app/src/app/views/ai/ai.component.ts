@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { NzSplitterModule } from 'ng-zorro-antd/splitter';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 
 @Component({
   selector: 'app-ai',
-  imports: [MatGridListModule],
+  imports: [
+    MatGridListModule,
+    NzSplitterModule,
+    NzCodeEditorModule,
+    NzSwitchModule,
+  ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.css',
 })
-export class AiComponent {
-  tiles = [
-    { text: 'One', cols: 1, rows: 5, color: '' },
-    { text: 'Two', cols: 3, rows: 3, color: '' },
-    // { text: 'Three', cols: 1, rows: 1, color: '' },
-    { text: 'Four', cols: 2, rows: 2, color: '' },
-    { text: 'Five', cols: 1, rows: 2, color: '' },
-  ];
-}
+export class AiComponent {}

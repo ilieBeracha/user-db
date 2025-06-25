@@ -25,6 +25,7 @@
               }
             ],
             "styles": [
+              "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss",
               "src/styles/tailwind.css"
@@ -82,6 +83,7 @@
               }
             ],
             "styles": [
+              "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
               "src/styles/tailwind.css"

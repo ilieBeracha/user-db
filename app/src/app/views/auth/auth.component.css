@@ -4,20 +4,40 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: var(--secondary);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
 }
 
 .form {
   display: flex;
-  color: var(--secondary);
   flex-direction: column;
-  gap: 1rem;
-  width: 300px;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  background-color: var(--secondary);
-  box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .card-header {
@@ -25,25 +45,19 @@
   flex-direction: column;
   gap: 0.5rem;
   color: var(--tertiary);
+  text-align: center;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+.card-header h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: bold;
 }
 
-.button {
-  background-color: var(--bright-blue);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  font-size: clamp(0.6rem, 1vw, 0.75rem);
-}
-
-.button:hover {
-  background-color: var(--bright-blue);
+.card-header p {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  opacity: 0.8;
 }
 
 .form-group {
@@ -53,21 +67,49 @@
 }
 
 .form-group label {
-  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-weight: 500;
+  color: var(--tertiary);
 }
 
-.form-group h1 {
-  font-size: clamp(0.8rem, 1.2vw, 1rem);
+.button {
+  background-color: var(--bright-blue);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--bright-blue);
+  opacity: 0.9;
+}
+
+.button:active {
+  transform: translateY(1px);
 }
 
 input {
   border: 1px solid var(--grayish-blue);
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   background-color: var(--primary);
-  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  color: var(--tertiary);
+  transition: border-color 0.2s ease;
 }
 
 input:focus {
   outline: none;
+  border-color: var(--bright-blue);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+input::placeholder {
+  color: var(--grayish-blue);
+  opacity: 0.7;
 }

@@ -1,18 +1,147 @@
-<div class="flex flex-col gap-4">
-  <div class="flex flex-col gap-2">
-    <h1 class="text-2xl font-bold">Databases</h1>
-    <p class="text-sm text-gray-500">
+<div class="flex flex-col gap-4 scale-[0.95] origin-top-left">
+  <!-- Title -->
+  <div class="flex flex-col gap-0.5">
+    <h1 class="text-xl font-semibold text-zinc-800 dark:text-white">
+      Databases
+    </h1>
+    <p class="text-sm text-zinc-500 dark:text-zinc-400">
       Here you can see all the databases in your server.
     </p>
+  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      @for (database of selectedDatabases(); track database.database_name) {
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{ database.database_name }}</mat-card-title>
+  @if (currentDatabase; as database) {
+  <div class="flex">
+    <div class="w-full max-w-xl">
+      <mat-card
+        class="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 hover:shadow-md transition-all duration-300"
+      >
+        <!-- Navigation Header -->
+        <div
+          class="flex items-center justify-between px-3 py-1.5 border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 rounded-t-xl"
+        >
+          <button
+            mat-icon-button
+            (click)="previousDatabase()"
+            [disabled]="totalDatabases <= 1"
+            class="text-zinc-500 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full w-7 h-7"
+          >
+            <mat-icon class="text-xs">chevron_left</mat-icon>
+          </button>
+
+          <span class="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            {{ currentIndex() + 1 }} of {{ totalDatabases }}
+          </span>
+
+          <button
+            mat-icon-button
+            (click)="nextDatabase()"
+            [disabled]="totalDatabases <= 1"
+            class="text-zinc-500 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full w-7 h-7"
+          >
+            <mat-icon class="text-xs">chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <!-- Database Header -->
+        <mat-card-header class="pt-3 pb-1">
+          <mat-card-title
+            class="text-base font-medium text-zinc-800 dark:text-white flex items-center gap-2 justify-center w-full text-center py-2"
+          >
+            {{ database.database_name }}
+          </mat-card-title>
         </mat-card-header>
+
+        <!-- Database Content -->
+        <mat-card-content class="pt-0 pb-3 px-3">
+          <!-- Status Block -->
+          <div
+            class="flex items-center justify-between mb-3 p-3 rounded-md bg-zinc-100 dark:bg-zinc-800"
+          >
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 bg-emerald-400 rounded-full"></div>
+              <div>
+                <p class="text-sm font-medium text-zinc-600 dark:text-zinc-300">
+                  Active
+                </p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Running</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-lg font-semibold text-zinc-800 dark:text-white">
+                {{ database.size }}
+              </div>
+              <div class="text-xs text-zinc-500 dark:text-zinc-400">
+                {{ database.size_bytes | number }} bytes
+              </div>
+            </div>
+          </div>
+
+          <!-- Storage Panel -->
+          <div
+            class="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm"
+          >
+            <div class="flex justify-between mb-2">
+              <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300"
+                >Storage</span
+              >
+              <span class="text-sm font-semibold text-zinc-800 dark:text-white">
+                {{ database.size }}
+              </span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-3">
+              <div
+                class="flex justify-between text-xs text-zinc-500 dark:text-zinc-400 mb-1"
+              >
+                <span>Used Space</span>
+                <span>{{ database.size }}</span>
+              </div>
+              <div
+                class="h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full overflow-hidden"
+              >
+                <div
+                  class="h-full bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 rounded-full"
+                  style="width: 65%"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Meta Info -->
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="bg-zinc-100 dark:bg-zinc-800 p-2 rounded">
+                <div class="font-medium text-zinc-500 dark:text-zinc-300">
+                  Formatted
+                </div>
+                <div
+                  class="text-sm font-semibold text-zinc-800 dark:text-white"
+                >
+                  {{ database.size }}
+                </div>
+              </div>
+              <div class="bg-zinc-100 dark:bg-zinc-800 p-2 rounded">
+                <div class="font-medium text-zinc-500 dark:text-zinc-300">
+                  Raw Bytes
+                </div>
+                <div
+                  class="text-sm font-semibold text-zinc-800 dark:text-white"
+                >
+                  {{ database.size_bytes | number }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
       </mat-card>
-      }
     </div>
   </div>
+  } @else {
+  <!-- Empty State -->
+  <div class="flex justify-center">
+    <div class="text-center text-zinc-400 py-6">
+      <mat-icon class="text-5xl mb-2">storage</mat-icon>
+      <p class="text-base">No databases found</p>
+    </div>
+  </div>
+  }
 </div>
