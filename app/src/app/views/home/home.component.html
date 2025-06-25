@@ -8,7 +8,7 @@
     <!-- Nav -->
     <div class="flex flex-col">
       <div
-        class="flex h-full min-h-[700px] flex-1 flex-col justify-between bg-slate-50 p-4 gap-4"
+        class="flex h-full min-h-[700px] flex-1 flex-col justify-between p-4 gap-4"
       >
         <div class="flex flex-col gap-4">
           <h1 class="text-[#0d141c] text-base font-medium leading-normal">
@@ -18,13 +18,11 @@
             <div
               class="flex items-center gap-3 px-3 py-2 cursor-pointer"
               [routerLinkActiveOptions]="{ exact: true }"
-              routerLinkActive="bg-[#e7edf4]"
+              (click)="sidenav.toggle()"
+              routerLink="/dashboard"
+              routerLinkActive="bg-[#e7edf4] text-black"
             >
-              <div
-                class="text-[#0d141c]"
-                data-icon="PresentationChart"
-                data-weight="regular"
-              >
+              <div class="" data-icon="PresentationChart" data-weight="regular">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24px"
@@ -38,10 +36,9 @@
                 </svg>
               </div>
               <p
-                routerLink="/dashboard"
                 [routerLinkActiveOptions]="{ exact: true }"
-                routerLinkActive="bg-[#e7edf4]"
-                class="text-[#0d141c] text-sm font-medium leading-normal"
+                routerLinkActive="bg-[#e7edf4] text-black"
+                class="text-sm font-medium leading-normal"
               >
                 Dashboard
               </p>
@@ -49,14 +46,11 @@
             <div
               class="flex items-center gap-3 px-3 py-2 cursor-pointer"
               [routerLinkActiveOptions]="{ exact: true }"
-              routerLinkActive="bg-[#e7edf4]"
+              (click)="sidenav.toggle()"
+              routerLink="/ai"
+              routerLinkActive="bg-[#e7edf4] text-black"
             >
-              <div
-                class="text-[#0d141c]"
-                data-icon="Database"
-                data-size="24px"
-                data-weight="regular"
-              >
+              <div data-icon="Database" data-size="24px" data-weight="regular">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24px"
@@ -70,10 +64,9 @@
                 </svg>
               </div>
               <p
-                routerLink="/ai"
                 [routerLinkActiveOptions]="{ exact: true }"
-                routerLinkActive="bg-[#e7edf4]"
-                class="text-[#0d141c] text-sm font-medium leading-normal"
+                routerLinkActive="bg-[#e7edf4] text-black"
+                class="text-sm font-medium leading-normal"
               >
                 AI
               </p>
@@ -81,10 +74,12 @@
             <div
               class="flex items-center gap-3 px-3 py-2 cursor-pointer"
               [routerLinkActiveOptions]="{ exact: true }"
-              routerLinkActive="bg-[#e7edf4]"
+              (click)="sidenav.toggle()"
+              routerLink="/schema"
+              routerLinkActive="bg-[#e7edf4] text-black"
             >
               <div
-                class="text-[#0d141c]"
+                class=""
                 data-icon="Table"
                 data-size="24px"
                 data-weight="fill"
@@ -102,10 +97,9 @@
                 </svg>
               </div>
               <a
-                routerLink="/schema"
                 [routerLinkActiveOptions]="{ exact: true }"
-                routerLinkActive="bg-[#e7edf4]"
-                class="text-[#0d141c] text-sm font-medium leading-normal cursor-pointer"
+                routerLinkActive="bg-[#e7edf4] text-black"
+                class="text-sm font-medium leading-normal cursor-pointer"
               >
                 Schema
               </a>
@@ -113,10 +107,12 @@
             <div
               class="flex items-center gap-3 px-3 py-2"
               [routerLinkActiveOptions]="{ exact: true }"
-              routerLinkActive="bg-[#e7edf4]"
+              (click)="sidenav.toggle()"
+              routerLink="/queries"
+              routerLinkActive="bg-[#e7edf4] text-black"
             >
               <div
-                class="text-[#0d141c]"
+                class=""
                 data-icon="MagnifyingGlass"
                 data-size="24px"
                 data-weight="regular"
@@ -134,9 +130,9 @@
                 </svg>
               </div>
               <a
-                routerLink="/queries"
-                routerLinkActive="bg-[#e7edf4]"
-                class="text-[#0d141c] text-sm font-medium leading-normal cursor-pointer"
+                [routerLinkActiveOptions]="{ exact: true }"
+                routerLinkActive="bg-[#e7edf4] text-black"
+                class="text-sm font-medium leading-normal cursor-pointer"
               >
                 Queries
               </a>
@@ -144,10 +140,12 @@
             <div
               class="flex items-center gap-3 px-3 py-2"
               [routerLinkActiveOptions]="{ exact: true }"
-              routerLinkActive="bg-[#e7edf4]"
+              routerLink="/settings"
+              (click)="sidenav.toggle()"
+              routerLinkActive="bg-[#e7edf4] text-black"
             >
               <div
-                class="text-[#0d141c]"
+                class=""
                 data-icon="Gear"
                 data-size="24px"
                 data-weight="regular"
@@ -165,9 +163,9 @@
                 </svg>
               </div>
               <a
-                routerLink="/settings"
-                routerLinkActive="bg-[#e7edf4]"
-                class="text-[#0d141c] text-sm font-medium leading-normal cursor-pointer"
+                [routerLinkActiveOptions]="{ exact: true }"
+                routerLinkActive="bg-[#e7edf4] text-black"
+                class="text-sm font-medium leading-normal cursor-pointer"
               >
                 Settings
               </a>
@@ -187,7 +185,7 @@
       <div class="flex flex-col gap-1">
         <div class="flex items-center gap-3 px-3 py-2">
           <div
-            class="text-[#0d141c]"
+            class=""
             data-icon="Question"
             data-size="24px"
             data-weight="regular"
@@ -207,8 +205,8 @@
           <p
             routerLink="/help"
             [routerLinkActiveOptions]="{ exact: true }"
-            routerLinkActive="bg-[#e7edf4]"
-            class="text-[#0d141c] text-sm font-medium leading-normal"
+            routerLinkActive="bg-[#e7edf4] text-black"
+            class="text-sm font-medium leading-normal"
           >
             Help and docs
           </p>

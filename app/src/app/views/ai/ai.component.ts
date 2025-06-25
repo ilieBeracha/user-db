@@ -9,9 +9,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 })
 export class AiComponent {
   tiles = [
-    { text: 'Two', cols: 1, rows: 2, color: '' },
-    { text: 'One', cols: 3, rows: 1, color: '' },
-    { text: 'Three', cols: 1, rows: 1, color: '' },
-    { text: 'Four', cols: 2, rows: 1, color: '' },
+    { text: 'One', cols: 1, rows: 5, color: '' },
+    { text: 'Two', cols: 3, rows: 3, color: '' },
+    // { text: 'Three', cols: 1, rows: 1, color: '' },
+    { text: 'Four', cols: 2, rows: 2, color: '' },
+    { text: 'Five', cols: 1, rows: 2, color: '' },
   ];
 }

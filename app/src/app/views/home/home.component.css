@@ -1,4 +1,16 @@
 .sidenav-container {
   height: 100vh;
   background-color: var(--background);
+  color: var(--foreground);
+}
+
+.mat-sidenav {
+  background-color: var(--sidebar-background) !important;
+  color: var(--sidebar-foreground) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+  width: 280px;
+}
+
+.mat-sidenav-content {
+  background-color: var(--background) !important;
 }

@@ -1,84 +1,101 @@
 @import "tailwindcss";
-@plugin "daisyui";
 
 @layer base {
-  :root {
-    --background: #222222;
-    --foreground: hsl(222.2 84% 4.9%);
+  :root,
+  .light {
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+    --surface: #121212;
+    --surface-variant: #1a1a1a;
+    --on-surface: #e4e4e7;
+    --on-surface-variant: #a1a1aa;
 
-    --card: hsl(0 0% 100%);
-    --card-foreground: hsl(222.2 84% 4.9%);
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
 
-    --primary: hsl(222.2 47.4% 11.2%);
-    --primary-foreground: hsl(210 40% 98%);
+    --muted: #262626;
+    --muted-foreground: #a1a1aa;
 
-    --secondary: hsl(210 40% 96.1%);
-    --secondary-foreground: hsl(222.2 47.4% 11.2%);
+    --accent: #3f3f46;
+    --accent-foreground: #fafafa;
 
-    --muted: hsl(210 40% 96.1%);
-    --muted-foreground: hsl(215.4 16.3% 46.9%);
+    --destructive: #dc2626;
+    --destructive-foreground: #fafafa;
 
-    --accent: hsl(210 40% 96.1%);
-    --accent-foreground: hsl(222.2 47.4% 11.2%);
+    --border: #3f3f46;
+    --input: #27272a;
+    --ring: #6366f1;
 
-    --destructive: hsl(0 84.2% 60.2%);
-    --destructive-foreground: hsl(210 40% 98%);
+    --card: #121212;
+    --card-foreground: #fafafa;
 
-    --border: hsl(214.3 31.8% 91.4%);
-    --input: hsl(214.3 31.8% 91.4%);
-    --ring: hsl(222.2 84% 4.9%);
+    --popover: #121212;
+    --popover-foreground: #fafafa;
 
-    --radius: 0.5rem;
+    --sidebar-background: #0a0a0a;
+    --sidebar-foreground: #e4e4e7;
+    --sidebar-primary: #6366f1;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #1a1a1a;
+    --sidebar-accent-foreground: #e4e4e7;
+    --sidebar-border: #3f3f46;
+    --sidebar-ring: #6366f1;
 
-    --sidebar-background: hsl(0 0% 98%);
-    --sidebar-foreground: hsl(240 5.3% 26.1%);
-    --sidebar-primary: hsl(240 5.9% 10%);
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(240 4.8% 95.9%);
-    --sidebar-accent-foreground: hsl(240 5.9% 10%);
-    --sidebar-border: hsl(220 13% 91%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: hsl(222.2 84% 4.9%);
-    --foreground: hsl(210 40% 98%);
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+    --surface: #121212;
+    --surface-variant: #1a1a1a;
+    --on-surface: #e4e4e7;
+    --on-surface-variant: #a1a1aa;
 
-    --card: hsl(222.2 84% 4.9%);
-    --card-foreground: hsl(210 40% 98%);
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
 
-    --popover: hsl(222.2 84% 4.9%);
-    --popover-foreground: hsl(210 40% 98%);
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
 
-    --primary: hsl(210 40% 98%);
-    --primary-foreground: hsl(222.2 47.4% 11.2%);
+    --muted: #262626;
+    --muted-foreground: #a1a1aa;
 
-    --secondary: hsl(217.2 32.6% 17.5%);
-    --secondary-foreground: hsl(210 40% 98%);
+    --accent: #3f3f46;
+    --accent-foreground: #fafafa;
 
-    --muted: hsl(217.2 32.6% 17.5%);
-    --muted-foreground: hsl(215 20.2% 65.1%);
+    --destructive: #dc2626;
+    --destructive-foreground: #fafafa;
 
-    --accent: hsl(217.2 32.6% 17.5%);
-    --accent-foreground: hsl(210 40% 98%);
+    --border: #3f3f46;
+    --input: #27272a;
+    --ring: #6366f1;
 
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(210 40% 98%);
+    --card: #121212;
+    --card-foreground: #fafafa;
 
-    --border: hsl(217.2 32.6% 17.5%);
-    --input: hsl(217.2 32.6% 17.5%);
-    --ring: hsl(212.7 26.8% 83.9%);
+    --popover: #121212;
+    --popover-foreground: #fafafa;
 
-    --sidebar-background: hsl(240 5.9% 10%);
-    --sidebar-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-primary: hsl(224.3 76.3% 48%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(240 3.7% 15.9%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-border: hsl(240 3.7% 15.9%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+    --sidebar-background: #0a0a0a;
+    --sidebar-foreground: #e4e4e7;
+    --sidebar-primary: #6366f1;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #1a1a1a;
+    --sidebar-accent-foreground: #e4e4e7;
+    --sidebar-border: #3f3f46;
+    --sidebar-ring: #6366f1;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }

@@ -52,4 +52,8 @@ export class HomeComponent {
         this.isScreenSmall = matches;
       });
   }
+
+  onRouteChange() {
+    
+  }
 }

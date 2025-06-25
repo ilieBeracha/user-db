@@ -1,5 +1,21 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 2rem;
+  padding: 1.5rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+}
+
+.dashboard-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  color: var(--on-surface);
+}
+
+.dashboard-section {
+  margin-bottom: 2rem;
 }

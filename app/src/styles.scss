@@ -1,86 +1,61 @@
 @use "@angular/material" as mat;
+
+// Include the common styles for Angular Material
+@include mat.core();
+
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
-:root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222.2 84% 4.9%);
-
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
-
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
-
-  --primary: hsl(222.2 47.4% 11.2%);
-  --primary-foreground: hsl(210 40% 98%);
-
-  --secondary: hsl(210 40% 96.1%);
-  --secondary-foreground: hsl(222.2 47.4% 11.2%);
-
-  --muted: hsl(210 40% 96.1%);
-  --muted-foreground: hsl(215.4 16.3% 46.9%);
-
-  --accent: hsl(210 40% 96.1%);
-  --accent-foreground: hsl(222.2 47.4% 11.2%);
-
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-
-  --border: hsl(214.3 31.8% 91.4%);
-  --input: hsl(214.3 31.8% 91.4%);
-  --ring: hsl(222.2 84% 4.9%);
-
-  --radius: 0.5rem;
-
-  --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+// Override Material components to match our design system
+.mat-mdc-card {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
 }
 
-.dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 40% 98%);
+.mat-mdc-button {
+  --mdc-text-button-label-text-color: var(--foreground);
+}
 
-  --card: hsl(222.2 84% 4.9%);
-  --card-foreground: hsl(210 40% 98%);
+.mat-mdc-raised-button {
+  --mdc-filled-button-container-color: var(--primary);
+  --mdc-filled-button-label-text-color: var(--primary-foreground);
+}
 
-  --popover: hsl(222.2 84% 4.9%);
-  --popover-foreground: hsl(210 40% 98%);
+.mat-mdc-dialog-surface {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+}
 
-  --primary: hsl(210 40% 98%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
+.mat-mdc-form-field {
+  --mdc-filled-text-field-container-color: var(--input);
+  --mdc-filled-text-field-label-text-color: var(--muted-foreground);
+  --mdc-filled-text-field-input-text-color: var(--foreground);
+  --mdc-outlined-text-field-outline-color: var(--border);
+}
 
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
+.mat-drawer {
+  background-color: var(--sidebar-background) !important;
+  color: var(--sidebar-foreground) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+}
 
-  --muted: hsl(217.2 32.6% 17.5%);
-  --muted-foreground: hsl(215 20.2% 65.1%);
+.mat-drawer-content {
+  background-color: var(--background) !important;
+}
 
-  --accent: hsl(217.2 32.6% 17.5%);
-  --accent-foreground: hsl(210 40% 98%);
+.mat-toolbar {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
 
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(210 40% 98%);
-
-  --border: hsl(217.2 32.6% 17.5%);
-  --input: hsl(217.2 32.6% 17.5%);
-  --ring: hsl(212.7 26.8% 83.9%);
-
-  --sidebar-background: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+html,
+body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
 }
 
 :host {
@@ -131,7 +106,8 @@ h1 {
 html,
 body {
   height: 100%;
-  background-color: var(--primary);
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
 }
 body {
   margin: 0;
@@ -140,4 +116,14 @@ body {
 p {
   margin: 0;
   padding: 0;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
 }
