@@ -1,20 +1,20 @@
-/* schema-tree.component.css */
 .schema-tree {
   font-family: "Inter", sans-serif;
   background: transparent;
   border-radius: 0.75rem;
-  color: var(--foreground);
+  color: #ffffff;
 }
 
 .mat-tree-node {
+  padding-left: 0.5rem;
   display: flex;
+  border-left: 2px solid #5f5f5f;
   align-items: center;
-  padding: 0.5rem;
   transition: all 0.2s ease;
 }
 
 .mat-tree-node:hover {
-  background-color: var(--zinc-100);
+  background-color: #353535;
 }
 
 .node-icon {
@@ -35,7 +35,7 @@
 .table-node {
   display: list-item;
   background: var(--zinc-100);
-  border-left: 2px solid #5f5f5f;
+  /* border-left: 2px solid #5f5f5f; */
 }
 
 .table-node .node-icon {
@@ -43,12 +43,13 @@
 }
 
 .column-node {
-  border-left: 2px solid #5f5f5f;
-  /* background: #353535; */
+  padding-left: 0.5rem;
+  /* border-left: 2px solid #5f5f5f; */
+  background-color: #222222;
 }
 
 .column-node:hover {
-  border-left: 2px solid #5f5f5f;
+  /* border-left: 2px solid #5f5f5f; */
   background: #353535;
 }
 
