@@ -1,13 +1,15 @@
 <nz-splitter nzLayout="horizontal" class="h-screen w-screen">
   <!-- Left Column (1 of 4 columns wide) -->
   <nz-splitter-panel nzDefaultSize="25%" nzMinSize="10%" nzMaxSize="50%">
-    <div class="h-full text-white p-8">One</div>
+    <div class="h-full text-white dark:bg-zinc-900 p-8">oNE</div>
   </nz-splitter-panel>
 
   <nz-splitter-panel nzDefaultSize="75%" nzMinSize="10%" nzMaxSize="90%">
-    <nz-splitter nzLayout="vertical" class="h-full">
+    <nz-splitter nzLayout="vertical" class="h-full w-full p-0 m-0">
       <nz-splitter-panel nzDefaultSize="60%">
-        <div class="h-full text-white p-4">Two</div>
+        <div class="h-full text-white dark:bg-zinc-900">
+          <app-code-ide></app-code-ide>
+        </div>
       </nz-splitter-panel>
 
       <!-- Bottom Rows (2 of 5 rows tall) -->
@@ -15,7 +17,7 @@
         <nz-splitter nzLayout="horizontal" class="h-full">
           <!-- Three takes 2 of 3 columns -->
           <nz-splitter-panel nzDefaultSize="100%">
-            <div class="h-full text-white p-4">Three</div>
+            <div class="h-full text-white dark:bg-zinc-900 p-4">Three</div>
           </nz-splitter-panel>
 
           <!-- Four takes 1 of 3 columns -->
