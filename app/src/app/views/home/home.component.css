@@ -1,6 +1,5 @@
 .sidenav-container {
   height: 100vh;
-  /* max-height: 100vh; */
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -11,11 +10,3 @@
   border-right: 1px solid var(--sidebar-border) !important;
   width: 280px;
 }
-
-/* .mat-sidenav-content { */
-/* overflow-y: hidden; */
-/* min-height: 100vh;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background-color: var(--background) !important; */
-/* } */

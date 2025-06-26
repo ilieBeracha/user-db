@@ -53,7 +53,5 @@ export class HomeComponent {
       });
   }
 
-  onRouteChange() {
-    
-  }
+  onRouteChange() {}
 }

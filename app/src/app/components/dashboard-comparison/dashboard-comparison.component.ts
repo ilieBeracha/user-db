@@ -31,20 +31,40 @@ interface DatabaseComparison {
 export class DashboardComparisonComponent {
   readonly comparisonData = input<DatabaseComparison[]>([]);
 
-  processedComparisons = computed(() => {
+  aggregatedStats = computed(() => {
     const data = this.comparisonData();
-    if (!data || !Array.isArray(data)) {
-      return [];
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      return null;
     }
-    return data.map((db) => ({
-      ...db,
-      performanceColor: this.getPerformanceColor(db.performance_rating),
-      cacheRating: this.getCacheRating(parseFloat(db.cache_hit_ratio)),
-      connectionStatus: this.getConnectionStatus(
-        parseInt(db.active_connections)
-      ),
-    }));
+
+    const totalDatabases = data.length;
+    const totalSize = data.reduce((sum, db) => sum + parseFloat(db.size_gb), 0);
+    const totalConnections = data.reduce((sum, db) => sum + parseInt(db.active_connections), 0);
+    const avgCacheHit = data.reduce((sum, db) => sum + parseFloat(db.cache_hit_ratio), 0) / totalDatabases;
+    const totalTransactions = data.reduce((sum, db) => sum + parseInt(db.total_transactions), 0);
+    
+    const performanceDistribution = data.reduce((acc, db) => {
+      acc[db.performance_rating] = (acc[db.performance_rating] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const totalTuples = data.reduce((sum, db) => 
+      sum + parseInt(db.tuples_inserted) + parseInt(db.tuples_updated) + parseInt(db.tuples_deleted), 0);
+
+    return {
+      totalDatabases,
+      totalSize: totalSize.toFixed(2),
+      totalConnections,
+      avgCacheHit: avgCacheHit.toFixed(1),
+      totalTransactions,
+      performanceDistribution,
+      totalTuples,
+      healthyDatabases: data.filter(db => parseFloat(db.cache_hit_ratio) > 90).length,
+      activeDatabases: data.filter(db => parseInt(db.active_connections) > 0).length
+    };
   });
+
+  keys = Object.keys;
 
   private getPerformanceColor(rating: string): string {
     switch (rating.toLowerCase()) {

@@ -1,239 +1,13 @@
 <div
-  class="flex flex-col bg-white h-full dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden"
+  class="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-xl shadow border border-zinc-200 dark:border-zinc-700"
 >
   <!-- Header -->
   <div
-    class="header-gradient px-6 py-4 border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800"
+    class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 rounded-t-xl"
   >
-    <div class="flex items-center justify-between">
-      <span class="text-base font-semibold flex items-center">
-        <svg
-          class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
-          ></path>
-        </svg>
-        <span class="text-zinc-800 dark:text-white">Database Overview</span>
-      </span>
-    </div>
-  </div>
-
-  <!-- Database Content -->
-  @if (currentDatabase; as database) {
-  <div class="flex-1 flex flex-col overflow-hidden p-6">
-    <!-- Navigation Header -->
-    <div
-      class="flex items-center justify-between mb-6 bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-800 dark:to-zinc-700 rounded-lg border border-zinc-200 dark:border-zinc-600 p-3 flex-shrink-0"
-    >
-      <button
-        mat-icon-button
-        (click)="previousDatabase()"
-        [disabled]="totalDatabases <= 1"
-        class="nav-button text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-white/50 dark:hover:bg-zinc-600 rounded-full w-10 h-10 transition-all duration-200"
-      >
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-
-      <div class="text-center">
-        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-300">
-          {{ currentIndex() + 1 }} of {{ totalDatabases }}
-        </div>
-        <div class="text-xs text-zinc-500 dark:text-zinc-400">
-          Database Navigation
-        </div>
-      </div>
-
-      <button
-        mat-icon-button
-        (click)="nextDatabase()"
-        [disabled]="totalDatabases <= 1"
-        class="nav-button text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-white/50 dark:hover:bg-zinc-600 rounded-full w-10 h-10 transition-all duration-200"
-      >
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
-
-    <!-- Database Header -->
-    <div class="text-center mb-6 flex-shrink-0">
-      <h1 class="text-2xl font-bold text-zinc-800 dark:text-white mb-2">
-        {{ database.database_name }}
-      </h1>
-      <div class="flex items-center justify-center gap-2">
-        <div class="status-indicator w-2 h-2 bg-emerald-400 rounded-full"></div>
-        <span class="text-sm text-zinc-600 dark:text-zinc-400"
-          >Connected & Active</span
-        >
-      </div>
-    </div>
-
-    <!-- Database Stats -->
-    <div class="flex-1 overflow-y-auto space-y-4 flex flex-col justify-between">
-      <!-- Main Size Card -->
-      <div class="metric-card">
-        <div class="flex items-center justify-between">
-          <div>
-            <span class="font-medium text-zinc-600 dark:text-zinc-300 text-lg">
-              Total Database Size
-            </span>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400">
-              Current storage utilization
-            </p>
-          </div>
-          <div class="text-right">
-            <div class="stat-value text-2xl font-bold">
-              {{ database.size }}
-            </div>
-            <div class="text-xs text-zinc-600 dark:text-zinc-400">
-              {{ database.size_bytes | number }} bytes
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Storage Usage Card -->
-      <div class="metric-card flex flex-col justify-between">
-        <div class="flex justify-between items-center">
-          <span class="font-medium text-zinc-600 text-lg dark:text-zinc-300">
-            Storage Analysis
-          </span>
-          <span class="stat-value text-lg font-bold">
-            {{ database.size }}
-          </span>
-        </div>
-
-        <!-- Enhanced Progress Bar -->
-        <div class="progress-wrapper mb-4">
-          <div
-            class="flex justify-between text-xs text-zinc-500 dark:text-zinc-400 mb-2"
-          >
-            <span>Space Utilization</span>
-            <span>65% of allocated</span>
-          </div>
-          <div
-            class="h-3 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden"
-          >
-            <div
-              class="progress-animated h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-400 rounded-full transition-all duration-500"
-              style="width: 65%"
-            ></div>
-          </div>
-        </div>
-
-        <!-- Storage Grid -->
-        <div class="storage-grid flex justify-center items-center gap-6">
-          <div class="metric-card">
-            <div class="text-center">
-              <div
-                class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2"
-              >
-                Formatted Size
-              </div>
-              <div class="stat-value text-xl font-bold">
-                {{ database.size }}
-              </div>
-            </div>
-          </div>
-
-          <div class="metric-card">
-            <div class="text-center">
-              <div
-                class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2"
-              >
-                Raw Bytes
-              </div>
-              <div class="stat-value text-xl font-bold">
-                {{ database.size_bytes | number }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Additional Metrics Row -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="metric-card text-center">
-          <svg
-            class="w-8 h-8 mx-auto mb-2 text-blue-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-            ></path>
-          </svg>
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Performance
-          </div>
-          <div class="stat-value text-lg font-bold">Optimal</div>
-        </div>
-
-        <div class="metric-card text-center">
-          <svg
-            class="w-8 h-8 mx-auto mb-2 text-green-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Health Status
-          </div>
-          <div class="stat-value text-lg font-bold">Healthy</div>
-        </div>
-
-        <div class="metric-card text-center">
-          <svg
-            class="w-8 h-8 mx-auto mb-2 text-purple-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            ></path>
-          </svg>
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Efficiency
-          </div>
-          <div class="stat-value text-lg font-bold">High</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  } @else {
-  <!-- Enhanced Empty State -->
-  <div
-    class="flex flex-col items-center justify-center h-full px-6 py-12 text-center"
-  >
-    <div class="metric-card max-w-md w-full">
+    <div class="flex items-center">
       <svg
-        class="w-16 h-16 mx-auto text-zinc-400 dark:text-zinc-500 mb-4"
+        class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -243,15 +17,103 @@
           stroke-linejoin="round"
           stroke-width="2"
           d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
-        ></path>
+        />
       </svg>
-      <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
-        No Databases Found
-      </h3>
-      <p class="text-sm text-zinc-500 dark:text-zinc-400">
-        Connect to your database to view detailed analytics and insights.
-      </p>
+      <span class="text-base font-semibold text-zinc-800 dark:text-white">
+        Database Overview
+      </span>
     </div>
+  </div>
+
+  <!-- Content -->
+  @if (currentDatabase; as database) {
+  <div class="flex flex-col flex-1 overflow-hidden p-6 space-y-3">
+    <!-- Navigation -->
+    <div
+      class="flex justify-between items-center border rounded-md bg-zinc-50 dark:bg-zinc-800 text-sm"
+    >
+      <button
+        mat-icon-button
+        (click)="previousDatabase()"
+        [disabled]="totalDatabases <= 1"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div>{{ currentIndex() + 1 }} of {{ totalDatabases }}</div>
+      <button
+        mat-icon-button
+        (click)="nextDatabase()"
+        [disabled]="totalDatabases <= 1"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-xl font-bold text-zinc-800 dark:text-white">
+        {{ database.database_name }}
+      </h1>
+      <p class="text-sm text-emerald-500">Connected & Active</p>
+    </div>
+
+    <!-- Metrics -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-4"
+    >
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-md text-center">
+        <p class="text-sm text-zinc-500">Size</p>
+        <p class="text-lg font-semibold text-blue-600 dark:text-blue-300">
+          {{ database.size }}
+        </p>
+      </div>
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-md text-center">
+        <p class="text-sm text-zinc-500">Bytes</p>
+        <p class="text-lg font-semibold">{{ database.size_bytes | number }}</p>
+      </div>
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-md text-center">
+        <p class="text-sm text-zinc-500">Performance</p>
+        <p class="text-lg font-semibold text-blue-500">Optimal</p>
+      </div>
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-md text-center">
+        <p class="text-sm text-zinc-500">Health</p>
+        <p class="text-lg font-semibold text-green-500">Healthy</p>
+      </div>
+    </div>
+
+    <!-- Storage Progress -->
+    <div class="space-y-2">
+      <div class="flex justify-between text-sm text-zinc-500">
+        <span>Storage Usage</span>
+        <span>65%</span>
+      </div>
+      <div
+        class="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden"
+      >
+        <div class="h-full bg-blue-500 rounded-full" style="width: 65%"></div>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <!-- Empty State -->
+  <div
+    class="flex flex-col items-center justify-center flex-1 p-6 text-center text-zinc-500 dark:text-zinc-400"
+  >
+    <svg
+      class="w-12 h-12 mb-4 text-zinc-400 dark:text-zinc-500"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
+      />
+    </svg>
+    <h3 class="text-base font-medium">No Databases Found</h3>
+    <p class="text-sm">Connect to view analytics and metrics.</p>
   </div>
   }
 </div>

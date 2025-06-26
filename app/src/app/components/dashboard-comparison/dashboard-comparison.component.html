@@ -1,43 +1,15 @@
 <div
-  class="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden"
+  class="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-xl shadow border border-zinc-200 dark:border-zinc-700"
 >
   <!-- Header -->
   <div
-    class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800"
+    class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 rounded-t-xl"
   >
-    <div class="flex items-center justify-between">
-      <span
-        class="text-base font-semibold text-zinc-800 dark:text-white flex items-center"
-      >
-        <svg
-          class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-          ></path>
-        </svg>
-        Database Performance Comparison
-      </span>
-      <span class="text-sm text-zinc-500 dark:text-zinc-400">
-        {{ !comparisonData() || comparisonData().length }} databases
-      </span>
-    </div>
-  </div>
-
-  <!-- Comparison Content -->
-  <div
-    class="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-96 overflow-y-auto"
-  >
-    @if (!comparisonData() || comparisonData().length === 0) {
-    <div class="px-6 py-8 text-center">
+    <span
+      class="text-base font-semibold text-zinc-800 dark:text-white flex items-center"
+    >
       <svg
-        class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-500 mb-3"
+        class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -47,217 +19,117 @@
           stroke-linejoin="round"
           stroke-width="2"
           d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        ></path>
+        />
       </svg>
-      <p class="text-zinc-500 dark:text-zinc-400">
-        No comparison data available
-      </p>
-    </div>
-    } @else { @for (database of processedComparisons(); track
-    database.database_name) {
+      Fleet Overview
+    </span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 overflow-y-auto p-6 flex flex-col justify-between">
+    @if (!aggregatedStats()) {
     <div
-      class="p-6 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-150"
+      class="flex items-center justify-center h-full text-center text-zinc-500 dark:text-zinc-400"
     >
-      <!-- Database Header -->
-      <div class="flex items-start justify-between mb-4">
-        <div>
-          <span class="text-lg font-semibold text-zinc-800 dark:text-white">
-            {{ database.database_name }}
-          </span>
-          <div class="flex items-center gap-3 mt-2">
-            <!-- Performance Badge -->
-            <span
-              class="inline-flex items-center py-0.5 rounded-full text-xs font-medium"
-              [ngClass]="database.performance_rating"
-            >
-              {{ database.performance_rating }}
-            </span>
-
-            <!-- Connection Status -->
-            <span
-              class="inline-flex items-center py-0.5 rounded-full text-xs font-medium"
-              [ngClass]="database.active_connections"
-            >
-              {{ database.active_connections }} Usage
-            </span>
-          </div>
-        </div>
-
-        <!-- Size Info -->
-        <div class="text-right">
-          <div class="text-lg font-semibold text-zinc-800 dark:text-white">
-            {{ database.size_formatted }}
-          </div>
-          <div class="text-xs text-zinc-500 dark:text-zinc-400">
-            {{ database.size_gb }} GB
-          </div>
-        </div>
-      </div>
-
-      <!-- Metrics Grid -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <!-- Cache Hit Ratio -->
-        <div
-          class="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700"
+      <div>
+        <svg
+          class="w-10 h-10 mx-auto mb-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Cache Hit Ratio
-          </div>
-          <div class="text-sm font-semibold text-zinc-800 dark:text-white">
-            {{ database.cache_hit_ratio }}%
-          </div>
-          <div class="text-xs text-zinc-500 dark:text-zinc-400">
-            {{ database.cache_hit_ratio }}
-          </div>
-        </div>
-
-        <!-- Active Connections -->
-        <div
-          class="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700"
-        >
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Active Connections
-          </div>
-          <div class="text-sm font-semibold text-zinc-800 dark:text-white">
-            {{ database.active_connections }}
-          </div>
-          <div class="text-xs text-zinc-500 dark:text-zinc-400">
-            {{ database.connection_percentage }}%
-          </div>
-        </div>
-
-        <!-- Total Transactions -->
-        <div
-          class="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700"
-        >
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Total Transactions
-          </div>
-          <div class="text-sm font-semibold text-zinc-800 dark:text-white">
-            {{ database.total_transactions | number }}
-          </div>
-          <div class="text-xs text-zinc-500 dark:text-zinc-400">
-            {{ database.commit_ratio }}% commit ratio
-          </div>
-        </div>
-
-        <!-- Tuples Activity -->
-        <div
-          class="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700"
-        >
-          <div
-            class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1"
-          >
-            Data Activity
-          </div>
-          <div class="text-sm font-semibold text-zinc-800 dark:text-white">
-            {{
-              +database.tuples_inserted +
-                +database.tuples_updated +
-                +database.tuples_deleted | number
-            }}
-          </div>
-          <div class="text-xs text-zinc-500 dark:text-zinc-400">
-            Total operations
-          </div>
-        </div>
-      </div>
-
-      <!-- Detailed Stats -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Read/Write Operations -->
-        <div
-          class="bg-white dark:bg-zinc-900 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700"
-        >
-          <h5 class="text-sm font-medium text-zinc-600 dark:text-zinc-300 mb-3">
-            Read/Write Operations
-          </h5>
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400"
-                >Tuples Returned</span
-              >
-              <span class="font-medium text-zinc-800 dark:text-white">{{
-                database.tuples_returned | number
-              }}</span>
-            </div>
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400"
-                >Tuples Fetched</span
-              >
-              <span class="font-medium text-zinc-800 dark:text-white">{{
-                database.tuples_fetched | number
-              }}</span>
-            </div>
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400">Inserts</span>
-              <span class="font-medium text-green-600 dark:text-green-400">{{
-                database.tuples_inserted | number
-              }}</span>
-            </div>
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400">Updates</span>
-              <span class="font-medium text-blue-600 dark:text-blue-400">{{
-                database.tuples_updated | number
-              }}</span>
-            </div>
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400">Deletes</span>
-              <span class="font-medium text-red-600 dark:text-red-400">{{
-                database.tuples_deleted | number
-              }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Block I/O -->
-        <div
-          class="bg-white dark:bg-zinc-900 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700"
-        >
-          <h5 class="text-sm font-medium text-zinc-600 dark:text-zinc-300 mb-3">
-            Block I/O Performance
-          </h5>
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400">Blocks Read</span>
-              <span class="font-medium text-zinc-800 dark:text-white">{{
-                database.blocks_read | number
-              }}</span>
-            </div>
-            <div class="flex justify-between text-xs">
-              <span class="text-zinc-500 dark:text-zinc-400"
-                >Blocks Hit (Cache)</span
-              >
-              <span class="font-medium text-zinc-800 dark:text-white">{{
-                database.blocks_hit | number
-              }}</span>
-            </div>
-            <div class="mt-3">
-              <div
-                class="flex justify-between text-xs text-zinc-500 dark:text-zinc-400 mb-1"
-              >
-                <span>Cache Efficiency</span>
-                <span>{{ database.cache_hit_ratio }}%</span>
-              </div>
-              <div
-                class="h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden"
-              >
-                <div
-                  class="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full transition-all duration-300"
-                  [style.width.%]="database.cache_hit_ratio"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+          />
+        </svg>
+        <span class="text-base font-medium text-zinc-500 dark:text-zinc-400">
+          No data
+        </span>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          Connect to view metrics
+        </p>
       </div>
     </div>
-    } }
+    } @else {
+    <div
+      class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4"
+    >
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-lg">
+        <p class="text-sm text-zinc-500">Storage</p>
+        <p class="text-xl font-semibold text-blue-700 dark:text-blue-300">
+          {{ aggregatedStats()!.totalSize }} GB
+        </p>
+      </div>
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-lg">
+        <p class="text-sm text-zinc-500">Avg Cache Hit</p>
+        <p class="text-xl font-semibold text-green-600 dark:text-green-300">
+          {{ aggregatedStats()!.avgCacheHit }}%
+        </p>
+      </div>
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-lg">
+        <p class="text-sm text-zinc-500">Connections</p>
+        <p class="text-xl font-semibold text-purple-600 dark:text-purple-300">
+          {{ aggregatedStats()!.totalConnections }}
+        </p>
+      </div>
+      <div class="bg-zinc-50 dark:bg-zinc-800 p-4 rounded-lg">
+        <p class="text-sm text-zinc-500">Transactions</p>
+        <p class="text-xl font-semibold text-orange-600 dark:text-orange-300">
+          {{ aggregatedStats()!.totalTransactions | number }}
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-8 grid gap-4 lg:grid-cols-2">
+      <!-- Health -->
+      <div class="p-4 rounded-lg bg-zinc-50 dark:bg-zinc-800">
+        <span
+          class="text-sm font-semibold text-zinc-700 dark:text-zinc-200 mb-2"
+        >
+          Health
+        </span>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          {{ aggregatedStats()!.healthyDatabases }}/{{
+            aggregatedStats()!.totalDatabases
+          }}
+          healthy
+        </p>
+        <div class="h-2 bg-zinc-200 dark:bg-zinc-700 rounded mt-2">
+          <div
+            class="h-2 bg-green-500 rounded"
+            [style.width.%]="
+              (aggregatedStats()!.healthyDatabases /
+                aggregatedStats()!.totalDatabases) *
+              100
+            "
+          ></div>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="p-4 rounded-lg bg-zinc-50 dark:bg-zinc-800">
+        <span
+          class="text-sm font-semibold text-zinc-700 dark:text-zinc-200 mb-2"
+        >
+          Activity
+        </span>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          Total Ops:
+          <span class="font-medium text-zinc-800 dark:text-white">{{
+            aggregatedStats()!.totalTuples | number
+          }}</span>
+        </p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">
+          Cache Hit:
+          <span class="font-medium text-green-600 dark:text-green-300"
+            >{{ aggregatedStats()!.avgCacheHit }}%</span
+          >
+        </p>
+      </div>
+    </div>
+    }
   </div>
 </div>

@@ -1,5 +1,5 @@
 <div
-  class="bg-white h-full dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden col-span-1"
+  class="bg-white h-full dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden col-span-1 flex flex-col justify-between"
 >
   <!-- Header -->
   <div
@@ -32,15 +32,15 @@
 
   <!-- Activity Feed -->
   <div
-    class="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-[600px] overflow-y-auto"
+    class="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-[600px] flex-1"
   >
     @for (activity of processedActivities(); track activity.pid) {
     <div
       class="px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-150"
     >
-      <div class="flex items-start justify-between">
+      <div class="flex items-start justify-between w-full sm:flex-col">
         <!-- Activity Info -->
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-full">
           <div class="flex items-center space-x-3 mb-2">
             <!-- Activity Type Badge -->
             <span
@@ -168,14 +168,14 @@
               </svg>
               {{ activity.client_addr }}:{{ activity.client_port }}
             </div>
-          </div>
-        </div>
 
-        <!-- Timestamp -->
-        <div class="flex-shrink-0 ml-4">
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">
-            {{ activity.timeAgo }}
-          </p>
+            <!-- Timestamp -->
+            <div class="flex-shrink-1 ml-auto w-full text-right">
+              <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                {{ activity.timeAgo }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
