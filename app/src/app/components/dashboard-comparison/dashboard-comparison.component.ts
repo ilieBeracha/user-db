@@ -1,6 +1,5 @@
-import { Component, input, computed, inject } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserDb } from '../../core/user-db';
 
 interface DatabaseComparison {
   database_name: string;
@@ -39,17 +38,31 @@ export class DashboardComparisonComponent {
 
     const totalDatabases = data.length;
     const totalSize = data.reduce((sum, db) => sum + parseFloat(db.size_gb), 0);
-    const totalConnections = data.reduce((sum, db) => sum + parseInt(db.active_connections), 0);
-    const avgCacheHit = data.reduce((sum, db) => sum + parseFloat(db.cache_hit_ratio), 0) / totalDatabases;
-    const totalTransactions = data.reduce((sum, db) => sum + parseInt(db.total_transactions), 0);
-    
+    const totalConnections = data.reduce(
+      (sum, db) => sum + parseInt(db.active_connections),
+      0
+    );
+    const avgCacheHit =
+      data.reduce((sum, db) => sum + parseFloat(db.cache_hit_ratio), 0) /
+      totalDatabases;
+    const totalTransactions = data.reduce(
+      (sum, db) => sum + parseInt(db.total_transactions),
+      0
+    );
+
     const performanceDistribution = data.reduce((acc, db) => {
       acc[db.performance_rating] = (acc[db.performance_rating] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    const totalTuples = data.reduce((sum, db) => 
-      sum + parseInt(db.tuples_inserted) + parseInt(db.tuples_updated) + parseInt(db.tuples_deleted), 0);
+    const totalTuples = data.reduce(
+      (sum, db) =>
+        sum +
+        parseInt(db.tuples_inserted) +
+        parseInt(db.tuples_updated) +
+        parseInt(db.tuples_deleted),
+      0
+    );
 
     return {
       totalDatabases,
@@ -59,8 +72,10 @@ export class DashboardComparisonComponent {
       totalTransactions,
       performanceDistribution,
       totalTuples,
-      healthyDatabases: data.filter(db => parseFloat(db.cache_hit_ratio) > 90).length,
-      activeDatabases: data.filter(db => parseInt(db.active_connections) > 0).length
+      healthyDatabases: data.filter((db) => parseFloat(db.cache_hit_ratio) > 90)
+        .length,
+      activeDatabases: data.filter((db) => parseInt(db.active_connections) > 0)
+        .length,
     };
   });
 

@@ -35,8 +35,130 @@
 
 /* Query preview styling */
 .query-preview {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   font-size: 12px;
   line-height: 1.4;
   word-break: break-all;
+}
+
+/* Line clamp utility for query text */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mockup code container styling */
+.mockup-code {
+  margin-top: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #475569 transparent;
+}
+
+.mockup-code.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mockup-code::-webkit-scrollbar {
+  height: 4px;
+}
+
+.mockup-code::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mockup-code::-webkit-scrollbar-thumb {
+  background-color: #475569;
+  border-radius: 2px;
+}
+
+.mockup-code pre {
+  margin: 0;
+  color: #e2e8f0;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.mockup-code pre[data-prefix]::before {
+  content: attr(data-prefix) " ";
+  color: #64748b;
+  margin-right: 0.5rem;
+}
+
+/* SQL Syntax Highlighting */
+.sql-code {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* SQL Syntax Highlighting for the mockup-code terminal theme */
+.mockup-code .sql-keyword {
+  color: #60a5fa; /* Light blue for SQL keywords in terminal */
+  font-weight: 600;
+}
+
+.mockup-code .sql-string {
+  color: #34d399; /* Green for strings in terminal */
+}
+
+.mockup-code .sql-number {
+  color: #fbbf24; /* Orange for numbers in terminal */
+  font-weight: 500;
+}
+
+.mockup-code .sql-comment {
+  color: #9ca3af; /* Gray for comments in terminal */
+  font-style: italic;
+}
+
+/* Regular SQL highlighting (for non-mockup code) */
+.sql-keyword {
+  color: #0ea5e9; /* Blue for SQL keywords */
+  font-weight: 600;
+}
+
+.sql-string {
+  color: #10b981; /* Green for strings */
+}
+
+.sql-number {
+  color: #f59e0b; /* Orange for numbers */
+  font-weight: 500;
+}
+
+.sql-comment {
+  color: #6b7280; /* Gray for comments */
+  font-style: italic;
+}
+
+/* Dark mode SQL highlighting */
+.dark .sql-keyword {
+  color: #38bdf8; /* Lighter blue for dark mode */
+}
+
+.dark .sql-string {
+  color: #34d399; /* Lighter green for dark mode */
+}
+
+.dark .sql-number {
+  color: #fbbf24; /* Lighter orange for dark mode */
+}
+
+.dark .sql-comment {
+  color: #9ca3af; /* Lighter gray for dark mode */
 }

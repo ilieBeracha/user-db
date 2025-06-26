@@ -32,7 +32,7 @@
 
   <!-- Activity Feed -->
   <div
-    class="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-[600px] flex-1"
+    class="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-[600px] flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-track-rounded-full overflow-x-hidden"
   >
     @for (activity of processedActivities(); track activity.pid) {
     <div
@@ -89,13 +89,39 @@
             </div>
           </div>
 
-          <!-- Query Preview -->
+          <!-- Query Display -->
           <div class="mb-2">
-            <p
-              class="text-sm text-zinc-700 dark:text-zinc-300 font-mono bg-zinc-50 dark:bg-zinc-800 rounded px-2 py-1 border border-zinc-200 dark:border-zinc-700"
+            <button
+              (click)="toggleQueryExpansion(activity.pid)"
+              class="w-full text-left text-sm rounded transition-colors duration-150 cursor-pointer"
             >
-              {{ activity.queryPreview }}
-            </p>
+              <div
+                [ngClass]="{ 'line-clamp-3': !isQueryExpanded(activity.pid) }"
+              >
+                <div class="mockup-code w-full" [ngClass]="{ 'line-clamp-3': !isQueryExpanded(activity.pid) }">
+                  <pre data-prefix="$"><code>{{
+                        isQueryExpanded(activity.pid)
+                          ? activity.formattedQuery
+                          : activity.queryPreview
+                      }}</code></pre>
+                </div>
+                <!-- <pre><code [innerHTML]="isQueryExpanded(activity.pid) ? activity.highlightedQuery : activity.queryPreview" class="sql-code"></code></pre> -->
+              </div>
+              <svg
+                class="inline w-3 h-3 ml-2 text-zinc-500 transform transition-transform duration-200 float-right"
+                [ngClass]="{ 'rotate-180': isQueryExpanded(activity.pid) }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
           </div>
 
           <!-- Connection Details -->

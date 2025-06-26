@@ -11,6 +11,7 @@ LIMIT $1;
 `;
 
 export const GET_RECENT_ACTIVITY_QUERY = `
+-- Shows recent activity with query details
   SELECT
     pid,
     usename AS username,
