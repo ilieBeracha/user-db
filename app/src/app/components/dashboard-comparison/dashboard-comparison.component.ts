@@ -1,5 +1,6 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserDb } from '../../core/user-db';
 
 interface DatabaseComparison {
   database_name: string;
@@ -29,9 +30,10 @@ interface DatabaseComparison {
 })
 export class DashboardComparisonComponent {
   readonly comparisonData = input<DatabaseComparison[]>([]);
+  userDb = inject(UserDb);
 
   processedComparisons = computed(() => {
-    const data = this.comparisonData();
+    const data = this.userDb.getComparisonData();
     if (!data || !Array.isArray(data)) {
       return [];
     }

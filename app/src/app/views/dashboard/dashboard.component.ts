@@ -37,12 +37,4 @@ export class DashboardComponent {
   protected databasesInServer = toSignal(this.userDb.getDatabasesInServer());
   protected recentActivities = toSignal(this.userDb.getRecentActivities());
   protected comparisonData = toSignal(this.userDb.getComparisonData());
-
-  constructor() {
-    effect(() => {
-      console.log(this.databasesInServer());
-      console.log(this.recentActivities());
-      console.log(this.comparisonData());
-    });
-  }
 }

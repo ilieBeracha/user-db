@@ -1,5 +1,6 @@
-import { Component, input, Signal, computed } from '@angular/core';
+import { Component, input, Signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserDb } from '../../core/user-db';
 
 interface DatabaseActivity {
   pid: number;
@@ -26,7 +27,7 @@ interface DatabaseActivity {
 })
 export class DashboardActivitiesComponent {
   recentActivities = input<DatabaseActivity[]>([]);
-
+  userDb = inject(UserDb);
   processedActivities = computed(() => {
     const activities = this.recentActivities();
     return activities?.map((activity) => ({

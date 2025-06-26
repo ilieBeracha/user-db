@@ -25,10 +25,4 @@ export class DashboardSummaryComponent {
   protected top1DbSizes = computed(
     () => this.selectedDatabases()?.[0]?.size_bytes
   );
-
-  constructor() {
-    effect(() => {
-      console.log(this.selectedDatabases());
-    });
-  }
 }
