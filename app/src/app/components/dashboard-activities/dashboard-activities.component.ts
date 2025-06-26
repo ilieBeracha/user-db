@@ -27,7 +27,6 @@ interface DatabaseActivity {
 })
 export class DashboardActivitiesComponent {
   recentActivities = input<DatabaseActivity[]>([]);
-  userDb = inject(UserDb);
   processedActivities = computed(() => {
     const activities = this.recentActivities();
     return activities?.map((activity) => ({

@@ -1,5 +1,5 @@
 <div
-  class="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden col-span-1 h-full"
+  class="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden"
 >
   <!-- Header -->
   <div
@@ -25,7 +25,7 @@
         Database Performance Comparison
       </span>
       <span class="text-sm text-zinc-500 dark:text-zinc-400">
-        {{ userDb.getComparisonData.length }} databases
+        {{ !comparisonData() || comparisonData().length }} databases
       </span>
     </div>
   </div>
@@ -34,7 +34,7 @@
   <div
     class="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-96 overflow-y-auto"
   >
-    @if (processedComparisons().length === 0) {
+    @if (!comparisonData() || comparisonData().length === 0) {
     <div class="px-6 py-8 text-center">
       <svg
         class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-500 mb-3"
@@ -61,24 +61,24 @@
       <!-- Database Header -->
       <div class="flex items-start justify-between mb-4">
         <div>
-          <h4 class="text-lg font-semibold text-zinc-800 dark:text-white">
+          <span class="text-lg font-semibold text-zinc-800 dark:text-white">
             {{ database.database_name }}
-          </h4>
+          </span>
           <div class="flex items-center gap-3 mt-2">
             <!-- Performance Badge -->
             <span
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-              [ngClass]="database.performanceColor"
+              class="inline-flex items-center py-0.5 rounded-full text-xs font-medium"
+              [ngClass]="database.performance_rating"
             >
               {{ database.performance_rating }}
             </span>
 
             <!-- Connection Status -->
             <span
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-              [ngClass]="database.connectionStatus.color"
+              class="inline-flex items-center py-0.5 rounded-full text-xs font-medium"
+              [ngClass]="database.active_connections"
             >
-              {{ database.connectionStatus.status }} Usage
+              {{ database.active_connections }} Usage
             </span>
           </div>
         </div>
@@ -109,7 +109,7 @@
             {{ database.cache_hit_ratio }}%
           </div>
           <div class="text-xs text-zinc-500 dark:text-zinc-400">
-            {{ database.cacheRating }}
+            {{ database.cache_hit_ratio }}
           </div>
         </div>
 

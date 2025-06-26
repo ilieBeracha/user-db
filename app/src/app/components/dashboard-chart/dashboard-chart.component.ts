@@ -1,6 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js';
-import { UserDb } from '../../core/user-db';
 
 @Component({
   selector: 'app-dashboard-chart',
@@ -10,7 +9,6 @@ import { UserDb } from '../../core/user-db';
 })
 export class DashboardChartComponent {
   protected chart = signal<Chart | null>(null);
-  protected userDb = inject(UserDb);
   protected config = signal<ChartConfiguration>({
     type: 'line',
     data: {

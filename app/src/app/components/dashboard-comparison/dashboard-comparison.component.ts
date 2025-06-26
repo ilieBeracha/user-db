@@ -30,10 +30,9 @@ interface DatabaseComparison {
 })
 export class DashboardComparisonComponent {
   readonly comparisonData = input<DatabaseComparison[]>([]);
-  userDb = inject(UserDb);
 
   processedComparisons = computed(() => {
-    const data = this.userDb.getComparisonData();
+    const data = this.comparisonData();
     if (!data || !Array.isArray(data)) {
       return [];
     }
