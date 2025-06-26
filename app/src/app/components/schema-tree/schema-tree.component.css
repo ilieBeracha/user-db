@@ -9,12 +9,13 @@
   padding-left: 0.5rem;
   display: flex;
   border-left: 2px solid #5f5f5f;
-  align-items: center;
+  /* align-items: center; */
 
   transition: all 0.2s ease;
 }
 
 .mat-tree-node:hover {
+  cursor: pointer;
   background-color: #353535;
 }
 
@@ -50,6 +51,7 @@
 
 .column-node:hover {
   /* border-left: 2px solid #5f5f5f; */
+  cursor: pointer;
   background: #353535;
 }
 
@@ -69,6 +71,7 @@
 }
 
 .toggle-button:hover {
+  cursor: pointer;
   background: #353535;
   color: #ffffff;
 }
