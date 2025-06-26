@@ -1,0 +1,79 @@
+/* schema-tree.component.css */
+.schema-tree {
+  font-family: "Inter", sans-serif;
+  background: transparent;
+  border-radius: 0.75rem;
+  color: var(--foreground);
+}
+
+.mat-tree-node {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.mat-tree-node:hover {
+  background-color: var(--zinc-100);
+}
+
+.node-icon {
+  margin-right: 0.5rem;
+  color: var(--muted-foreground);
+}
+
+.node-label {
+  font-weight: 500;
+  color: var(--foreground);
+  font-size: 0.875rem;
+}
+
+.database-node .node-icon {
+  color: var(--bright-blue);
+}
+
+.table-node {
+  display: list-item;
+  background: var(--zinc-100);
+  border-left: 2px solid #5f5f5f;
+}
+
+.table-node .node-icon {
+  color: var(--electric-violet);
+}
+
+.column-node {
+  border-left: 2px solid #5f5f5f;
+  /* background: #353535; */
+}
+
+.column-node:hover {
+  border-left: 2px solid #5f5f5f;
+  background: #353535;
+}
+
+.tree-invisible {
+  display: none;
+}
+
+.toggle-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+
+  background: transparent;
+  color: #353535;
+  transition: 0.2s;
+}
+
+.toggle-button:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+mat-icon {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+}

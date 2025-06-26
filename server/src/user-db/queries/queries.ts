@@ -1,38 +1,45 @@
 export const LARGEST_DATABASE_QUERY = `
--- Shows database sizes ordered by size (largest first)
 SELECT 
-    datname AS database_name,
-    pg_size_pretty(pg_database_size(datname)) AS size,
-    pg_database_size(datname) AS size_bytes
-FROM pg_database
-WHERE datistemplate = false
-ORDER BY pg_database_size(datname) DESC
+  d.datname AS database_name,
+  pg_catalog.pg_get_userbyid(d.datdba) AS owner,
+  pg_size_pretty(pg_database_size(d.datname)) AS size,
+  pg_database_size(d.datname) AS size_bytes,
+  has_database_privilege(d.datname, 'CONNECT') AS can_connect
+FROM pg_database d
+WHERE 
+  d.datistemplate = false
+  AND has_database_privilege(d.datname, 'CONNECT')
+ORDER BY pg_database_size(d.datname) DESC
 LIMIT $1;
 `;
 
 export const GET_RECENT_ACTIVITY_QUERY = `
--- Shows recent activity with query details
-  SELECT
-    pid,
-    usename AS username,
-    application_name,
-    client_addr,
-    client_hostname,
-    client_port,
-    backend_start,
-    query_start,
-    state_change,
-    state,
-    query,
-    (now() - query_start)::text AS query_duration,
-    (now() - state_change)::text AS state_duration,
-    (now() - backend_start)::text AS connection_duration
-  FROM pg_stat_activity
-  WHERE pid <> pg_backend_pid()
-    AND state IS NOT NULL
-  ORDER BY COALESCE(query_start, state_change, backend_start) DESC
-  LIMIT $1;
+-- Recent database activity including query and connection timing
+SELECT
+  pid,
+  usename AS username,
+  application_name,
+  client_addr,
+  client_hostname,
+  client_port,
+  backend_start,
+  query_start,
+  state_change,
+  state,
+  query,
+  -- Durations
+  (now() - query_start)::text          AS query_duration,
+  (now() - state_change)::text         AS state_duration,
+  (now() - backend_start)::text        AS connection_duration
+FROM pg_stat_activity
+WHERE
+  pid <> pg_backend_pid()              -- Exclude current session
+  AND state IS NOT NULL                -- Only active/idle queries
+ORDER BY
+  COALESCE(query_start, state_change, backend_start) DESC
+LIMIT $1;
 `;
+
 export const PERFORMANCE_MATRIX = `
 SELECT 
     db.datname as database_name,
@@ -50,28 +57,40 @@ ORDER BY cache_hit_ratio DESC;
 `;
 
 export const CONNECTION_USAGE_BY_DB_QUERY = `
+-- Show connection count per database with percentage of total
 SELECT 
-    COALESCE(datname, 'System') as database_name,
-    count(*) as connection_count,
-    ROUND((count(*) * 100.0) / (SELECT count(*) FROM pg_stat_activity), 2) as percentage
-FROM pg_stat_activity 
+  COALESCE(datname, 'System') AS database_name,
+  COUNT(*) AS connection_count,
+  ROUND(
+    (COUNT(*) * 100.0) / NULLIF((SELECT COUNT(*) FROM pg_stat_activity), 0),
+    2
+  ) AS percentage
+FROM pg_stat_activity
 GROUP BY datname
 ORDER BY connection_count DESC;
 `;
 
 export const EFFICIENCY_COMPARISON_QUERY = `
-SELECT 
-    datname as database_name,
-    ROUND((blks_hit * 100.0) / NULLIF(blks_hit + blks_read, 0), 2) as cache_hit_ratio,
-    CASE 
-        WHEN (blks_hit * 100.0) / NULLIF(blks_hit + blks_read, 0) >= 95 THEN 'Excellent'
-        WHEN (blks_hit * 100.0) / NULLIF(blks_hit + blks_read, 0) >= 90 THEN 'Good'
-        WHEN (blks_hit * 100.0) / NULLIF(blks_hit + blks_read, 0) >= 80 THEN 'Fair'
-        ELSE 'Poor'
-    END as performance_rating
-FROM pg_stat_database 
-WHERE datname NOT IN ('template0', 'template1', 'postgres')
+-- Efficiency score based on buffer cache hit ratio
+WITH hit_stats AS (
+  SELECT 
+    datname AS database_name,
+    ROUND((blks_hit * 100.0) / NULLIF(blks_hit + blks_read, 0), 2) AS cache_hit_ratio
+  FROM pg_stat_database
+  WHERE 
+    datname NOT IN ('template0', 'template1', 'postgres')
     AND blks_hit + blks_read > 0
+)
+SELECT
+  database_name,
+  cache_hit_ratio,
+  CASE 
+    WHEN cache_hit_ratio >= 95 THEN 'Excellent'
+    WHEN cache_hit_ratio >= 90 THEN 'Good'
+    WHEN cache_hit_ratio >= 80 THEN 'Fair'
+    ELSE 'Poor'
+  END AS performance_rating
+FROM hit_stats
 ORDER BY cache_hit_ratio DESC;
 `;
 
@@ -124,3 +143,29 @@ WHERE db.datname NOT IN ('template0', 'template1', 'postgres')
     AND db.datallowconn = true
 ORDER BY total_transactions DESC;
  `;
+
+export const GET_TABLES_WITH_COLUMNS_QUERY = `
+ SELECT
+   t.table_name,
+   COUNT(c.column_name) AS column_count,
+   JSON_AGG(
+     JSON_BUILD_OBJECT(
+       'column', c.column_name,
+       'type', c.data_type,
+       'nullable', c.is_nullable
+     ) ORDER BY c.ordinal_position
+   ) AS columns
+ FROM information_schema.tables t
+ JOIN information_schema.columns c
+   ON t.table_name = c.table_name
+  AND t.table_schema = c.table_schema
+ WHERE t.table_schema = 'public'
+   AND t.table_type = 'BASE TABLE'
+ GROUP BY t.table_name
+ ORDER BY t.table_name;
+`;
+
+export const GET_TABLE_DATA_QUERY = `
+SELECT * FROM get_table_data_dynamic($1) 
+AS t(col1 TEXT, col2 INT, col3 TIMESTAMP);
+`;

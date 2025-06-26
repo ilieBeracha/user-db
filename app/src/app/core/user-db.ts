@@ -11,7 +11,7 @@ export class UserDb {
   userDbConnection = signal<any>(null);
   databasesInServer = signal<any[]>([]);
   recentActivities = signal<any[]>([]);
-
+  schemaExplorer = signal<any[]>([]);
   comparisonData = signal<any[]>([]);
   getConnection() {
     return this.dbUserService.getConnection().pipe(
@@ -51,6 +51,15 @@ export class UserDb {
       })
     );
   }
+  getSchemaExplorer() {
+    return this.dbUserService.getSchemaExplorer().pipe(
+      take(1),
+      tap((response) => {
+        this.schemaExplorer.set(response);
+        return response;
+      })
+    );
+  }
   readRecentActivities() {
     return computed(() => this.recentActivities);
   }
@@ -65,5 +74,9 @@ export class UserDb {
 
   readComparisonData() {
     return computed(() => this.comparisonData);
+  }
+
+  readSchemaExplorer() {
+    return computed(() => this.schemaExplorer);
   }
 }

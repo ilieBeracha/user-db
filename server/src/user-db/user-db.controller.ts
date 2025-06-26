@@ -1,7 +1,6 @@
 import { Controller, Get, Req, UseGuards } from "@nestjs/common";
 import { UserDbService } from "./user-db.service";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { DatabasePerformanceMetrics } from "../../../shared/comparison-dto";
 
 @Controller("user-db")
 export class UserDbController {
@@ -21,9 +20,7 @@ export class UserDbController {
 
   @Get("comparison")
   @UseGuards(JwtAuthGuard)
-  async getComparisonData(
-    @Req() req: any
-  ): Promise<DatabasePerformanceMetrics> {
+  async getComparisonData(@Req() req: any): Promise<any> {
     return this.userDbService.getComparisonData(req);
   }
 
@@ -31,5 +28,11 @@ export class UserDbController {
   @UseGuards(JwtAuthGuard)
   async getDatabasesInServer(@Req() req: any): Promise<any> {
     return this.userDbService.getDatabasesInServer(req);
+  }
+
+  @Get("schema-explorer")
+  @UseGuards(JwtAuthGuard)
+  async getTables(@Req() req: any): Promise<any> {
+    return this.userDbService.getSchemaExplorerAcrossDatabases(req?.user?.id);
   }
 }

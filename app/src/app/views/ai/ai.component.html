@@ -1,10 +1,17 @@
 <nz-splitter nzLayout="horizontal" class="h-screen w-screen">
   <!-- Left Column (1 of 4 columns wide) -->
   <nz-splitter-panel nzDefaultSize="25%" nzMinSize="10%" nzMaxSize="50%">
-    <div class="h-full text-white dark:bg-zinc-900 p-8">oNE</div>
+    <div class="h-full text-white dark:bg-zinc-900 pt-12 bg-zinc-900 grid">
+      <app-schema-tree [schemaTree]="schemaExplorer()"></app-schema-tree>
+    </div>
   </nz-splitter-panel>
 
-  <nz-splitter-panel nzDefaultSize="75%" nzMinSize="10%" nzMaxSize="90%">
+  <nz-splitter-panel
+    nzDefaultSize="75%"
+    nzMinSize="10%"
+    nzMaxSize="90%"
+    class="pt-12"
+  >
     <nz-splitter nzLayout="vertical" class="h-full w-full p-0 m-0">
       <nz-splitter-panel nzDefaultSize="60%">
         <div class="h-full text-white dark:bg-zinc-900">

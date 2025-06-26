@@ -34,6 +34,32 @@ export class UserDbConnectionManager {
     return newDataSource;
   }
 
+  async getConnectionForDatabase(
+    database: string,
+    userId: string
+  ): Promise<DataSource> {
+    const baseUserDb = await this.userDbRepo.findOneBy({ user_id: userId });
+    if (!baseUserDb) throw new Error("User DB not found");
+
+    const cacheKey = `${userId}::${database}`;
+    if (this.dataSources.has(cacheKey)) {
+      const existing = this.dataSources.get(cacheKey)!;
+      if (existing.isInitialized) return existing;
+    }
+
+    const newDataSource = AppDataSource(
+      baseUserDb.host,
+      baseUserDb.port,
+      baseUserDb.user,
+      baseUserDb.password,
+      database // 🔥 override target db
+    );
+
+    await newDataSource.initialize();
+    this.dataSources.set(cacheKey, newDataSource);
+    return newDataSource;
+  }
+
   async closeAll() {
     for (const [_, ds] of this.dataSources) {
       if (ds.isInitialized) await ds.destroy();
