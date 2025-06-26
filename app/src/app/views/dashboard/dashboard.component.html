@@ -1,3 +1,26 @@
-<div class="page-container">
-  <app-dashboard-databases [selectedDatabases]="selectedDatabases()" />
+<div class="max-w-[1800px] mx-auto w-full py-10 flex flex-col gap-10 px-12">
+  <div class="flex flex-col gap-0.5">
+    <h1 class="text-xl font-semibold text-zinc-800 dark:text-white">
+      Databases
+    </h1>
+    <p class="text-sm text-zinc-500 dark:text-zinc-400">
+      Here you can see all the databases in your server.
+    </p>
+  </div>
+  <div class="space-y-3 grid grid-cols-12 gap-2">
+    <app-dashboard-databases
+      class="col-span-4 h-full"
+      [databasesInServer]="databasesInServer()"
+    />
+    <app-dashboard-activities
+      class="col-span-8 h-full"
+      [recentActivities]="recentActivities()"
+    />
+
+    <app-dashboard-comparison
+      class="col-span-6 h-full"
+      [comparisonData]="comparisonData()"
+    />
+    <app-dashboard-chart class="col-span-6 h-full w-full" />
+  </div>
 </div>

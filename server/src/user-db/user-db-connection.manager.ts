@@ -41,7 +41,7 @@ export class UserDbConnectionManager {
     this.dataSources.clear();
   }
 
-  async performBatch(batches: any[], user_id: string) {
+  async performBatch(batches: any, user_id: string) {
     const userDb = await this.userDbRepo.findOneBy({ user_id });
     if (!userDb) throw new Error("User DB not found");
 

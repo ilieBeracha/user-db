@@ -19,17 +19,19 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dashboard-databases.component.html',
 })
 export class DashboardDatabasesComponent {
-  readonly selectedDatabases = input<any>();
+  readonly databasesInServer = input<any[]>([]);
   protected currentIndex = signal(0);
 
   protected get currentDatabase() {
-    const databases = this.selectedDatabases();
-    return databases && databases.length > 0 ? databases[this.currentIndex()] : null;
+    const databases = this.databasesInServer();
+    return databases && databases?.length > 0
+      ? databases[this.currentIndex()]
+      : null;
   }
 
   protected get totalDatabases() {
-    const databases = this.selectedDatabases();
-    return databases ? databases.length : 0;
+    const databases = this.databasesInServer();
+    return databases?.length ?? 0;
   }
 
   protected nextDatabase() {

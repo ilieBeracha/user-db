@@ -3,7 +3,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserDb } from "./entities/user-db.entity";
 import { UserDbConnectionManager } from "./user-db-connection.manager";
-import { LARGEST_DATABASE_QUERY } from "./queries/queries";
+import {
+  CONNECTION_USAGE_BY_DB_QUERY,
+  EFFICIENCY_COMPARISON_QUERY,
+  GET_RECENT_ACTIVITY_QUERY,
+  LARGEST_DATABASE_QUERY,
+  RESOURCE_UTILIZATION_SUMMARY_QUERY,
+  PERFORMANCE_MATRIX,
+} from "./queries/queries";
 
 @Injectable()
 export class UserDbService {
@@ -21,6 +28,26 @@ export class UserDbService {
     );
 
     return result;
+  }
+
+  async getRecentActivity(req: any, limit: number = 10) {
+    const result = await this.connManager.runSingleQuery(
+      GET_RECENT_ACTIVITY_QUERY,
+      [50],
+      req?.user?.id
+    );
+
+    return result;
+  }
+
+  async getComparisonData(req: any) {
+    const results = await this.connManager.runSingleQuery(
+      RESOURCE_UTILIZATION_SUMMARY_QUERY,
+      [],
+      req?.user?.id
+    );
+
+    return results;
   }
 
   async isConnected(req: any) {

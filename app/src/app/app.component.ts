@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
+
+Chart.register(...registerables);
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, FormsModule],
@@ -10,6 +14,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class AppComponent {
   title = 'angular-dashboard';
-  editorOptions = { theme: 'vs-dark', language: 'sql' };
-  code: string = 'SELECT * FROM users';
+
+  config: ChartConfiguration = {
+    type: 'doughnut',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [
+        {
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1,
+        },
+      ],
+    },
+  };
 }

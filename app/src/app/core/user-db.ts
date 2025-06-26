@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { DbUserService } from '../../services/dbUserService';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { connectUserDbDto } from '../../services/dbUserService';
 
 @Injectable({
@@ -10,7 +10,9 @@ export class UserDb {
   private dbUserService = inject(DbUserService);
   userDbConnection = signal<any>(null);
   databasesInServer = signal<any[]>([]);
+  recentActivities = signal<any[]>([]);
 
+  comparisonData = signal<any[]>([]);
   getConnection() {
     return this.dbUserService.getConnection().pipe(
       tap((response) => {
@@ -32,6 +34,26 @@ export class UserDb {
       })
     );
   }
+  getRecentActivities() {
+    return this.dbUserService.getRecentActivities().pipe(
+      tap((response) => {
+        this.databasesInServer.set(response);
+        return response;
+      })
+    );
+  }
+  getComparisonData() {
+    return this.dbUserService.getComparisonData().pipe(
+      take(1),
+      tap((response) => {
+        this.comparisonData.set(response);
+        return response;
+      })
+    );
+  }
+  readRecentActivities() {
+    return computed(() => this.recentActivities);
+  }
 
   readDatabasesInServer() {
     return computed(() => this.databasesInServer);
@@ -41,14 +63,7 @@ export class UserDb {
     return computed(() => this.userDbConnection);
   }
 
-  // Add these methods to your UserDb service
-  async getDatabaseSchema(databaseName: string): Promise<string> {
-    // Implementation to fetch schema from your backend
-    return '';
-  }
-
-  async saveGeneratedSchema(schemaData: any): Promise<void> {
-    // Implementation to save generated schema
-    console.log(schemaData);
+  readComparisonData() {
+    return computed(() => this.comparisonData);
   }
 }

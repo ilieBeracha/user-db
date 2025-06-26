@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { API_URL } from '../app/cosnts';
 import { Auth } from '../app/core/auth';
+import { DatabasePerformanceMetrics } from '../../../shared/comparison-dto';
 
 export interface connectUserDbDto {
   host: string;
@@ -46,6 +47,22 @@ export class DbUserService {
   getDatabasesInServer() {
     return this.http.get<any>(
       `${API_URL}/user-db/server-databases`,
+      this.getHeaders()
+    );
+  }
+
+  getRecentActivities() {
+    const response = this.http.get<any>(
+      `${API_URL}/user-db/activities`,
+      this.getHeaders()
+    );
+
+    return response;
+  }
+
+  getComparisonData() {
+    return this.http.get<any>(
+      `${API_URL}/user-db/comparison`,
       this.getHeaders()
     );
   }
