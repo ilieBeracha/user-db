@@ -1,9 +1,15 @@
-<div
-  class="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700"
->
-  <ngx-monaco-editor
-    style="height: 100%; width: 100%"
-    [options]="editorOptions"
-    [(ngModel)]="code"
-  ></ngx-monaco-editor>
+<div class="flex flex-col h-full bg-white dark:bg-zinc-900">
+  <!-- Simple Editor -->
+  <div class="flex-1">
+    <ngx-monaco-editor
+      class="h-full"
+      [options]="editorOptions"
+      [(ngModel)]="code"
+    ></ngx-monaco-editor>
+  </div>
+
+  <!-- Simple Bottom Panel (optional) -->
+  <div *ngIf="showResults" class="border-t border-zinc-200 dark:border-zinc-700 p-4 bg-zinc-50 dark:bg-zinc-800">
+    <p class="text-sm text-zinc-600 dark:text-zinc-400">Query results would appear here</p>
+  </div>
 </div>

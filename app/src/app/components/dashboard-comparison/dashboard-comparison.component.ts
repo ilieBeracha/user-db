@@ -86,7 +86,7 @@ export class DashboardComparisonComponent {
       case 'excellent':
         return 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900';
       case 'good':
-        return 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900';
+        return 'text-blue-600  dark:text-blue-400 ';
       case 'fair':
         return 'text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900';
       case 'poor':

@@ -48,7 +48,7 @@ export class DashboardActivitiesComponent {
       return format(query, {
         language: 'postgresql',
         keywordCase: 'upper',
-        indentStyle: 'standard'
+        indentStyle: 'standard',
       });
     } catch (error) {
       // If formatting fails, return the original query
@@ -114,7 +114,7 @@ export class DashboardActivitiesComponent {
       case 'active':
         return 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/20';
       case 'idle':
-        return 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20';
+        return 'text-blue-600 dark:text-blue-400';
       case 'idle in transaction':
         return 'text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/20';
       case 'idle in transaction (aborted)':

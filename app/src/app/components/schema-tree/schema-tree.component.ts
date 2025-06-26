@@ -53,6 +53,9 @@ export class SchemaTreeComponent {
     });
   }
 
+  isColumn = (node: TreeNode) => node.type === 'column';
+  isTable = (node: TreeNode) => node.type === 'table';
+
   hasChild = (_: number, node: TreeNode) => !!node.children?.length;
 
   private buildTreeData() {
@@ -64,13 +67,12 @@ export class SchemaTreeComponent {
       type: 'database',
       icon: 'storage',
       children: schema.tables.map((table) => ({
-        name: `${table.table_name} (${table.column_count} columns)`,
+        name: `${table.table_name}`,
         type: 'table',
+        schema: schema.database,
         icon: 'table_chart',
         children: table.columns.map((column) => ({
-          name: `${column.column} : ${column.type}${
-            column.nullable === 'NO' ? ' NOT NULL' : ''
-          }`,
+          name: `${column.column}`,
           type: 'column',
           icon: column.nullable === 'NO' ? 'key' : 'text_fields',
           details: column,
@@ -84,6 +86,7 @@ export class SchemaTreeComponent {
   onNodeClick(node: TreeNode, event: Event) {
     event.stopPropagation();
     this.selectedNode = node;
+    console.log(node);
     this.updateBreadcrumb(node);
   }
 

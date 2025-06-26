@@ -48,7 +48,8 @@
               [ngClass]="{
                 'bg-green-100 text-green-800':
                   activity.activityType === 'SELECT',
-                'bg-blue-100 text-blue-800': activity.activityType === 'INSERT',
+                'text-blue-800  dark:text-blue-400 dark:bg-blue-900/20':
+                  activity.activityType === 'INSERT',
                 'bg-yellow-100 text-yellow-800':
                   activity.activityType === 'UPDATE',
                 'bg-red-100 text-red-800': activity.activityType === 'DELETE',
@@ -98,7 +99,10 @@
               <div
                 [ngClass]="{ 'line-clamp-3': !isQueryExpanded(activity.pid) }"
               >
-                <div class="mockup-code w-full" [ngClass]="{ 'line-clamp-3': !isQueryExpanded(activity.pid) }">
+                <div
+                  class="mockup-code w-full"
+                  [ngClass]="{ 'line-clamp-3': !isQueryExpanded(activity.pid) }"
+                >
                   <pre data-prefix="$"><code>{{
                         isQueryExpanded(activity.pid)
                           ? activity.formattedQuery

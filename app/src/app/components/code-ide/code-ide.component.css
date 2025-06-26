@@ -1,11 +1,11 @@
-/* Code Editor Styling */
+/* Code Editor Simple Styling */
 textarea {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   tab-size: 2;
   line-height: 1.5;
 }
 
-/* Disable textarea scrollbar styling in favor of browser default */
+/* Simple scrollbar styling */
 textarea::-webkit-scrollbar {
   width: 8px;
 }
@@ -19,40 +19,12 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 4px;
 }
 
-textarea::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8;
-}
-
-/* Dark mode scrollbar */
 .dark textarea::-webkit-scrollbar-thumb {
   background-color: #52525b;
-}
-
-.dark textarea::-webkit-scrollbar-thumb:hover {
-  background-color: #71717a;
 }
 
 /* Output panel styling */
 pre {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   line-height: 1.4;
-}
-
-/* Button hover animations */
-button {
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-/* Loading state for execute button */
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
 }

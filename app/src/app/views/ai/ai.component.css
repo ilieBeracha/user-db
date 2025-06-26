@@ -1,0 +1,41 @@
+/* HTTPie Dark Theme */
+
+/* Custom splitter styling */
+:host ::ng-deep .ant-splitter {
+  background: transparent;
+}
+
+:host ::ng-deep .ant-splitter-bar {
+  background: #1e1b4b;
+  border: none;
+}
+
+/* Dark mysterious sections */
+
+/* Simple scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+
+/* Focus indicators only */
+button:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 0.875rem;
+  }
+}

@@ -1,38 +1,56 @@
-<nz-splitter nzLayout="horizontal" class="h-screen w-screen">
-  <!-- Left Column (1 of 4 columns wide) -->
-  <nz-splitter-panel nzDefaultSize="25%" nzMinSize="10%" nzMaxSize="50%">
-    <div class="h-full text-white dark:bg-zinc-900 pt-12 bg-zinc-900 grid">
-      <app-schema-tree [schemaTree]="schemaExplorer()"></app-schema-tree>
-    </div>
-  </nz-splitter-panel>
-
-  <nz-splitter-panel
-    nzDefaultSize="75%"
-    nzMinSize="10%"
-    nzMaxSize="90%"
-    class="pt-12"
-  >
-    <nz-splitter nzLayout="vertical" class="h-full w-full p-0 m-0">
-      <nz-splitter-panel nzDefaultSize="60%">
-        <div class="h-full text-white dark:bg-zinc-900">
-          <app-code-ide></app-code-ide>
+<div class="h-screen w-screen dark:bg-zinc-900">
+  <nz-splitter nzLayout="horizontal" class="h-full">
+    <!-- Schema Explorer Panel -->
+    <nz-splitter-panel nzDefaultSize="22%" nzMinSize="15%" nzMaxSize="40%">
+      <div
+        class="h-full schema-section border-r border-zinc-200 dark:border-zinc-700"
+      >
+        <div class="h-[calc(100%)] overflow-auto">
+          <app-schema-tree [schemaTree]="schemaExplorer()"></app-schema-tree>
         </div>
-      </nz-splitter-panel>
+      </div>
+    </nz-splitter-panel>
 
-      <!-- Bottom Rows (2 of 5 rows tall) -->
-      <nz-splitter-panel>
-        <nz-splitter nzLayout="horizontal" class="h-full">
-          <!-- Three takes 2 of 3 columns -->
-          <nz-splitter-panel nzDefaultSize="100%">
-            <div class="h-full text-white dark:bg-zinc-900 p-4">Three</div>
-          </nz-splitter-panel>
+    <!-- Main Content Area -->
+    <nz-splitter-panel nzDefaultSize="78%" nzMinSize="60%" nzMaxSize="85%">
+      <nz-splitter nzLayout="vertical" class="h-full">
+        <!-- Query Editor and Results -->
+        <nz-splitter-panel nzDefaultSize="80%" nzMinSize="40%" nzMaxSize="80%">
+          <nz-splitter nzLayout="horizontal" class="h-full">
+            <!-- Main Query Editor -->
+            <nz-splitter-panel
+              nzDefaultSize="100%"
+              nzMinSize="50%"
+              nzMaxSize="100%"
+            >
+              <div class="h-full query-section">
+                <div class="h-[calc(100%)]">
+                  <app-code-ide></app-code-ide>
+                </div>
+              </div>
+            </nz-splitter-panel>
 
-          <!-- Four takes 1 of 3 columns -->
-          <!-- <nz-splitter-panel nzDefaultSize="20%">
-            <div class="h-full text-white p-4">Four</div>
-          </nz-splitter-panel> -->
-        </nz-splitter>
-      </nz-splitter-panel>
-    </nz-splitter>
-  </nz-splitter-panel>
-</nz-splitter>
+            <!-- Query History Sidebar -->
+            <nz-splitter-panel
+              nzDefaultSize="20%"
+              nzMinSize="200px"
+              nzMaxSize="100%"
+            >
+            </nz-splitter-panel>
+          </nz-splitter>
+        </nz-splitter-panel>
+
+        <!-- AI Assistant Panel -->
+        <nz-splitter-panel nzDefaultSize="45%" nzMinSize="20%" nzMaxSize="100%">
+          <div
+            class="h-full ai-section border-t border-zinc-200 dark:border-zinc-700"
+          >
+            <div class="h-[calc(100%)]">
+              <app-ai-gen></app-ai-gen>
+            </div>
+          </div>
+        </nz-splitter-panel>
+      </nz-splitter>
+    </nz-splitter-panel>
+  </nz-splitter>
+</div>

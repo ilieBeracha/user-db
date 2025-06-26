@@ -8,15 +8,22 @@
 .mat-tree-node {
   padding-left: 0.5rem;
   display: flex;
-  border-left: 2px solid #5f5f5f;
+  border-left: 2px solid orange;
   /* align-items: center; */
-
+  min-height: none !important;
+  gap: 0px;
   transition: all 0.2s ease;
 }
 
-.mat-tree-node:hover {
+.mat-tree-node:not(.selected-node-column):hover {
   cursor: pointer;
+  border-left: 2px solid orange;
   background-color: #353535;
+  color: #454545;
+}
+
+.selected-node-column {
+  opacity: 0.5;
 }
 
 .node-icon {
@@ -36,7 +43,7 @@
 .table-node {
   display: list-item;
   /* background: var(--zinc-100); */
-  /* border-left: 2px solid #5f5f5f; */
+  /* border-left: 2px solid orange; */
 }
 
 .table-node .node-icon {
@@ -45,12 +52,12 @@
 
 .column-node {
   padding-left: 0.5rem;
-  /* border-left: 2px solid #5f5f5f; */
+  /* border-left: 2px solid orange; */
   /* background-color: #222222; */
 }
 
 .column-node:hover {
-  /* border-left: 2px solid #5f5f5f; */
+  /* border-left: 2px solid orange; */
   cursor: pointer;
   background: #353535;
 }

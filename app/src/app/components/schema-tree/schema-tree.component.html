@@ -11,7 +11,11 @@
     (click)="onNodeClick(node, $event)"
   >
     <mat-icon [fontIcon]="getNodeIcon(node)" class="node-icon"></mat-icon>
-    <span class="node-label truncate max-w-[200px]">{{ node.name }}</span>
+    <span
+      class="node-label truncate max-w-[200px]"
+      [class.selected-node-column]="isColumn(node)"
+      >{{ node.name }}</span
+    >
   </mat-tree-node>
 
   <mat-nested-tree-node
@@ -21,6 +25,9 @@
     <div
       class="mat-tree-node flex items-center gap-2"
       matTreeNodeToggle
+      [class.selected-node-table]="
+        isTable(node) && selectedNode?.name === node.name
+      "
       [title]="getNodeTooltip(node)"
       (click)="onNodeClick(node, $event)"
     >

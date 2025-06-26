@@ -7,6 +7,7 @@ import { CodeIdeComponent } from '../../components/code-ide/code-ide.component';
 import { UserDb } from '../../core/user-db';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SchemaTreeComponent } from '../../components/schema-tree/schema-tree.component';
+import { AiGenComponent } from '../../components/ai-gen/ai-gen.component';
 
 @Component({
   selector: 'app-ai',
@@ -14,9 +15,10 @@ import { SchemaTreeComponent } from '../../components/schema-tree/schema-tree.co
     CodeIdeComponent,
     MatGridListModule,
     NzSplitterModule,
-    NzCodeEditorModule,
+    NzCodeEditorModule, 
     NzSwitchModule,
     SchemaTreeComponent,
+    AiGenComponent,
   ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.css',

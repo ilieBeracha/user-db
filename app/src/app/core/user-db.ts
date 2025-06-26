@@ -13,6 +13,7 @@ export class UserDb {
   recentActivities = signal<any[]>([]);
   schemaExplorer = signal<any[]>([]);
   comparisonData = signal<any[]>([]);
+  
   getConnection() {
     return this.dbUserService.getConnection().pipe(
       tap((response) => {
