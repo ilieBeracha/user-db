@@ -8,7 +8,6 @@
 .mat-tree-node {
   padding-left: 0.5rem;
   display: flex;
-  border-left: 2px solid orange;
   /* align-items: center; */
   min-height: none !important;
   gap: 0px;
@@ -17,7 +16,6 @@
 
 .mat-tree-node:not(.selected-node-column):hover {
   cursor: pointer;
-  border-left: 2px solid orange;
   background-color: #353535;
   color: #454545;
 }

@@ -2,7 +2,19 @@
 
 // Include the common styles for Angular Material
 @include mat.core();
-
+:root {
+  @include mat.tabs-overrides(
+    (
+      active-focus-indicator-color: white,
+      active-focus-label-text-color: white,
+      active-hover-label-text-color: white,
+      inactive-focus-label-text-color: white,
+      inactive-hover-label-text-color: white,
+      inactive-label-text-color: white,
+      active-label-text-color: white,
+    )
+  );
+}
 html {
   color-scheme: dark;
 }
@@ -95,8 +107,6 @@ body {
 }
 
 h1 {
-  color: var(--gray-400);
-  letter-spacing: -0.05rem;
   margin: 0;
   font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -131,7 +141,6 @@ p {
 .ant-splitter-bar-dragger {
   border-radius: 10px !important;
   box-shadow: 0 0 10px #353535 !important;
-  border: 2px solid #353535 !important;
 }
 
 .ant-splitter-bar-dragger:hover {

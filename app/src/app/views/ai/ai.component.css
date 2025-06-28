@@ -39,3 +39,9 @@ button:focus-visible {
     font-size: 0.875rem;
   }
 }
+
+.mat-tab-group .mat-tab-header {
+  background-color: #1e1b4b;
+  border-radius: 10px;
+  padding: 10px;
+}

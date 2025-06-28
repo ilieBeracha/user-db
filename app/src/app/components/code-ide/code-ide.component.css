@@ -1,6 +1,6 @@
 /* Code Editor Simple Styling */
 textarea {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   tab-size: 2;
   line-height: 1.5;
 }
@@ -25,6 +25,6 @@ textarea::-webkit-scrollbar-thumb {
 
 /* Output panel styling */
 pre {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   line-height: 1.4;
 }

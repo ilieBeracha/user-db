@@ -14,15 +14,17 @@ export class CodeIdeComponent {
     theme: 'vs-dark',
     language: 'sql',
     minimap: { enabled: false },
+    padding: { top: 20, bottom: 20 },
+    automaticLayout: true,
   };
 
   code = 'SELECT * FROM users LIMIT 10;';
-  
+
   // Simple UI state
   showResults = false;
   isExecuting = false;
   queryError: string | null = null;
-  
+
   executeQuery() {
     console.log('Execute query:', this.code);
   }
