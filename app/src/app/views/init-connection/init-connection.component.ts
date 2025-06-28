@@ -28,7 +28,7 @@ export class InitConnectionComponent implements OnInit {
     // Check if connection already exists without triggering navigation
     this.userDb.getConnection().subscribe((connection) => {
       if (connection) {
-        this.router.navigate(['/dashboard'], { replaceUrl: true });
+        this.router.navigate(['/query-builder'], { replaceUrl: true });
       }
     });
   }
@@ -46,7 +46,7 @@ export class InitConnectionComponent implements OnInit {
         })
         .subscribe((response) => {
           if (response) {
-            this.router.navigate(['/dashboard'], { replaceUrl: true });
+            this.router.navigate(['/query-builder'], { replaceUrl: true });
           }
         });
     }

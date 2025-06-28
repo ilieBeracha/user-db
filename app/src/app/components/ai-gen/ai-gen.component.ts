@@ -13,61 +13,95 @@ interface Message {
   imports: [CommonModule, FormsModule],
   styleUrl: './ai-gen.component.css',
   template: `
-    <div class="flex flex-col h-full max-h-screen px-4">
+    <div class="flex flex-col h-full text-white">
       <!-- Header -->
-      <div class="py-4 text-center  p-4 flex flex-col gap-2 ">
-        <span
-          class="text-lg  font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-white rounded-2xl"
-        >
-          Database Assistant
-        </span>
-        <span
-          class="text-sm bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
-        >
-          Ask me anything about your database
-        </span>
+      <div class="p-6 border-b border-gray-700/50 backdrop-blur-sm">
+        <div class="text-center space-y-2">
+          <span
+            class="text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+          >
+            🤖 Database Assistant
+          </span>
+          <p class="text-sm text-gray-400">
+            Ask me anything about your database schema and data
+          </p>
+        </div>
       </div>
 
-      <!-- Chat History -->
+      <!-- Chat Messages -->
       <div
-        class="flex-1 overflow-y-auto space-y-4 bg-zinc-100/10 min-h-[300px] rounded-2xl"
+        class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar h-full flex flex-col"
       >
         <div
-          *ngFor="let msg of messages"
-          class="max-w-xl mx-auto rounded-2xl"
-          [ngClass]="{
-            'text-right': msg.role === 'user',
-            'text-left': msg.role === 'assistant'
-          }"
+          *ngIf="messages.length === 0"
+          class="flex items-center justify-center h-full"
         >
-          <div
-            [ngClass]="{
-              'bg-blue-500 text-white rounded-tl-xl rounded-tr-xl rounded-bl-xl':
-                msg.role === 'user',
-              'bg-zinc-200  dark:bg-zinc-800 dark:text-zinc-100 rounded-tl-xl rounded-tr-xl rounded-br-xl':
-                msg.role === 'assistant'
-            }"
-            class="inline-block px-4 py-2 text-sm"
-          >
-            {{ msg.content }}
+          <div class="text-center space-y-3 opacity-60 h-full">
+            <div class="text-4xl">💬</div>
+            <p class="text-gray-500">
+              Start a conversation about your database
+            </p>
+            <div class="text-xs text-gray-500 space-y-1 h-full">
+              <p>Try: "Show me all tables"</p>
+              <p>Or: "Count users in the database"</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngFor="let msg of messages"
+          class="flex h-full"
+          [ngClass]="msg.role === 'user' ? 'justify-end' : 'justify-start'"
+        >
+          <div class="max-w-[80%] space-y-2">
+            <div
+              class="text-xs text-gray-500 px-2"
+              [ngClass]="msg.role === 'user' ? 'text-right' : 'text-left'"
+            >
+              {{ msg.role === 'user' ? 'You' : 'Assistant' }}
+            </div>
+            <div
+              [ngClass]="{
+                'bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-2xl rounded-br-md shadow-lg':
+                  msg.role === 'user',
+                'bg-gray-800/80 border border-gray-700/50 text-gray-100 rounded-2xl rounded-bl-md shadow-lg backdrop-blur-sm':
+                  msg.role === 'assistant'
+              }"
+              class="px-4 py-3 text-sm leading-relaxed h-full"
+            >
+              <div class="whitespace-pre-wrap">{{ msg.content }}</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Message Input -->
-      <div class="p-4">
-        <div class="flex gap-2">
-          <input
-            [(ngModel)]="currentMessage"
-            placeholder="Ask about your database..."
-            class="flex-1 px-3 py-2 text-sm rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            (keydown.enter)="sendMessage()"
-          />
+      <!-- Input Area -->
+      <div class="p-4 border-t border-gray-700/50 backdrop-blur-sm ">
+        <div class="flex gap-3 items-end">
+          <div class="flex-1 relative">
+            <input
+              [(ngModel)]="currentMessage"
+              placeholder="Ask about tables, data, relationships..."
+              class="w-full px-4 py-3 text-sm  bg-gray-800/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all backdrop-blur-sm"
+              (keydown.enter)="sendMessage()"
+              [disabled]="isLoading"
+            />
+            <div
+              *ngIf="isLoading"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
+              <div
+                class="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent"
+              ></div>
+            </div>
+          </div>
           <button
             (click)="sendMessage()"
-            class="px-4 py-2 text-sm font-semibold text-white rounded bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90 transition"
+            [disabled]="!currentMessage.trim() || isLoading"
+            class="px-6 py-3 font-medium text-white rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
           >
-            Send
+            <span *ngIf="!isLoading">Send</span>
+            <span *ngIf="isLoading">•••</span>
           </button>
         </div>
       </div>
@@ -77,20 +111,23 @@ interface Message {
 export class AiGenComponent {
   currentMessage = '';
   messages: Message[] = [];
+  isLoading = false;
 
   sendMessage() {
-    if (!this.currentMessage.trim()) return;
+    if (!this.currentMessage.trim() || this.isLoading) return;
 
-    this.messages.push({ role: 'user', content: this.currentMessage });
+    const userMessage = this.currentMessage;
+    this.messages.push({ role: 'user', content: userMessage });
+    this.currentMessage = '';
+    this.isLoading = true;
 
-    // Simulate assistant response (replace with actual logic later)
+    // Simulate assistant response with more realistic delay
     setTimeout(() => {
       this.messages.push({
         role: 'assistant',
-        content: `You asked about: "${this.currentMessage}"`,
+        content: `I understand you're asking: "${userMessage}"\n\nI'm currently in demo mode. Once connected to the backend, I'll be able to help you with:\n\n• Database schema exploration\n• Natural language to SQL conversion\n• Query optimization suggestions\n• Data insights and analysis`,
       });
-    }, 300);
-
-    this.currentMessage = '';
+      this.isLoading = false;
+    }, 1500);
   }
 }

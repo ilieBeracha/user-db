@@ -8,7 +8,6 @@ import { UserDb } from '../../core/user-db';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SchemaTreeComponent } from '../../components/schema-tree/schema-tree.component';
 import { AiGenComponent } from '../../components/ai-gen/ai-gen.component';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-ai',
@@ -20,8 +19,6 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
     NzSwitchModule,
     SchemaTreeComponent,
     AiGenComponent,
-    MatTabGroup,
-    MatTab,
   ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.css',

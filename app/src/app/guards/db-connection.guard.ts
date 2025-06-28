@@ -12,9 +12,9 @@ export const DbConnectionGuard: CanActivateFn = (route, state) => {
     switchMap((connection) => {
       if (!connection) {
         router.navigate(['/init-connection'], { replaceUrl: true });
-        return of(false); // ❌ Cancel current navigation
+        return of(false);
       }
-      return of(true); // ✅ Allow
+      return of(true);
     })
   );
 };

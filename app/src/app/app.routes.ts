@@ -21,15 +21,7 @@ export const routes: Routes = [
       import('./views/home/home.component').then((m) => m.HomeComponent),
     children: [
       {
-        path: 'dashboard',
-        canActivate: [DbConnectionGuard],
-        loadComponent: () =>
-          import('./views/dashboard/dashboard.component').then(
-            (m) => m.DashboardComponent
-          ),
-      },
-      {
-        path: 'ai',
+        path: 'query-builder',
         loadComponent: () =>
           import('./views/ai/ai.component').then((m) => m.AiComponent),
       },

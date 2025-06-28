@@ -1,30 +1,22 @@
 <div class="h-screen w-screen dark:bg-zinc-900">
   <nz-splitter nzLayout="horizontal" class="h-full">
-    <!-- Schema Explorer Panel -->
-    <nz-splitter-panel nzDefaultSize="20%" nzMinSize="15%" nzMaxSize="40%">
-      <div
-        class="h-full schema-section border-r bg-gradient-to-br from-gray-900 to-black/50 pt-12"
-      >
-        <div class="overflow-auto">
-          <mat-tab-group class="h-full">
-            <mat-tab label="Schema Explorer">
-              <app-schema-tree
-                [schemaTree]="schemaExplorer()"
-              ></app-schema-tree>
-            </mat-tab>
-            <mat-tab label="AI Assistant"> <app-ai-gen></app-ai-gen> </mat-tab>
-          </mat-tab-group>
-        </div>
-      </div>
+    <nz-splitter-panel
+      nzDefaultSize="20%"
+      nzMinSize="15%"
+      nzMaxSize="40%"
+      class="p-8"
+    >
+      <nz-splitter nzLayout="vertical" class="h-full">
+        <nz-splitter-panel nzDefaultSize="30%" nzMinSize="20%" nzMaxSize="100%">
+          <app-schema-tree [schemaTree]="schemaExplorer()"></app-schema-tree>
+        </nz-splitter-panel>
+      </nz-splitter>
     </nz-splitter-panel>
 
-    <!-- Main Content Area -->
-    <nz-splitter-panel nzDefaultSize="78%" nzMinSize="60%" nzMaxSize="85%">
+    <nz-splitter-panel nzDefaultSize="100%" nzMinSize="60%" nzMaxSize="85%">
       <nz-splitter nzLayout="vertical" class="h-full">
-        <!-- Query Editor and Results -->
         <nz-splitter-panel nzDefaultSize="80%" nzMinSize="40%" nzMaxSize="80%">
           <nz-splitter nzLayout="horizontal" class="h-full">
-            <!-- Main Query Editor -->
             <nz-splitter-panel
               nzDefaultSize="100%"
               nzMinSize="50%"
@@ -36,12 +28,10 @@
                 </div>
               </div>
             </nz-splitter-panel>
-
-            <!-- Query History Sidebar -->
             <nz-splitter-panel
               nzDefaultSize="20%"
-              nzMinSize="200px"
-              nzMaxSize="100%"
+              nzMinSize="15%"
+              nzMaxSize="40%"
             >
               <app-schema-tree
                 [schemaTree]="schemaExplorer()"
@@ -56,7 +46,7 @@
             class="h-full ai-section border-t border-zinc-200 dark:border-zinc-700"
           >
             <div class="h-[calc(100%)]">
-              <!-- <app-ai-gen></app-ai-gen> -->
+              <app-ai-gen></app-ai-gen>
             </div>
           </div>
         </nz-splitter-panel>

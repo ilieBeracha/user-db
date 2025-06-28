@@ -37,7 +37,7 @@ export class Auth {
       )
       .subscribe({
         next: () => {
-          this.router.navigate(['/dashboard'], { replaceUrl: true });
+          this.router.navigate(['/query-builder'], { replaceUrl: true });
         },
         error: (error) => {
           console.error(error);

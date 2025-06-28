@@ -24,7 +24,7 @@ export interface DatabaseSchema {
 
 // schema-tree.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, OnInit } from '@angular/core';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,7 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './schema-tree.component.html',
   styleUrl: './schema-tree.component.css',
 })
-export class SchemaTreeComponent {
+export class SchemaTreeComponent implements OnInit {
   schemaTree = input<DatabaseSchema[]>();
 
   treeControl = new NestedTreeControl<TreeNode>((node) => node.children || []);
@@ -51,6 +51,10 @@ export class SchemaTreeComponent {
         this.buildTreeData();
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.buildTreeData();
   }
 
   isColumn = (node: TreeNode) => node.type === 'column';

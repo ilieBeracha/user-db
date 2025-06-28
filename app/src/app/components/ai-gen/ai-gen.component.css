@@ -1,32 +1,71 @@
-/* Simple scrollbar for chat container */
-::-webkit-scrollbar {
-  width: 6px;
+/* Custom scrollbar for chat container */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* zinc-300 */
-  border-radius: 3px;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #52525b;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
 }
 
-/* Code/Schema styling */
-.font-mono {
-  font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono",
-    "Source Code Pro", monospace;
+/* Animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-/* Placeholder color adjustments */
-input::placeholder {
-  color: #9ca3af; /* zinc-400 */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.dark input::placeholder {
-  color: #a1a1aa; /* zinc-400 */
+/* Message animations */
+.flex:nth-child(odd) {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.flex:nth-child(even) {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Focus states */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button hover effects */
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Glass morphism effect */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }

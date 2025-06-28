@@ -2,7 +2,7 @@
 <mat-tree
   [dataSource]="dataSource"
   [treeControl]="treeControl"
-  class="schema-tree w-full"
+  class="schema-tree w-full p-2"
 >
   <mat-tree-node
     *matTreeNodeDef="let node"
@@ -10,7 +10,11 @@
     [title]="getNodeTooltip(node)"
     (click)="onNodeClick(node, $event)"
   >
-    <mat-icon [fontIcon]="getNodeIcon(node)" class="node-icon"></mat-icon>
+    <mat-icon
+      [fontIcon]="getNodeIcon(node)"
+      class="node-icon text-white"
+      [color]="isColumn(node) ? 'primary' : 'white'"
+    ></mat-icon>
     <span
       class="node-label truncate max-w-[200px]"
       [class.selected-node-column]="isColumn(node)"
