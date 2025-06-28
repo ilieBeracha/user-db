@@ -42,13 +42,26 @@
 
         <!-- AI Assistant Panel -->
         <nz-splitter-panel nzDefaultSize="45%" nzMinSize="20%" nzMaxSize="100%">
-          <div
-            class="h-full ai-section border-t border-zinc-200 dark:border-zinc-700"
-          >
-            <div class="h-[calc(100%)]">
-              <app-ai-gen></app-ai-gen>
-            </div>
-          </div>
+          <nz-splitter nzLayout="horizontal" class="h-full">
+            <nz-splitter-panel
+              nzDefaultSize="70%"
+              nzMinSize="50%"
+              nzMaxSize="100%"
+            >
+              <div class="h-[calc(100%)]">
+                <app-ai-gen></app-ai-gen>
+              </div>
+            </nz-splitter-panel>
+            <nz-splitter-panel
+              nzDefaultSize="30%"
+              nzMinSize="50%"
+              nzMaxSize="100%"
+            >
+              <div class="h-[calc(100%)]">
+                <app-json-editor></app-json-editor>
+              </div>
+            </nz-splitter-panel>
+          </nz-splitter>
         </nz-splitter-panel>
       </nz-splitter>
     </nz-splitter-panel>

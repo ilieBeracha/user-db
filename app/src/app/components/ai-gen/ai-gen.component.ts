@@ -13,28 +13,21 @@ interface Message {
   imports: [CommonModule, FormsModule],
   styleUrl: './ai-gen.component.css',
   template: `
-    <div class="flex flex-col h-full text-white">
+    <div class="flex flex-col h-full text-white p-2">
       <!-- Header -->
-      <div class="p-6 border-b border-gray-700/50 backdrop-blur-sm">
-        <div class="text-center space-y-2">
-          <span
-            class="text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
-          >
-            🤖 Database Assistant
-          </span>
-          <p class="text-sm text-gray-400">
-            Ask me anything about your database schema and data
-          </p>
+      <div class="p-3  backdrop-blur-sm">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-lg font-medium text-gray-300">AI Assistant</span>
+          </div>
         </div>
       </div>
 
       <!-- Chat Messages -->
-      <div
-        class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar h-full flex flex-col"
-      >
+      <div class="flex-1 overflow-y-auto p-4 space-y-4 h-full flex flex-col">
         <div
           *ngIf="messages.length === 0"
-          class="flex items-center justify-center h-full"
+          class="flex items-center justify-center h-full bg-gray-[#1e1e1e]"
         >
           <div class="text-center space-y-3 opacity-60 h-full">
             <div class="text-4xl">💬</div>
@@ -50,12 +43,12 @@ interface Message {
 
         <div
           *ngFor="let msg of messages"
-          class="flex h-full"
+          class="flex h-full bg-gray-[#1e1e1e]"
           [ngClass]="msg.role === 'user' ? 'justify-end' : 'justify-start'"
         >
           <div class="max-w-[80%] space-y-2">
             <div
-              class="text-xs text-gray-500 px-2"
+              class="text-xs text-gray-500 px-2 bg-gray-[#1e1e1e]"
               [ngClass]="msg.role === 'user' ? 'text-right' : 'text-left'"
             >
               {{ msg.role === 'user' ? 'You' : 'Assistant' }}

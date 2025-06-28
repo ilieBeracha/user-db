@@ -8,6 +8,7 @@ import { UserDb } from '../../core/user-db';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SchemaTreeComponent } from '../../components/schema-tree/schema-tree.component';
 import { AiGenComponent } from '../../components/ai-gen/ai-gen.component';
+import { JsonEditorComponent } from '../../components/json-editor/json-editor.component';
 
 @Component({
   selector: 'app-ai',
@@ -19,6 +20,7 @@ import { AiGenComponent } from '../../components/ai-gen/ai-gen.component';
     NzSwitchModule,
     SchemaTreeComponent,
     AiGenComponent,
+    JsonEditorComponent,
   ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.css',
