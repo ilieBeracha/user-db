@@ -1,4 +1,4 @@
-<div class="h-screen w-screen">
+<div class="h-screen w-screen bg-zinc-900">
   <nz-splitter nzLayout="horizontal" class="h-full">
     <nz-splitter-panel
       nzDefaultSize="20%"
@@ -29,13 +29,11 @@
               </div>
             </nz-splitter-panel>
             <nz-splitter-panel
-              nzDefaultSize="20%"
+              nzDefaultSize="25%"
               nzMinSize="15%"
               nzMaxSize="40%"
             >
-              <app-schema-tree
-                [schemaTree]="schemaExplorer()"
-              ></app-schema-tree>
+              <app-json-editor></app-json-editor>
             </nz-splitter-panel>
           </nz-splitter>
         </nz-splitter-panel>
@@ -58,7 +56,10 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-json-editor></app-json-editor>
+                <app-schema-tree
+                  [schemaTree]="schemaExplorer()"
+                ></app-schema-tree>
+                <!-- <app-json-editor></app-json-editor> -->
               </div>
             </nz-splitter-panel>
           </nz-splitter>

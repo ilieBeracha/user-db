@@ -9,6 +9,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { SchemaTreeComponent } from '../../components/schema-tree/schema-tree.component';
 import { AiGenComponent } from '../../components/ai-gen/ai-gen.component';
 import { JsonEditorComponent } from '../../components/json-editor/json-editor.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-ai',
@@ -20,6 +21,7 @@ import { JsonEditorComponent } from '../../components/json-editor/json-editor.co
     NzSwitchModule,
     SchemaTreeComponent,
     AiGenComponent,
+    CommonModule,
     JsonEditorComponent,
   ],
   templateUrl: './ai.component.html',

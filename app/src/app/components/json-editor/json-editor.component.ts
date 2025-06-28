@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as monaco from 'monaco-editor';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-json-editor',
@@ -18,28 +19,14 @@ import * as monaco from 'monaco-editor';
   imports: [CommonModule],
   styleUrl: './json-editor.component.css',
   template: `
-    <div class="flex flex-col h-full  text-white">
+    <div class="flex flex-col h-1/2  text-white ">
       <!-- Header -->
-      <div class="p-3  backdrop-blur-sm">
+      <div class="p-3 backdrop-blur-sm bg-zinc-800">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="text-lg">📄</span>
-            <span class="text-sm font-medium text-gray-300">JSON Editor</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <button
-              (click)="formatJson()"
-              class="px-3 py-1 text-xs  rounded transition-colors"
-              [disabled]="!isValidJson"
+            <span class="text-lg font-medium text-gray-300"
+              >JSON Editor • IDLE Theme</span
             >
-              Format
-            </button>
-            <button
-              (click)="copyJson()"
-              class="px-3 py-1 text-xs rounded transition-colors"
-            >
-              Copy
-            </button>
           </div>
         </div>
       </div>
@@ -89,8 +76,11 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
   hasErrors: boolean = false;
   lineCount: number = 1;
 
-  ngOnInit() {
-    this.initializeEditor();
+  constructor(private themeService: ThemeService) {}
+
+  async ngOnInit() {
+    this.themeService.setTheme('vs-dark');
+    await this.initializeEditor();
   }
 
   ngOnDestroy() {
@@ -106,7 +96,7 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  private initializeEditor() {
+  private async initializeEditor() {
     // Set Monaco environment
     (window as any).MonacoEnvironment = {
       getWorkerUrl: function (moduleId: string, label: string) {
@@ -138,16 +128,32 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
 
     this.jsonValue = this.value || JSON.stringify(defaultJson, null, 2);
 
+    // Load and set IDLE theme
+    let theme = 'vs-dark'; // fallback
+    try {
+      await this.themeService.loadTheme('idle');
+      theme = 'idle';
+      console.log('IDLE theme loaded successfully');
+    } catch (error) {
+      console.error('Failed to load IDLE theme, using vs-dark:', error);
+    }
+
     // Create Monaco editor
     this.editor = monaco.editor.create(this.editorContainer.nativeElement, {
       value: this.jsonValue,
+      tabSize: 2,
       language: 'json',
-      theme: 'vs-dark',
+      padding: {
+        top: 10,
+      },
+      tabCompletion: 'on',
+      theme: theme,
       automaticLayout: true,
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
-      fontSize: 13,
-      lineNumbers: 'on',
+      fontSize: 10,
+      fontFamily: 'monospace',
+      lineNumbers: 'off',
       renderWhitespace: 'selection',
       wordWrap: 'on',
       folding: true,
@@ -158,9 +164,9 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
         showKeywords: false,
       },
       quickSuggestions: {
-        other: false,
-        comments: false,
-        strings: false,
+        other: true,
+        comments: true,
+        strings: true,
       },
     });
 
@@ -178,6 +184,7 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
         if (model) {
           const markers = monaco.editor.getModelMarkers({
             resource: model.uri,
+            owner: 'json',
           });
           this.hasErrors = markers.length > 0;
         }
