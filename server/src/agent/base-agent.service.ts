@@ -1,124 +1,143 @@
 import { Injectable } from "@nestjs/common";
 import { ChatOpenAI } from "@langchain/openai";
 import { UserDbService } from "src/user-db/user-db.service";
-import { ConfigService } from "@nestjs/config";
-
-const configService = new ConfigService();
+import { BufferMemory } from "langchain/memory";
+import { ChatMessageHistory } from "@langchain/community/stores/message/in_memory";
 
 @Injectable()
 export class BaseAgentService {
   protected llm: ChatOpenAI;
+  protected memory: BufferMemory;
 
   constructor(protected userDbService: UserDbService) {
     this.llm = new ChatOpenAI({
-      modelName: "gpt-3.5-turbo",
-      openAIApiKey: configService.get("OPENAI_API_KEY"),
+      modelName: "gpt-4o-mini",
+      temperature: 0.1,
+      maxTokens: 4000,
+    });
+
+    this.memory = new BufferMemory({
+      memoryKey: "chat_history",
+      chatHistory: new ChatMessageHistory(),
+      returnMessages: true,
     });
   }
 
-  async getSchemaContext(userId: string) {
-    return await this.userDbService.getTablesWithColumns(userId);
-  }
-
-  async executeQuery(sql: string, userId: string) {
+  async getSchemaContext(userId: string): Promise<any[]> {
     try {
-      const result = await this.userDbService.executeCustomQuery(sql, userId);
-      return { success: true, data: result, error: null };
+      const schema = await this.userDbService.getTablesWithColumns(userId);
+      return schema || [];
     } catch (error) {
-      return { success: false, data: null, error: error.message };
+      console.error("Failed to get schema context:", error);
+      return [];
     }
   }
 
-  cleanGeneratedSQL(rawSQL: string): string {
-    let cleanSQL = rawSQL.trim();
-    cleanSQL = cleanSQL.replace(/```sql\n?/g, "").replace(/```\n?/g, "");
-    cleanSQL = cleanSQL.replace(/^SQL QUERY:\s*/i, "");
+  async generateSQL(request: string, schema: any[]): Promise<string> {
+    const schemaContext = this.formatSchemaForPrompt(schema);
+    
+    const prompt = `Given the following database schema and user request, generate a PostgreSQL query.
 
-    cleanSQL = cleanSQL.replace(/\bcolumn\b(?!")/gi, '"column_name"');
-    cleanSQL = cleanSQL.replace(/\btable\b(?!")/gi, '"table_name"');
+Database Schema:
+${schemaContext}
 
-    return cleanSQL.trim();
-  }
+User Request: ${request}
 
-  buildBasePrompt(request: string, schema: any[]): string {
-    return `Generate a SQL query based on the following request.
-
-REQUEST: ${request}
-
-AVAILABLE SCHEMA:
-${JSON.stringify(schema, null, 2)}
-
-CRITICAL INSTRUCTIONS:
-- Generate ONLY the SQL query, no explanations or markdown
-- ALWAYS use double quotes around table names, column names when needed
-- When joining different data types, use proper casting (::text, ::uuid)
-- Use DISTINCT if duplicates are expected
+Rules:
+- Return only the SQL query, no explanations
 - Use proper PostgreSQL syntax
-- Only use SELECT statements
-- IMPORTANT: Only query user-created tables, exclude system tables
-- For record counts, use UNION ALL to count rows from each table
-- Example record count: SELECT SUM(cnt) as total_records FROM ((SELECT COUNT(*) as cnt FROM "user") UNION ALL (SELECT COUNT(*) as cnt FROM "user_db")) as counts
+- Include table aliases when joining tables
+- Use LIMIT for large result sets when appropriate
 
-SQL QUERY:`;
+SQL Query:`;
+
+    const response = await this.llm.invoke(prompt);
+    return response.content.toString().trim().replace(/```sql|```/g, "").trim();
   }
 
-  async generateExplanation(
-    request: string,
-    generatedSQL: string,
-    schema: any[]
-  ): Promise<string> {
-    const explanationPrompt = `Explain what this SQL query does and why it was generated.
+  async generateExplanation(request: string, sql: string, schema: any[]): Promise<string> {
+    const prompt = `Explain this SQL query in simple terms:
 
-ORIGINAL REQUEST: ${request}
+User Request: ${request}
+SQL Query: ${sql}
 
-GENERATED SQL:
-${generatedSQL}
+Provide a clear, non-technical explanation of what this query does and what results it will return.`;
 
-DATABASE SCHEMA:
-${JSON.stringify(schema, null, 2)}
-
-INSTRUCTIONS:
-- Explain in simple, clear language what the query does
-- Mention which tables/columns were used and why
-- Explain any JOINs, filters, or aggregations
-- Keep it concise (2-3 sentences)
-- Start with "This query..."
-
-EXPLANATION:`;
-
-    const response = await this.llm.invoke(explanationPrompt);
+    const response = await this.llm.invoke(prompt);
     return response.content.toString().trim();
   }
 
-  async runFailedQuery(
-    originalQuery: string,
-    schema: any[],
-    error: string,
-    request: string
-  ): Promise<string> {
-    const retryPrompt = `The previous SQL query failed. Please generate a corrected version.
+  async executeQuery(sql: string, userId: string): Promise<any> {
+    try {
+      const result = await this.userDbService.executeCustomQuery(sql, userId);
+      return {
+        success: true,
+        data: result,
+        error: null
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        error: error.message
+      };
+    }
+  }
 
-ORIGINAL REQUEST: ${request}
+  async runFailedQuery(sql: string, schema: any[], error: string, originalRequest: string): Promise<string> {
+    const schemaContext = this.formatSchemaForPrompt(schema);
+    
+    const prompt = `The following SQL query failed with an error. Please fix it:
 
-FAILED QUERY:
-${originalQuery}
+Original Request: ${originalRequest}
+Failed SQL: ${sql}
+Error: ${error}
 
-ERROR MESSAGE:
-${error}
+Database Schema:
+${schemaContext}
 
-DATABASE SCHEMA:
-${JSON.stringify(schema, null, 2)}
+Return only the corrected SQL query:`;
 
-INSTRUCTIONS:
-- Analyze the error and fix the SQL syntax
-- Generate ONLY the corrected SQL query, no explanations
-- Use proper PostgreSQL syntax
-- Ensure table and column names are correctly quoted
-- Only use SELECT statements
+    const response = await this.llm.invoke(prompt);
+    return response.content.toString().trim().replace(/```sql|```/g, "").trim();
+  }
 
-CORRECTED SQL QUERY:`;
+  async saveToMemory(input: string, output: string): Promise<void> {
+    try {
+      await this.memory.saveContext({ input }, { output });
+    } catch (error) {
+      console.warn("Failed to save to memory:", error);
+    }
+  }
 
-    const response = await this.llm.invoke(retryPrompt);
-    return this.cleanGeneratedSQL(response.content.toString());
+  clearMemory(): void {
+    this.memory.clear();
+  }
+
+  async getMemoryVariables(): Promise<any> {
+    return await this.memory.loadMemoryVariables({});
+  }
+
+  cleanGeneratedSQL(sql: string): string {
+    return sql
+      .replace(/```sql|```/g, "")
+      .replace(/^sql\s*/i, "")
+      .trim();
+  }
+
+  private formatSchemaForPrompt(schema: any[]): string {
+    if (!schema || schema.length === 0) {
+      return "No schema information available.";
+    }
+
+    return schema
+      .map((table) => {
+        const columns = table.columns || [];
+        const columnList = columns
+          .map((col: any) => `  ${col.column_name} (${col.data_type})`)
+          .join("\n");
+        return `Table: ${table.table_name}\n${columnList}`;
+      })
+      .join("\n\n");
   }
 }

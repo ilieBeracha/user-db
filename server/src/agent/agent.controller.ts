@@ -1,21 +1,27 @@
-import { Controller, Post, Body, Req, UseGuards } from "@nestjs/common";
-import { QueryGeneratorService } from "./query-generator.service";
-import { ChatAgentService } from "./chat-agent.service";
+import {
+  Controller,
+  Post,
+  Body,
+  Req,
+  UseGuards,
+  Delete,
+  Get,
+} from "@nestjs/common";
+import { UnifiedAgentService } from "./unified-agent.service";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Controller("agent")
 export class AgentsController {
   constructor(
-    private queryGenerator: QueryGeneratorService,
-    private chatAgent: ChatAgentService
+    private unifiedAgent: UnifiedAgentService,
   ) {}
 
   @Post("generate")
   @UseGuards(JwtAuthGuard)
   async generateQuery(@Body() body: { requirement: string }, @Req() req: any) {
-    return await this.queryGenerator.generateAndExecuteQuery(
+    return await this.unifiedAgent.executeDirectQuery(
       body.requirement,
-      req.user.id
+      req.user.id,
     );
   }
 
@@ -23,12 +29,25 @@ export class AgentsController {
   @UseGuards(JwtAuthGuard)
   async chatWithDatabase(
     @Body() body: { message: string; chatHistory?: any[] },
-    @Req() req: any
+    @Req() req: any,
   ) {
-    return await this.chatAgent.chatAboutDatabase(
+    return await this.unifiedAgent.processMessage(
       body.message,
       req.user.id,
-      body.chatHistory
+      body.chatHistory,
     );
+  }
+
+  @Delete("session")
+  @UseGuards(JwtAuthGuard)
+  async clearSession(@Req() req: any) {
+    await this.unifiedAgent.clearUserSession(req.user.id);
+    return { success: true, message: "Session cleared successfully" };
+  }
+
+  @Get("session")
+  @UseGuards(JwtAuthGuard)
+  async getSessionInfo(@Req() req: any) {
+    return await this.unifiedAgent.getSessionInfo(req.user.id);
   }
 }

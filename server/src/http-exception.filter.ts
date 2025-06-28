@@ -1,6 +1,17 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { Response } from 'express';
-import { QueryFailedError, EntityNotFoundError, CannotCreateEntityIdMapError } from 'typeorm';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from "@nestjs/common";
+import { Response } from "express";
+import {
+  QueryFailedError,
+  EntityNotFoundError,
+  CannotCreateEntityIdMapError,
+} from "typeorm";
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -11,28 +22,28 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Internal server error';
-    let error = 'Internal Server Error';
+    let message = "Internal server error";
+    let error = "Internal Server Error";
     let details: any = undefined;
 
-    this.logger.error('Exception caught:', exception);
+    this.logger.error("Exception caught:", exception);
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      
-      if (typeof exceptionResponse === 'object') {
+
+      if (typeof exceptionResponse === "object") {
         message = (exceptionResponse as any).message || message;
         error = (exceptionResponse as any).error || error;
       } else {
-        message = exceptionResponse as string;
+        message = exceptionResponse;
       }
     } else if (exception instanceof QueryFailedError) {
       status = HttpStatus.BAD_REQUEST;
-      error = 'Database Query Failed';
-      message = 'Database query failed';
-      
-      if (process.env.NODE_ENV !== 'production') {
+      error = "Database Query Failed";
+      message = "Database query failed";
+
+      if (process.env.NODE_ENV !== "production") {
         details = {
           query: exception.query,
           parameters: exception.parameters,
@@ -42,20 +53,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof EntityNotFoundError) {
       // Handle TypeORM entity not found errors
       status = HttpStatus.NOT_FOUND;
-      error = 'Entity Not Found';
+      error = "Entity Not Found";
       message = exception.message;
     } else if (exception instanceof CannotCreateEntityIdMapError) {
       // Handle TypeORM entity ID map errors
       status = HttpStatus.BAD_REQUEST;
-      error = 'Invalid Entity Data';
+      error = "Invalid Entity Data";
       message = exception.message;
     } else if (exception instanceof Error) {
       // Handle generic errors
       error = exception.name;
       message = exception.message;
-      
+
       // In development, include stack trace
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV !== "production") {
         details = {
           stack: exception.stack,
         };
@@ -70,10 +81,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     // Add details in development mode
-    if (details && process.env.NODE_ENV !== 'production') {
+    if (details && process.env.NODE_ENV !== "production") {
       errorResponse.details = details;
     }
 
     response.status(status).json(errorResponse);
   }
-} 
+}

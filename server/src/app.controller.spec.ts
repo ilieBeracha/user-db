@@ -17,7 +17,7 @@ describe("AppController", () => {
   describe("root", () => {
     it('should return "Modelyo API connected successfully"', () => {
       expect(appController.getModelyoApi()).toBe(
-        "Modelyo API connected successfully"
+        "Modelyo API connected successfully",
       );
     });
   });

@@ -12,13 +12,13 @@ import { AuthResponseDto } from "src/auth/dto/auth-response.dto";
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
   ) {}
   async register(
     email: string,
     password: string,
     firstName: string,
-    lastName: string
+    lastName: string,
   ) {
     const user = await this.findByEmail(email);
     if (user) {

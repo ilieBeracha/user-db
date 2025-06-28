@@ -33,7 +33,7 @@ export class ResponseFormatter {
     explanation: string,
     queryResult: any,
     schema: any[],
-    startTime: number
+    startTime: number,
   ): QueryExecutionResult {
     const endTime = Date.now();
     const executionTime = endTime - startTime;
@@ -46,7 +46,7 @@ export class ResponseFormatter {
     let columns: string[] = [];
 
     if (isSuccess && data.length > 0) {
-      columns = Object.keys(data[0]) as string[];
+      columns = Object.keys(data[0]);
       tableFormat = {
         headers: columns,
         rows: data.map((row) => columns.map((col) => row[col])),
@@ -73,7 +73,7 @@ export class ResponseFormatter {
     message: string,
     context: any,
     userId: string,
-    suggestedQueries?: string[]
+    suggestedQueries?: string[],
   ): ChatResponse {
     return {
       message,

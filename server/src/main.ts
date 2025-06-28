@@ -27,7 +27,7 @@ async function bootstrap() {
       transform: true,
       exceptionFactory: (errors) => {
         const messages = errors?.map((error) =>
-          Object.values(error.constraints || {}).join(", ")
+          Object.values(error.constraints || {}).join(", "),
         );
         return new HttpException(
           {
@@ -35,10 +35,10 @@ async function bootstrap() {
             error: "Bad Request",
             message: messages,
           },
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       },
-    })
+    }),
   );
 
   app.useGlobalFilters(new HttpExceptionFilter());
@@ -57,7 +57,7 @@ async function bootstrap() {
         description: "Enter JWT token",
         in: "header",
       },
-      "JWT-auth" // This name here is important for matching up with @ApiBearerAuth() in your controller.
+      "JWT-auth", // This name here is important for matching up with @ApiBearerAuth() in your controller.
     )
     .build();
 

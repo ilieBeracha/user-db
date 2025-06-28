@@ -1,11 +1,11 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { IsEmail, IsString, MinLength } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Expose } from "class-transformer";
 
 export class LoginDto {
   @ApiProperty()
   @IsEmail()
-  @Expose() 
+  @Expose()
   email: string;
 
   @ApiProperty()
@@ -14,4 +14,3 @@ export class LoginDto {
   @Expose()
   password: string;
 }
-  

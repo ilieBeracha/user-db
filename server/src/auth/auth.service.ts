@@ -8,21 +8,21 @@ import { AuthResponseDto } from "./dto/auth-response.dto";
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async register(
     email: string,
     password: string,
     firstName: string,
-    lastName: string
+    lastName: string,
   ): Promise<AuthResponseDto> {
     const hash = await bcrypt.hash(password, 10);
     const user = await this.userService.register(
       email,
       hash,
       firstName,
-      lastName
+      lastName,
     );
     return this.buildAuthResponse(user);
   }
@@ -52,7 +52,7 @@ export class AuthService {
   }
 
   async refresh(
-    refreshToken: string
+    refreshToken: string,
   ): Promise<{ access_token: string; refresh_token: string }> {
     try {
       const payload = await this.jwtService.verifyAsync(refreshToken, {
@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   private async generateTokens(
-    user: User
+    user: User,
   ): Promise<{ access_token: string; refresh_token: string }> {
     const payload = {
       sub: user.id,

@@ -25,14 +25,14 @@ export class UserDbService {
   constructor(
     @InjectRepository(UserDb)
     private readonly userDbRepository: Repository<UserDb>,
-    private readonly connManager: UserDbConnectionManager
+    private readonly connManager: UserDbConnectionManager,
   ) {}
 
   async getDatabasesInServer(req: any) {
     const result = await this.connManager.runSingleQuery(
       LARGEST_DATABASE_QUERY,
       [100],
-      req?.user?.id
+      req?.user?.id,
     );
 
     return result;
@@ -42,7 +42,7 @@ export class UserDbService {
     const result = await this.connManager.runSingleQuery(
       GET_RECENT_ACTIVITY_QUERY,
       [100],
-      req?.user?.id
+      req?.user?.id,
     );
 
     return result;
@@ -52,7 +52,7 @@ export class UserDbService {
     const results = await this.connManager.runSingleQuery(
       RESOURCE_UTILIZATION_SUMMARY_QUERY,
       [],
-      req?.user?.id
+      req?.user?.id,
     );
 
     return results;
@@ -67,7 +67,7 @@ export class UserDbService {
     const result = await this.connManager.runSingleQuery(
       GET_TABLES_WITH_COLUMNS_QUERY,
       [],
-      user_id
+      user_id,
     );
     return result;
   }
@@ -103,7 +103,7 @@ export class UserDbService {
       await this.connManager.runSingleQuery(
         `SELECT datname FROM pg_database WHERE datistemplate = false`,
         [],
-        userId
+        userId,
       );
 
     for (const db of databases) {
@@ -121,7 +121,7 @@ export class UserDbService {
         }[] = await this.connManager.runSingleQuery(
           GET_TABLES_WITH_COLUMNS_QUERY,
           [],
-          userId
+          userId,
         );
 
         // 3. For each table, get 1 sample row
@@ -133,7 +133,7 @@ export class UserDbService {
             const result = await this.connManager.runSingleQuery(
               `SELECT * FROM ${safeTable} LIMIT 1`,
               [],
-              userId
+              userId,
             );
             sampleRow = result?.[0] || {};
           } catch {
@@ -143,7 +143,7 @@ export class UserDbService {
           // 4. Attach sample values with classification
           table.columns = table.columns.map((col) => {
             const isSensitive = this.SENSITIVE_KEYS.some((keyword) =>
-              col.column.toLowerCase().includes(keyword)
+              col.column.toLowerCase().includes(keyword),
             );
 
             return {

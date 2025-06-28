@@ -11,7 +11,7 @@ export class UserDbConnectionManager {
   private readonly logger = new Logger(UserDbConnectionManager.name);
   constructor(
     @InjectRepository(UserDb)
-    private readonly userDbRepo: Repository<UserDb>
+    private readonly userDbRepo: Repository<UserDb>,
   ) {}
   async getDataSource(userDb: UserDb): Promise<DataSource> {
     const cacheKey = `${userDb.user_id}`;
@@ -26,7 +26,7 @@ export class UserDbConnectionManager {
       userDb.port,
       userDb.user,
       userDb.password,
-      userDb.database
+      userDb.database,
     );
 
     await newDataSource.initialize();
@@ -36,7 +36,7 @@ export class UserDbConnectionManager {
 
   async getConnectionForDatabase(
     database: string,
-    userId: string
+    userId: string,
   ): Promise<DataSource> {
     const baseUserDb = await this.userDbRepo.findOneBy({ user_id: userId });
     if (!baseUserDb) throw new Error("User DB not found");
@@ -52,7 +52,7 @@ export class UserDbConnectionManager {
       baseUserDb.port,
       baseUserDb.user,
       baseUserDb.password,
-      database
+      database,
     );
 
     await newDataSource.initialize();
