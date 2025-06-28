@@ -52,7 +52,7 @@ export class UserDbConnectionManager {
       baseUserDb.port,
       baseUserDb.user,
       baseUserDb.password,
-      database // 🔥 override target db
+      database
     );
 
     await newDataSource.initialize();

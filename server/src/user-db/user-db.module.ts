@@ -9,5 +9,6 @@ import { UserDbConnectionManager } from "./user-db-connection.manager";
   imports: [TypeOrmModule.forFeature([UserDb])],
   controllers: [UserDbController],
   providers: [UserDbService, UserDbConnectionManager],
+  exports: [UserDbService],
 })
 export class UserDbModule {}

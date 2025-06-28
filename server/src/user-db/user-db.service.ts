@@ -4,12 +4,9 @@ import { Repository } from "typeorm";
 import { UserDb } from "./entities/user-db.entity";
 import { UserDbConnectionManager } from "./user-db-connection.manager";
 import {
-  CONNECTION_USAGE_BY_DB_QUERY,
-  EFFICIENCY_COMPARISON_QUERY,
   GET_RECENT_ACTIVITY_QUERY,
   LARGEST_DATABASE_QUERY,
   RESOURCE_UTILIZATION_SUMMARY_QUERY,
-  PERFORMANCE_MATRIX,
   GET_TABLES_WITH_COLUMNS_QUERY,
 } from "./queries/queries";
 
@@ -27,7 +24,7 @@ export class UserDbService {
 
   constructor(
     @InjectRepository(UserDb)
-    private readonly userDbRepo: Repository<UserDb>,
+    private readonly userDbRepository: Repository<UserDb>,
     private readonly connManager: UserDbConnectionManager
   ) {}
 
@@ -65,6 +62,39 @@ export class UserDbService {
     const result = await this.connManager.isConnected(req);
     return result;
   }
+
+  async getTablesWithColumns(user_id: string) {
+    const result = await this.connManager.runSingleQuery(
+      GET_TABLES_WITH_COLUMNS_QUERY,
+      [],
+      user_id
+    );
+    return result;
+  }
+
+  async executeCustomQuery(query: string, user_id: string) {
+    // Security: Basic validation to prevent dangerous operations
+    const cleanQuery = query.toLowerCase().trim();
+    const dangerousOperations = [
+      "drop",
+      "delete",
+      "truncate",
+      "alter",
+      "update",
+      "insert",
+      "create",
+    ];
+    console.log(cleanQuery);
+    console.log(dangerousOperations);
+    for (const operation of dangerousOperations) {
+      if (cleanQuery.includes(operation)) {
+        throw new Error(`Dangerous operation '${operation}' not allowed`);
+      }
+    }
+
+    return await this.connManager.runSingleQuery(query, [], user_id);
+  }
+
   async getSchemaExplorerAcrossDatabases(userId: string): Promise<any[]> {
     const fullResult: any[] = [];
 
