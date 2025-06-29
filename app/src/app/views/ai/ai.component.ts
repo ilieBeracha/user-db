@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { NzSplitterModule } from 'ng-zorro-antd/splitter';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
@@ -36,6 +36,7 @@ import { ResponseTableComponent } from '../../components/response-table-componen
 })
 export class AiComponent {
   userDb = inject(UserDb);
+  currentQuery: any = this.userDb.currentQuery();
 
   protected schemaExplorer: any = toSignal(this.userDb.getSchemaExplorer());
 

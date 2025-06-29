@@ -8,9 +8,7 @@
     >
       <nz-splitter nzLayout="vertical" class="h-full">
         <nz-splitter-panel nzDefaultSize="30%" nzMinSize="20%" nzMaxSize="100%">
-          <div
-            class="flex items-center min-h-14 justify-center gap-2 h-14"
-          >
+          <div class="flex items-center min-h-14 justify-center gap-2 h-14">
             <span class="text-lg font-medium text-gray-300">Schema Tree</span>
           </div>
           <app-schema-tree [schemaTree]="schemaExplorer()"></app-schema-tree>
@@ -53,7 +51,7 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-response-table></app-response-table>
+                <app-response-table [data]="currentQuery"></app-response-table>
               </div>
             </nz-splitter-panel>
             <nz-splitter-panel
