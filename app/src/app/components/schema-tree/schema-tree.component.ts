@@ -8,20 +8,6 @@ export interface TreeNode {
   details?: any;
 }
 
-export interface DatabaseSchema {
-  database: string;
-  tables: {
-    table_name: string;
-    column_count: string;
-    columns: {
-      column: string;
-      type: string;
-      nullable: string;
-      sample: any;
-    }[];
-  }[];
-}
-
 // schema-tree.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, effect, input, OnInit } from '@angular/core';
@@ -29,6 +15,7 @@ import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { schemaExplorerResponse } from '../../../types/user-db';
 
 @Component({
   selector: 'app-schema-tree',
@@ -38,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './schema-tree.component.css',
 })
 export class SchemaTreeComponent implements OnInit {
-  schemaTree = input<DatabaseSchema[]>();
+  schemaTree = input<schemaExplorerResponse>();
 
   treeControl = new NestedTreeControl<TreeNode>((node) => node.children || []);
   dataSource = new MatTreeNestedDataSource<TreeNode>();
@@ -66,7 +53,9 @@ export class SchemaTreeComponent implements OnInit {
     const schemas = this.schemaTree();
     if (!schemas) return;
 
-    const treeData: TreeNode[] = schemas.map((schema) => ({
+    console.log('Building tree data from schema:', schemas);
+
+    const treeData: TreeNode[] = schemas.results.map((schema) => ({
       name: schema.database,
       type: 'database',
       icon: 'storage',

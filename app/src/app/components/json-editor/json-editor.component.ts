@@ -19,9 +19,11 @@ import { ThemeService } from '../../services/theme.service';
   imports: [CommonModule],
   styleUrl: './json-editor.component.css',
   template: `
-    <div class="flex flex-col h-1/2  text-white ">
+    <div class="flex flex-col h-full py-2 text-[rgb(255, 227, 238)] ">
       <!-- Header -->
-      <div class="p-3 backdrop-blur-sm bg-zinc-800">
+      <div
+        class="flex items-center justify-center gap-2 h-14  dark:bg-[rgb(255, 227, 238)]"
+      >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-lg font-medium text-gray-300"
@@ -151,7 +153,7 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
       automaticLayout: true,
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
-      fontSize: 10,
+      fontSize: 14,
       fontFamily: 'monospace',
       lineNumbers: 'off',
       renderWhitespace: 'selection',

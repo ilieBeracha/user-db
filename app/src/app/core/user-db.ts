@@ -11,9 +11,17 @@ export class UserDb {
   userDbConnection = signal<any>(null);
   databasesInServer = signal<any[]>([]);
   recentActivities = signal<any[]>([]);
-  schemaExplorer = signal<any[]>([]);
+  schemaExplorer = signal<{ reaponse: any[]; query: string }>({
+    reaponse: [],
+    query: '',
+  });
   comparisonData = signal<any[]>([]);
-  
+
+  currentQuery = signal({
+    query: '',
+    results: [],
+  });
+
   getConnection() {
     return this.dbUserService.getConnection().pipe(
       tap((response) => {
@@ -57,6 +65,16 @@ export class UserDb {
       take(1),
       tap((response) => {
         this.schemaExplorer.set(response);
+        this.currentQuery.set(response);
+        console.log('Schema Explorer Response:', response);
+        return response;
+      })
+    );
+  }
+  queryDb(prompt: string) {
+    return this.dbUserService.getAiResponse(prompt).pipe(
+      take(1),
+      tap((response) => {
         return response;
       })
     );
@@ -79,5 +97,9 @@ export class UserDb {
 
   readSchemaExplorer() {
     return computed(() => this.schemaExplorer);
+  }
+
+  readCurretQuery() {
+    return computed(() => this.currentQuery());
   }
 }

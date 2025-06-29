@@ -10,6 +10,8 @@ import { SchemaTreeComponent } from '../../components/schema-tree/schema-tree.co
 import { AiGenComponent } from '../../components/ai-gen/ai-gen.component';
 import { JsonEditorComponent } from '../../components/json-editor/json-editor.component';
 import { CommonModule } from '@angular/common';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { ResponseTableComponent } from '../../components/response-table-component/response-table-component';
 
 @Component({
   selector: 'app-ai',
@@ -23,6 +25,11 @@ import { CommonModule } from '@angular/common';
     AiGenComponent,
     CommonModule,
     JsonEditorComponent,
+    NzTableModule,
+    ResponseTableComponent,
+    JsonEditorComponent,
+    SchemaTreeComponent,
+    AiGenComponent,
   ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.css',
@@ -31,4 +38,8 @@ export class AiComponent {
   userDb = inject(UserDb);
 
   protected schemaExplorer = toSignal(this.userDb.getSchemaExplorer());
+
+  triggerQuery(query: string) {
+    console.log(query);
+  }
 }

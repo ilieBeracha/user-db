@@ -5,12 +5,14 @@ import {
   AfterViewInit,
   OnDestroy,
   signal,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import * as monaco from 'monaco-editor';
-import { ThemeService, ThemeInfo } from '../../services/theme.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-code-ide',
@@ -19,6 +21,7 @@ import { ThemeService, ThemeInfo } from '../../services/theme.service';
   styleUrl: './code-ide.component.css',
 })
 export class CodeIdeComponent implements AfterViewInit, OnDestroy {
+  @Output() triggerQuery = new EventEmitter<any>();
   constructor(private themeService: ThemeService) {}
 
   async ngAfterViewInit() {
@@ -28,7 +31,7 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
         await this.themeService.loadTheme('spotify');
         await this.themeService.setTheme('spotify');
         theme = 'spotify';
-        console.log('IDLE theme loaded successfully');
+        console.log('Spotify theme loaded successfully');
       } catch (error) {
         console.error('Failed to load Spotify theme, using vs-dark:', error);
       }
@@ -46,6 +49,7 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
         lineNumbers: 'on',
         glyphMargin: false,
         folding: true,
+        tabSize: 2,
         lineDecorationsWidth: 0,
         lineNumbersMinChars: 3,
       });
@@ -84,6 +88,7 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
     if (this.editor) {
       this.code = this.editor.getValue();
     }
+    this.triggerQuery.emit(this.code);
     this.isExecuting = true;
     this.queryError = null;
 

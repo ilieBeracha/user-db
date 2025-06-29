@@ -2,6 +2,7 @@
 .monaco-editor-container {
   width: 100%;
   height: 100%;
+  background-color: rgb(17, 17, 17);
 }
 
 /* Button hover effects */

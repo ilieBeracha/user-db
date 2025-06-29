@@ -115,12 +115,6 @@ export class AiGenComponent {
     this.isLoading = true;
 
     // Simulate assistant response with more realistic delay
-    setTimeout(() => {
-      this.messages.push({
-        role: 'assistant',
-        content: `I understand you're asking: "${userMessage}"\n\nI'm currently in demo mode. Once connected to the backend, I'll be able to help you with:\n\n• Database schema exploration\n• Natural language to SQL conversion\n• Query optimization suggestions\n• Data insights and analysis`,
-      });
-      this.isLoading = false;
-    }, 1500);
+    return this.messages;
   }
 }

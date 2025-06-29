@@ -72,4 +72,12 @@ export class DbUserService {
       this.getHeaders()
     );
   }
+
+  getAiResponse(prompt: string) {
+    return this.http.post<any>(
+      `${API_URL}/user-db/ai-chat`,
+      { prompt },
+      this.getHeaders()
+    );
+  }
 }

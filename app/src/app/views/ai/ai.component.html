@@ -1,4 +1,4 @@
-<div class="h-screen w-screen bg-zinc-900">
+<div class="h-screen w-screen bg-[rgb(255, 30, 86)">
   <nz-splitter nzLayout="horizontal" class="h-full">
     <nz-splitter-panel
       nzDefaultSize="20%"
@@ -8,6 +8,11 @@
     >
       <nz-splitter nzLayout="vertical" class="h-full">
         <nz-splitter-panel nzDefaultSize="30%" nzMinSize="20%" nzMaxSize="100%">
+          <div
+            class="flex items-center min-h-14 justify-center gap-2 h-14"
+          >
+            <span class="text-lg font-medium text-gray-300">Schema Tree</span>
+          </div>
           <app-schema-tree [schemaTree]="schemaExplorer()"></app-schema-tree>
         </nz-splitter-panel>
       </nz-splitter>
@@ -24,21 +29,22 @@
             >
               <div class="h-full query-section">
                 <div class="h-[calc(100%)]">
-                  <app-code-ide></app-code-ide>
+                  <app-code-ide
+                    (triggerQuery)="triggerQuery($event)"
+                  ></app-code-ide>
                 </div>
               </div>
             </nz-splitter-panel>
             <nz-splitter-panel
-              nzDefaultSize="25%"
+              nzDefaultSize="100%"
               nzMinSize="15%"
               nzMaxSize="40%"
             >
-              <app-json-editor></app-json-editor>
+              <app-ai-gen></app-ai-gen>
             </nz-splitter-panel>
           </nz-splitter>
         </nz-splitter-panel>
 
-        <!-- AI Assistant Panel -->
         <nz-splitter-panel nzDefaultSize="45%" nzMinSize="20%" nzMaxSize="100%">
           <nz-splitter nzLayout="horizontal" class="h-full">
             <nz-splitter-panel
@@ -47,7 +53,7 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-ai-gen></app-ai-gen>
+                <app-response-table></app-response-table>
               </div>
             </nz-splitter-panel>
             <nz-splitter-panel
@@ -56,10 +62,7 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-schema-tree
-                  [schemaTree]="schemaExplorer()"
-                ></app-schema-tree>
-                <!-- <app-json-editor></app-json-editor> -->
+                <app-json-editor></app-json-editor>
               </div>
             </nz-splitter-panel>
           </nz-splitter>
