@@ -26,11 +26,7 @@ export class InitConnectionComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if connection already exists without triggering navigation
-    this.userDb.getConnection().subscribe((connection) => {
-      if (connection) {
-        this.router.navigate(['/query-builder'], { replaceUrl: true });
-      }
-    });
+    this.userDb.getConnection().subscribe();
   }
 
   protected onSubmit() {

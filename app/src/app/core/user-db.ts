@@ -23,9 +23,11 @@ export class UserDb {
   });
 
   getConnection() {
+    console.log('Getting Connection');
     return this.dbUserService.getConnection().pipe(
       tap((response) => {
         this.userDbConnection.set(response);
+        console.log('Connection Response:', response);
         return response;
       })
     );
@@ -65,7 +67,10 @@ export class UserDb {
       take(1),
       tap((response) => {
         this.schemaExplorer.set(response);
-        this.currentQuery.set(response);
+        this.currentQuery.set({
+          query: response.query,
+          results: response.results,
+        });
         console.log('Schema Explorer Response:', response);
         return response;
       })
@@ -99,7 +104,7 @@ export class UserDb {
     return computed(() => this.schemaExplorer);
   }
 
-  readCurretQuery() {
-    return computed(() => this.currentQuery());
+  readCurrentQuery() {
+    return computed(() => this.currentQuery);
   }
 }

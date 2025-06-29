@@ -3,12 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserDb } from "./entities/user-db.entity";
 import { UserDbConnectionManager } from "./user-db-connection.manager";
-import {
-  GET_RECENT_ACTIVITY_QUERY,
-  LARGEST_DATABASE_QUERY,
-  RESOURCE_UTILIZATION_SUMMARY_QUERY,
-  GET_TABLES_WITH_COLUMNS_QUERY,
-} from "./queries/queries";
+import { GET_TABLES_WITH_COLUMNS_QUERY } from "./queries/queries";
 
 @Injectable()
 export class UserDbService {
@@ -28,52 +23,18 @@ export class UserDbService {
     private readonly connManager: UserDbConnectionManager
   ) {}
 
-  async getDatabasesInServer(req: any) {
-    const result = await this.connManager.runSingleQuery(
-      LARGEST_DATABASE_QUERY,
-      [100],
-      req?.user?.id
-    );
-
-    return result;
-  }
-
-  async getRecentActivity(req: any, limit: number = 10) {
-    const result = await this.connManager.runSingleQuery(
-      GET_RECENT_ACTIVITY_QUERY,
-      [100],
-      req?.user?.id
-    );
-
-    return result;
-  }
-
-  async getComparisonData(req: any) {
-    const results = await this.connManager.runSingleQuery(
-      RESOURCE_UTILIZATION_SUMMARY_QUERY,
-      [],
-      req?.user?.id
-    );
-
-    return results;
-  }
-
   async isConnected(req: any) {
     const result = await this.connManager.isConnected(req);
     return result;
   }
 
-  async getTablesWithColumns(user_id: string) {
-    const result = await this.connManager.runSingleQuery(
-      GET_TABLES_WITH_COLUMNS_QUERY,
-      [],
-      user_id
-    );
+  async connect(database: UserDb, userId: string) {
+    database.user_id = userId;
+    const result = await this.userDbRepository.save(database);
     return result;
   }
 
   async executeCustomQuery(query: string, user_id: string) {
-    // Security: Basic validation to prevent dangerous operations
     const cleanQuery = query.toLowerCase().trim();
     const dangerousOperations = [
       "drop",
@@ -84,8 +45,7 @@ export class UserDbService {
       "insert",
       "create",
     ];
-    console.log(cleanQuery);
-    console.log(dangerousOperations);
+
     for (const operation of dangerousOperations) {
       if (cleanQuery.includes(operation)) {
         throw new Error(`Dangerous operation '${operation}' not allowed`);
@@ -98,7 +58,6 @@ export class UserDbService {
   async getSchemaExplorerAcrossDatabases(userId: string): Promise<any> {
     const fullResult: any[] = [];
 
-    // 1. Fetch all non-template DBs
     const databases: { datname: string }[] =
       await this.connManager.runSingleQuery(
         `SELECT datname FROM pg_database WHERE datistemplate = false`,
@@ -110,10 +69,8 @@ export class UserDbService {
       const dbName = db.datname;
 
       try {
-        // ✅ FIXED: Get a real connection object for this DB
         await this.connManager.getConnectionForDatabase(dbName, userId);
 
-        // 2. Get all tables + columns for that DB
         const tables: {
           table_name: string;
           column_count: number;
@@ -124,7 +81,6 @@ export class UserDbService {
           userId
         );
 
-        // 3. For each table, get 1 sample row
         for (const table of tables) {
           const safeTable = `"public"."${table.table_name}"`;
           let sampleRow: Record<string, any> = {};
@@ -140,7 +96,6 @@ export class UserDbService {
             sampleRow = {};
           }
 
-          // 4. Attach sample values with classification
           table.columns = table.columns.map((col) => {
             const isSensitive = this.SENSITIVE_KEYS.some((keyword) =>
               col.column.toLowerCase().includes(keyword)

@@ -8,10 +8,13 @@ import {
   OnInit,
   OnDestroy,
   OnChanges,
+  inject,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as monaco from 'monaco-editor';
 import { ThemeService } from '../../services/theme.service';
+import { UserDb } from '../../core/user-db';
 
 @Component({
   selector: 'app-json-editor',
@@ -68,7 +71,7 @@ import { ThemeService } from '../../services/theme.service';
 export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
   @Input() value: string = '';
   @Output() valueChange = new EventEmitter<string>();
-
+  userDb = inject(UserDb);
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
 
   private editor: monaco.editor.IStandaloneCodeEditor | null = null;
@@ -78,7 +81,16 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
   hasErrors: boolean = false;
   lineCount: number = 1;
 
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService) {
+    effect(() => {
+      this.jsonValue = JSON.stringify(
+        this.userDb.currentQuery()?.results,
+        null,
+        2
+      );
+      this.editor?.setValue(this.jsonValue);
+    });
+  }
 
   async ngOnInit() {
     this.themeService.setTheme('vs-dark');

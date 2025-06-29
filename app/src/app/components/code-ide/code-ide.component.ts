@@ -7,12 +7,16 @@ import {
   signal,
   Output,
   EventEmitter,
+  inject,
+  OnInit,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import * as monaco from 'monaco-editor';
 import { ThemeService } from '../../services/theme.service';
+import { UserDb } from '../../core/user-db';
 
 @Component({
   selector: 'app-code-ide',
@@ -21,8 +25,16 @@ import { ThemeService } from '../../services/theme.service';
   styleUrl: './code-ide.component.css',
 })
 export class CodeIdeComponent implements AfterViewInit, OnDestroy {
+  userDb = inject(UserDb);
+  code = '';
+
   @Output() triggerQuery = new EventEmitter<any>();
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService) {
+    effect(() => {
+      this.code = this.userDb.currentQuery()?.query || '';
+      this.editor?.setValue(this.code);
+    });
+  }
 
   async ngAfterViewInit() {
     if (this.editorElement) {
@@ -76,8 +88,6 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
     padding: { top: 20, bottom: 20 },
     automaticLayout: true,
   };
-
-  code = 'SELECT * FROM users LIMIT 10;';
 
   // Simple UI state
   showResults = false;

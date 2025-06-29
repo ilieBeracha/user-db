@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { UserDb } from '../core/user-db';
-import { take, switchMap, of } from 'rxjs';
+import { take, switchMap, of, catchError } from 'rxjs';
 
 export const DbConnectionGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -15,6 +15,10 @@ export const DbConnectionGuard: CanActivateFn = (route, state) => {
         return of(false);
       }
       return of(true);
+    }),
+    catchError(() => {
+      router.navigate(['/init-connection'], { replaceUrl: true });
+      return of(false);
     })
   );
 };

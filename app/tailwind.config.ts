@@ -1,9 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -68,9 +66,9 @@ const config: Config = {
         '88': '22rem',
       },
       borderRadius: {
-        'lg': 'var(--radius)',
-        'md': 'calc(var(--radius) - 2px)',
-        'sm': 'calc(var(--radius) - 4px)',
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
     },
   },

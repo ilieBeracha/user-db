@@ -37,7 +37,7 @@ import { ResponseTableComponent } from '../../components/response-table-componen
 export class AiComponent {
   userDb = inject(UserDb);
 
-  protected schemaExplorer = toSignal(this.userDb.getSchemaExplorer());
+  protected schemaExplorer: any = toSignal(this.userDb.getSchemaExplorer());
 
   triggerQuery(query: string) {
     console.log(query);

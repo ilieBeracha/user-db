@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { UserDbService } from "./user-db.service";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
@@ -12,22 +12,10 @@ export class UserDbController {
     return this.userDbService.isConnected(req);
   }
 
-  @Get("activities")
+  @Post("connect")
   @UseGuards(JwtAuthGuard)
-  async getRecentActivity(@Req() req: any): Promise<any> {
-    return this.userDbService.getRecentActivity(req);
-  }
-
-  @Get("comparison")
-  @UseGuards(JwtAuthGuard)
-  async getComparisonData(@Req() req: any): Promise<any> {
-    return this.userDbService.getComparisonData(req);
-  }
-
-  @Get("server-databases")
-  @UseGuards(JwtAuthGuard)
-  async getDatabasesInServer(@Req() req: any): Promise<any> {
-    return this.userDbService.getDatabasesInServer(req);
+  async executeQuery(@Req() req: any): Promise<any> {
+    return this.userDbService.connect(req.body, req.user.id);
   }
 
   @Get("schema-explorer")
