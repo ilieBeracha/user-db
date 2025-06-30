@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { DbUserService } from '../../services/dbUserService';
 import { take, tap } from 'rxjs';
 import { connectUserDbDto } from '../../services/dbUserService';
+import { Agents } from './ai';
 
 @Injectable({
   providedIn: 'root',
@@ -15,12 +16,7 @@ export class UserDb {
     reaponse: [],
     query: '',
   });
-
-  currentQuery = signal({
-    query: '',
-    results: [],
-  });
-
+  agents = inject(Agents);
   getConnection() {
     console.log('Getting Connection');
     return this.dbUserService.getConnection().pipe(
@@ -41,7 +37,7 @@ export class UserDb {
       take(1),
       tap((response) => {
         this.schemaExplorer.set(response);
-        this.currentQuery.set({
+        this.agents.currentQuery.set({
           query: response.query,
           results: response.results,
         });

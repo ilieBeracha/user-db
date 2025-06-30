@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ResponseTableComponent } from '../../components/response-table-component/response-table-component';
 import { DashboardActivitiesComponent } from '../../components/dashboard-activities/dashboard-activities.component';
+import { Agents } from '../../core/ai';
 @Component({
   selector: 'app-ai',
   imports: [
@@ -37,10 +38,11 @@ import { DashboardActivitiesComponent } from '../../components/dashboard-activit
 })
 export class AiComponent {
   userDb = inject(UserDb);
-  currentQuery: any = this.userDb.currentQuery();
+  agents = inject(Agents);
+  currentQuery: any = this.agents.currentQuery();
   protected schemaExplorer: any = toSignal(this.userDb.getSchemaExplorer());
   protected recentActivities = toSignal(this.userDb.getRecentActivities());
-  
+
   triggerQuery(query: string) {
     console.log(query);
   }

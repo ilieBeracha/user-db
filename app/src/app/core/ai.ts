@@ -7,14 +7,31 @@ import { AgentsService } from '../../services/agentsService';
 })
 export class Agents {
   private agentsService = inject(AgentsService);
-  messages = signal<any[]>([]);
-
-  generateSQL(query: string, schema: any) { 
-    return this.agentsService.generateSQL(query, schema).pipe(
-      tap((response) => {
-        this.messages.set(response);
-        return response;
-      })
-    );
+  message = signal<any>({});
+  isLoading = signal(false);
+  agentQuery = signal<string>('');
+  agentSchema = signal<any>({});
+  currentQuery = signal({
+    query: '',
+    results: [],
+  });
+  generateSQL(query: string, schema: any) {
+    this.isLoading.set(true);
+    this.agentsService
+      .generateSQL(query, schema)
+      .pipe(
+        tap((response) => {
+          console.log(response);
+          this.agentQuery.set(response.query);
+          this.agentSchema.set(response.schema);
+          this.message.set(response.message);
+          this.currentQuery.set({
+            query: response.query,
+            results: response.result,
+          });
+          this.isLoading.set(false);
+        })
+      )
+      .subscribe();
   }
 }

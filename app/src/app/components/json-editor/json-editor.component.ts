@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import * as monaco from 'monaco-editor';
 import { ThemeService } from '../../services/theme.service';
 import { UserDb } from '../../core/user-db';
+import { Agents } from '../../core/ai';
 
 @Component({
   selector: 'app-json-editor',
@@ -71,7 +72,7 @@ import { UserDb } from '../../core/user-db';
 export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
   @Input() value: string = '';
   @Output() valueChange = new EventEmitter<string>();
-  userDb = inject(UserDb);
+  agents = inject(Agents);
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
 
   private editor: monaco.editor.IStandaloneCodeEditor | null = null;
@@ -84,7 +85,7 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private themeService: ThemeService) {
     effect(() => {
       this.jsonValue = JSON.stringify(
-        this.userDb.currentQuery()?.results,
+        this.agents.currentQuery().results,
         null,
         2
       );

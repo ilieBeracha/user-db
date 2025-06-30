@@ -2,6 +2,7 @@ import { Component, effect, inject, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { UserDb } from '../../core/user-db';
+import { Agents } from '../../core/ai';
 
 @Component({
   selector: 'app-response-table',
@@ -13,10 +14,10 @@ import { UserDb } from '../../core/user-db';
 export class ResponseTableComponent {
   @Input() data: any[] = [];
   currentQueryResults: any = [];
-  userDb = inject(UserDb);
+  agents = inject(Agents);
   constructor() {
     effect(() => {
-      this.currentQueryResults = this.userDb.currentQuery();
+      this.currentQueryResults = this.agents.currentQuery();
       console.log(this.currentQueryResults);
     });
   }

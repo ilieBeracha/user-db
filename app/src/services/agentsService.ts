@@ -8,6 +8,7 @@ import { API_URL } from '../app/cosnts';
 })
 export class AgentsService {
   private auth = inject(Auth);
+
   constructor(private readonly http: HttpClient) {}
   private getHeaders() {
     return {

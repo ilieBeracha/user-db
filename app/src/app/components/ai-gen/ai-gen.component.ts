@@ -23,11 +23,11 @@ export class AiGenComponent {
   isLoading = false;
   agents = inject(Agents);
   userDb = inject(UserDb);
-  schemaExplorer = {};
 
   constructor() {
     effect(() => {
-      this.schemaExplorer = this.userDb.schemaExplorer();
+      this.messages = [...this.messages, this.agents.message()];
+      console.log(this.messages);
     });
   }
 
@@ -35,16 +35,6 @@ export class AiGenComponent {
     const userMessage = this.currentMessage;
     this.messages.push({ role: 'user', content: userMessage });
     this.currentMessage = '';
-    this.isLoading = true;
-    this.agents
-      .generateSQL(userMessage, this.userDb.schemaExplorer())
-      .subscribe((response) => {
-        console.log('Response:', response);
-        this.messages.push({
-          role: 'assistant',
-          content: response,
-        });
-        this.isLoading = false;
-      });
+    this.agents.generateSQL(userMessage, this.userDb.schemaExplorer());
   }
 }

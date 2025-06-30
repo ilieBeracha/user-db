@@ -35,12 +35,17 @@ export class AgentsService {
       .withStructuredOutput(
         z.object({
           message: z
-            .string()
+            .object({
+              role: z.literal("assistant").describe("The role of the message"),
+              content: z.string().describe("The content of the message"),
+            })
             .describe("The message to be returned to the user"),
           query: z.string().describe("The query to be executed"),
           result: z
             .string()
-            .describe("The result of the query in JSON format")
+            .describe(
+              "The result of the query in JSON.stringify() format, make sure to return the result in a valid JSON format"
+            )
             .transform((val) => JSON.parse(val)),
         })
       )

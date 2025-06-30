@@ -17,6 +17,7 @@ import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import * as monaco from 'monaco-editor';
 import { ThemeService } from '../../services/theme.service';
 import { UserDb } from '../../core/user-db';
+import { Agents } from '../../core/ai';
 
 @Component({
   selector: 'app-code-ide',
@@ -26,13 +27,14 @@ import { UserDb } from '../../core/user-db';
 })
 export class CodeIdeComponent implements AfterViewInit, OnDestroy {
   userDb = inject(UserDb);
-  code = '';
+  agents = inject(Agents);
+  editorValue = '';
 
   @Output() triggerQuery = new EventEmitter<any>();
   constructor(private themeService: ThemeService) {
     effect(() => {
-      this.code = this.userDb.currentQuery()?.query || '';
-      this.editor?.setValue(this.code);
+      this.editorValue = this.agents.currentQuery().query;
+      this.editor?.setValue(this.editorValue);
     });
   }
 
@@ -49,7 +51,7 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
       }
 
       this.editor = monaco.editor.create(this.editorElement.nativeElement, {
-        value: this.code,
+        value: this.editorValue,
         theme: theme,
         language: 'sql',
         fontSize: 14,
@@ -67,7 +69,7 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
       });
 
       this.editor.onDidChangeModelContent(() => {
-        this.code = this.editor?.getValue() || '';
+        this.editorValue = this.editor?.getValue() || '';
       });
     }
   }
@@ -96,32 +98,32 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
 
   executeQuery() {
     if (this.editor) {
-      this.code = this.editor.getValue();
+      this.editorValue = this.editor.getValue();
     }
-    this.triggerQuery.emit(this.code);
+    this.triggerQuery.emit(this.editorValue);
     this.isExecuting = true;
     this.queryError = null;
 
     setTimeout(() => {
       this.isExecuting = false;
       this.showResults = true;
-      console.log('Execute query:', this.code);
+      console.log('Execute query:', this.editorValue);
     }, 1000);
   }
 
   formatQuery() {
     if (this.editor) {
-      const formatted = this.code.replace(/\s+/g, ' ').trim();
+      const formatted = this.editorValue.replace(/\s+/g, ' ').trim();
       this.editor.setValue(formatted);
-      this.code = formatted;
+      this.editorValue = formatted;
     }
   }
 
   saveQuery() {
     if (this.editor) {
-      this.code = this.editor.getValue();
+      this.editorValue = this.editor.getValue();
     }
-    console.log('Save query:', this.code);
+    console.log('Save query:', this.editorValue);
   }
 
   exportResults() {
