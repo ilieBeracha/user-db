@@ -20,7 +20,7 @@ export class AgentsService {
   generateSQL(query: string, schema: any) {
     return this.http.post<any>(
       `${API_URL}/agent/chat`,
-      { query: query, schema: schema },
+      { query: query },
       this.getHeaders()
     );
   }

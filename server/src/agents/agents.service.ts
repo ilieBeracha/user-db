@@ -17,9 +17,11 @@ export class AgentsService {
     });
 
     this.systemPrompt = `
-    You are a helpful assistant that can help with database queries
+    You are a helpful assistant that can help with database queries.
     You will be given a query and a schema.
-    The schema is in the following format: {schema}`;
+    The schema is in the following format: {schema}
+    
+    IMPORTANT: Do not use markdown formatting in your responses. Return plain text only.`;
   }
 
   async executeDirectQuery(query: string, userId: string) {
@@ -44,9 +46,8 @@ export class AgentsService {
           result: z
             .string()
             .describe(
-              "The result of the query in JSON.stringify() format, make sure to return the result in a valid JSON format"
-            )
-            .transform((val) => JSON.parse(val)),
+              "The result of the query as a JSON.stringify() format, make sure to return the result in a valid JSON format. Do not use markdown formatting in your responses. Return plain text only. Do not use ```json or ``` in your responses. Do not use ``` in your responses."
+            ),
         })
       )
       .invoke(prompt);

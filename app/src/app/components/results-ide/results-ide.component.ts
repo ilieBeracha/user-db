@@ -14,87 +14,113 @@ import {
 import { CommonModule } from '@angular/common';
 import * as monaco from 'monaco-editor';
 import { ThemeService } from '../../services/theme.service';
-import { UserDb } from '../../core/user-db';
 import { Agents } from '../../core/ai';
 
 @Component({
-  selector: 'app-json-editor',
+  selector: 'app-results-ide',
   standalone: true,
   imports: [CommonModule],
-  styleUrl: './json-editor.component.css',
+  styleUrl: './results-ide.component.css',
   template: `
-    <div class="flex flex-col h-full py-2 text-[rgb(255, 227, 238)] ">
-      <!-- Header -->
+    <div class="flex flex-col h-full py-2 text-white ">
+      <!-- Header with Toggle Buttons -->
       <div
-        class="flex items-center justify-center gap-2 h-14  dark:bg-[rgb(255, 227, 238)]"
+        class="flex items-center justify-between h-14 px-4 border-b border-slate-700"
       >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-lg font-medium text-gray-300"
-              >JSON Editor • IDLE Theme</span
-            >
-          </div>
+        <div class="flex items-center gap-2">
+          <span class="text-lg font-medium text-slate-300">IDE</span>
+        </div>
+
+        <!-- Toggle Buttons -->
+        <div class="flex items-center rounded-lg p-1">
+          <button
+            (click)="setMode('results')"
+            [class.active]="!isQuery"
+            class="mode-toggle px-3 py-1.5 text-sm font-medium rounded-md transition-all"
+          >
+            Results
+          </button>
+          <button
+            (click)="setMode('query')"
+            [class.active]="isQuery"
+            class="mode-toggle px-3 py-1.5 text-sm font-medium rounded-md transition-all"
+          >
+            Query
+          </button>
         </div>
       </div>
 
       <!-- Monaco Editor Container -->
       <div class="flex-1 relative">
-        <div #editorContainer class="w-full h-full"></div>
+        <div #editorElement class="w-full h-full"></div>
       </div>
 
       <!-- Status Bar -->
-      <div class="p-2 border-tbackdrop-blur-sm">
+      <div class="p-2 border-t ">
         <div class="flex items-center justify-between text-xs">
           <div class="flex items-center gap-4">
-            <span class="text-gray-400">Lines: {{ lineCount }}</span>
-            <span class="text-gray-400"
-              >Size: {{ formatSize(jsonValue.length) }}</span
+            <span class="text-slate-400">Lines: {{ lineCount }}</span>
+            <span class="text-slate-400"
+              >Size: {{ formatSize(response.length) }}</span
+            >
+            <span class="text-slate-400"
+              >Mode: {{ isQuery ? 'Query' : 'Results' }}</span
             >
           </div>
-          <div class="flex items-center gap-2">
+          @if (isQuery) {
+          <div class="flex items-center gap-2" *ngIf="hasErrors">
             <div *ngIf="hasErrors" class="flex items-center gap-1 text-red-400">
               <span>❌</span>
               <span>JSON has errors</span>
             </div>
             <div
-              *ngIf="!hasErrors && jsonValue.trim()"
+              *ngIf="!hasErrors && response.trim()"
               class="flex items-center gap-1 text-green-400"
             >
               <span>✅</span>
               <span>Valid JSON</span>
             </div>
           </div>
+          }
         </div>
       </div>
     </div>
   `,
 })
-export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
+export class ResultsIdeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() value: string = '';
   @Output() valueChange = new EventEmitter<string>();
   agents = inject(Agents);
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
-
+  @ViewChild('editorElement', { static: true }) editorElement!: ElementRef;
   private editor: monaco.editor.IStandaloneCodeEditor | null = null;
 
-  jsonValue: string = '';
+  response: string = '';
   isValidJson: boolean = false;
   hasErrors: boolean = false;
   lineCount: number = 1;
+  isQuery: boolean = false;
 
   constructor(private themeService: ThemeService) {
     effect(() => {
-      this.jsonValue = JSON.stringify(
-        this.agents.currentQuery().results,
-        null,
-        2
-      );
-      this.editor?.setValue(this.jsonValue);
+      if (this.isQuery) {
+        this.response = JSON.stringify(
+          this.agents.currentQuery().query,
+          null,
+          2
+        );
+      } else {
+        this.response = JSON.stringify(
+          this.agents.currentQuery().results,
+          null,
+          2
+        );
+      }
+      this.editor?.setValue(this.response);
     });
   }
 
   async ngOnInit() {
-    this.themeService.setTheme('vs-dark');
     await this.initializeEditor();
   }
 
@@ -105,9 +131,17 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.editor && this.value !== this.jsonValue) {
-      this.jsonValue = this.value || '';
-      this.editor.setValue(this.jsonValue);
+    if (this.isQuery) {
+      this.response = JSON.stringify(this.agents.currentQuery().query, null, 2);
+    } else {
+      this.response = JSON.stringify(
+        this.agents.currentQuery().results,
+        null,
+        2
+      );
+    }
+    if (this.editor && this.value !== this.response) {
+      this.editor.setValue(this.response);
     }
   }
 
@@ -118,15 +152,10 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
         if (label === 'json') {
           return './assets/monaco-editor/esm/vs/language/json/json.worker.js';
         }
-        if (label === 'css' || label === 'scss' || label === 'less') {
-          return './assets/monaco-editor/esm/vs/language/css/css.worker.js';
+        if (label === 'sql') {
+          return './assets/monaco-editor/esm/vs/language/sql/sql.worker.js';
         }
-        if (label === 'html' || label === 'handlebars' || label === 'razor') {
-          return './assets/monaco-editor/esm/vs/language/html/html.worker.js';
-        }
-        if (label === 'typescript' || label === 'javascript') {
-          return './assets/monaco-editor/esm/vs/language/typescript/ts.worker.js';
-        }
+
         return './assets/monaco-editor/esm/vs/editor/editor.worker.js';
       },
     };
@@ -141,21 +170,21 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
       },
     };
 
-    this.jsonValue = this.value || JSON.stringify(defaultJson, null, 2);
+    this.response = this.value || JSON.stringify(defaultJson, null, 2);
 
     // Load and set IDLE theme
-    let theme = 'vs-dark'; // fallback
+    let theme = 'spacecadet'; // fallback
     try {
-      await this.themeService.loadTheme('idle');
-      theme = 'idle';
+      await this.themeService.loadTheme('spacecadet');
+      await this.themeService.setTheme('spacecadet');
       console.log('IDLE theme loaded successfully');
     } catch (error) {
       console.error('Failed to load IDLE theme, using vs-dark:', error);
     }
 
     // Create Monaco editor
-    this.editor = monaco.editor.create(this.editorContainer.nativeElement, {
-      value: this.jsonValue,
+    this.editor = monaco.editor.create(this.editorElement.nativeElement, {
+      value: this.response,
       tabSize: 2,
       language: 'json',
       padding: {
@@ -187,9 +216,9 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
 
     // Listen for content changes
     this.editor.onDidChangeModelContent(() => {
-      this.jsonValue = this.editor!.getValue();
+      this.response = this.editor!.getValue();
       this.updateStatus();
-      this.valueChange.emit(this.jsonValue);
+      this.valueChange.emit(this.response);
     });
 
     // Listen for marker changes (validation errors)
@@ -200,6 +229,7 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
           const markers = monaco.editor.getModelMarkers({
             resource: model.uri,
             owner: 'json',
+            take: 1,
           });
           this.hasErrors = markers.length > 0;
         }
@@ -213,8 +243,8 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
     this.lineCount = this.editor?.getModel()?.getLineCount() || 1;
 
     try {
-      if (this.jsonValue.trim()) {
-        JSON.parse(this.jsonValue);
+      if (this.response.trim()) {
+        JSON.parse(this.response);
         this.isValidJson = true;
       } else {
         this.isValidJson = false;
@@ -224,11 +254,11 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  formatJson() {
+  formatResponse() {
     if (!this.editor || !this.isValidJson) return;
 
     try {
-      const parsed = JSON.parse(this.jsonValue);
+      const parsed = JSON.parse(this.response);
       const formatted = JSON.stringify(parsed, null, 2);
       this.editor.setValue(formatted);
     } catch (error) {
@@ -236,17 +266,56 @@ export class JsonEditorComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  async copyJson() {
+  async copyResponse() {
     try {
-      await navigator.clipboard.writeText(this.jsonValue);
+      await navigator.clipboard.writeText(this.response);
     } catch (error) {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
-      textArea.value = this.jsonValue;
+      textArea.value = this.response;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
+    }
+  }
+
+  setMode(mode: 'query' | 'results') {
+    this.isQuery = mode === 'query';
+    this.updateEditorContent();
+    this.updateEditorLanguage();
+  }
+
+  private updateEditorContent() {
+    if (this.isQuery) {
+      const queryData = this.agents.currentQuery().query;
+      this.response =
+        typeof queryData === 'string'
+          ? queryData
+          : JSON.stringify(queryData, null, 2);
+    } else {
+      const resultsData = this.agents.currentQuery().results;
+      this.response = JSON.stringify(resultsData, null, 2);
+    }
+
+    if (this.editor) {
+      this.editor.setValue(this.response);
+      this.updateStatus();
+    }
+  }
+
+  private updateEditorLanguage() {
+    if (this.editor) {
+      const model = this.editor.getModel();
+      if (model) {
+        if (this.isQuery) {
+          // Set language to SQL if it's a query
+          monaco.editor.setModelLanguage(model, 'sql');
+        } else {
+          // Set language to JSON if it's results
+          monaco.editor.setModelLanguage(model, 'json');
+        }
+      }
     }
   }
 

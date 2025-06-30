@@ -27,9 +27,7 @@
             >
               <div class="h-full query-section">
                 <div class="h-[calc(100%)]">
-                  <app-code-ide
-                    (triggerQuery)="triggerQuery($event)"
-                  ></app-code-ide>
+                  <app-results-ide></app-results-ide>
                 </div>
               </div>
             </nz-splitter-panel>
@@ -51,7 +49,7 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-json-editor></app-json-editor>
+                <!-- <app-response-table [data]="currentQuery"></app-response-table> -->
               </div>
             </nz-splitter-panel>
             <nz-splitter-panel

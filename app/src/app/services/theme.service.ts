@@ -316,6 +316,15 @@ export class ThemeService {
       colors: {},
     },
     {
+      id: 'ilie-custom',
+      name: 'Ilie Custom',
+      category: 'dark',
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {},
+    },
+    {
       id: 'tomorrow-night-eighties',
       name: 'Tomorrow Night Eighties',
       category: 'dark',
@@ -367,7 +376,15 @@ export class ThemeService {
       base: 'vs-dark',
       inherit: true,
       rules: [],
-      colors: {},
+      colors: {
+        'editor.background': '#282a36',
+        'editor.foreground': '#f8f8f2',
+        'editor.lineHighlightBackground': '#282a36',
+        'editor.selectionBackground': '#44475a',
+        'editor.selectionHighlightBorder': '#222218',
+        'editor.inactiveSelectionBackground': '#282a36',
+        'editor.inactiveSelectionHighlightBorder': '#282a36',
+      },
     },
     {
       id: 'idlefingers',
@@ -596,16 +613,32 @@ export class ThemeService {
           .getElementById('editorContainer')
           ?.setAttribute('theme', themeId);
       } else {
-        // Load from file
+        // Load from JSON file to enrich theme with distinct colors/rules
         const fileName = this.getThemeFileName(themeId);
 
-        // const themeData = Dracula as any;
-        monaco.editor.defineTheme(themeId, {
-          base: themeInfo?.base || ('vs-light' as any),
-          inherit: themeInfo?.inherit ?? true,
-          rules: themeInfo?.rules || [],
-          colors: themeInfo?.colors || {},
-        });
+        try {
+          // Dynamically import the JSON definition (requires "resolveJsonModule": true in tsconfig)
+          const themeModule: any = await import(`./themes/${fileName}`);
+          const themeData = themeModule?.default ?? themeModule;
+
+          monaco.editor.defineTheme(themeId, {
+            base:
+              themeInfo?.base ||
+              (themeData?.base as any) ||
+              ('vs-light' as any),
+            inherit: themeInfo?.inherit ?? true,
+            rules: themeData?.rules || themeInfo?.rules || [],
+            colors: themeData?.colors || themeInfo?.colors || {},
+          });
+        } catch (e) {
+          // Fallback if JSON import fails
+          monaco.editor.defineTheme(themeId, {
+            base: themeInfo?.base || ('vs-light' as any),
+            inherit: themeInfo?.inherit ?? true,
+            rules: themeInfo?.rules || [],
+            colors: themeInfo?.colors || {},
+          });
+        }
         document
           .getElementById('editorContainer')
           ?.setAttribute('theme', themeId);

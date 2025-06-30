@@ -10,6 +10,7 @@ import {
   inject,
   OnInit,
   effect,
+  OnChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,12 +26,13 @@ import { Agents } from '../../core/ai';
   templateUrl: './code-ide.component.html',
   styleUrl: './code-ide.component.css',
 })
-export class CodeIdeComponent implements AfterViewInit, OnDestroy {
+export class CodeIdeComponent implements OnInit, OnDestroy, OnChanges {
   userDb = inject(UserDb);
   agents = inject(Agents);
   editorValue = '';
 
   @Output() triggerQuery = new EventEmitter<any>();
+
   constructor(private themeService: ThemeService) {
     effect(() => {
       this.editorValue = this.agents.currentQuery().query;
@@ -38,7 +40,7 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  async ngAfterViewInit() {
+  async ngOnInit() {
     if (this.editorElement) {
       let theme = 'vs-dark'; // fallback
       try {
@@ -71,6 +73,12 @@ export class CodeIdeComponent implements AfterViewInit, OnDestroy {
       this.editor.onDidChangeModelContent(() => {
         this.editorValue = this.editor?.getValue() || '';
       });
+    }
+  }
+
+  ngOnChanges() {
+    if (this.editor) {
+      this.editor.setValue(this.editorValue);
     }
   }
 

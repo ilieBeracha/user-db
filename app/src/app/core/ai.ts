@@ -25,9 +25,21 @@ export class Agents {
           this.agentQuery.set(response.query);
           this.agentSchema.set(response.schema);
           this.message.set(response.message);
+          
+          let parsedResult = response.result;
+          try {
+            // Try to parse if it's a JSON string
+            if (typeof response.result === 'string') {
+              parsedResult = JSON.parse(response.result);
+            }
+          } catch (e) {
+            // If parsing fails, keep as string
+            parsedResult = response.result;
+          }
+          
           this.currentQuery.set({
             query: response.query,
-            results: response.result,
+            results: parsedResult,
           });
           this.isLoading.set(false);
         })
