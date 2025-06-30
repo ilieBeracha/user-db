@@ -45,3 +45,58 @@ button:focus-visible {
   border-radius: 10px;
   padding: 10px;
 }
+
+/* Dashboard Button Styles */
+.dashboard-btn {
+  @apply px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200;
+  @apply bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white;
+  @apply border border-slate-600 hover:border-slate-500;
+}
+
+.dashboard-btn.primary {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600 text-white;
+  @apply hover:from-indigo-500 hover:to-purple-500;
+  @apply border-indigo-500 hover:border-indigo-400;
+  @apply shadow-lg hover:shadow-xl;
+}
+
+/* Toolbar Button Styles */
+.toolbar-btn {
+  @apply px-3 py-1.5 text-sm rounded-md transition-all duration-200;
+  @apply bg-slate-700/50 text-slate-400 hover:bg-slate-600 hover:text-slate-200;
+  @apply border border-slate-600/50 hover:border-slate-500;
+}
+
+/* Animation for stats */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bg-slate-700\/30 {
+  animation: countUp 0.5s ease-out;
+}
+
+/* Hover effects for interactive elements */
+.cursor-pointer:hover {
+  transform: translateY(-1px);
+}
+
+/* Performance indicators */
+.text-green-400 {
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.text-blue-400 {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.text-purple-400 {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+/* Interactive query cards */
+.bg-slate-700\/30:hover {
+  background: rgba(71, 85, 105, 0.5);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}

@@ -22,7 +22,15 @@ import { Agents } from '../../core/ai';
   imports: [CommonModule],
   styleUrl: './results-ide.component.css',
   template: `
-    <div class="flex flex-col h-full py-2 text-white ">
+    <div class="flex flex-col h-full py-2 text-white relative bg-black/80">
+      <!-- <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+          class="absolute top-1/12 left-1/8 w-full h-full bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-1/12 -right-1/2 w-full h-full bg-gradient-to-tl from-blue-500/10 rounded-full blur-3xl"
+        ></div>
+      </div> -->
       <!-- Header with Toggle Buttons -->
       <div
         class="flex items-center justify-between h-14 px-4 border-b border-slate-700"
