@@ -1,4 +1,73 @@
-<!-- This component now uses inline template in the TypeScript file -->
-<div>
-  <div></div>
+<div class="flex flex-col h-full bg-zinc-900/10 text-white p-2">
+  <!-- Header -->
+  <div class="flex items-center justify-between h-14">
+    <div class="flex justify-center items-center gap-2 h-full w-full">
+      <span
+        class="text-lg font-medium text-foreground border-b border-border/50 py-2"
+        >AI Assistant</span
+      >
+      <div
+        class="w-2 h-full flex justify-center items-center bg-primary rounded-full animate-pulse"
+      ></div>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-4 space-y-4">
+    <div
+      *ngFor="let msg of messages"
+      class="flex"
+      [ngClass]="msg.role === 'user' ? 'justify-end' : 'justify-start'"
+    >
+      <div class="max-w-[80%] space-y-2">
+        <div
+          class="text-xs text-muted-foreground px-2"
+          [ngClass]="msg.role === 'user' ? 'text-right' : 'text-left'"
+        >
+          {{ msg.role === "user" ? "You" : "Assistant" }}
+        </div>
+        <div
+          [ngClass]="{
+            'bg-primary text-primary-foreground rounded-2xl rounded-br-md shadow-lg':
+              msg.role === 'user',
+            'bg-card border border-border text-card-foreground rounded-2xl rounded-bl-md shadow-lg':
+              msg.role === 'assistant'
+          }"
+          class="px-4 py-3 text-sm leading-relaxed"
+        >
+          <div class="whitespace-pre-wrap">{{ msg.content }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="p-4 border-t">
+    <div class="flex gap-3 items-end">
+      <div class="flex-1 relative">
+        <input
+          [(ngModel)]="currentMessage"
+          placeholder="Ask about tables, data, relationships..."
+          class="w-full px-4 py-3 text-sm text-white border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          (keydown.enter)="sendMessage()"
+          [disabled]="isLoading"
+        />
+        <div
+          *ngIf="isLoading"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2"
+        >
+          <div
+            class="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"
+          ></div>
+        </div>
+      </div>
+      <button
+        (click)="sendMessage()"
+        [disabled]="!currentMessage.trim() || isLoading"
+        class="px-6 py-3 font-medium bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+      >
+        <span *ngIf="!isLoading">Send</span>
+        <span *ngIf="isLoading">•••</span>
+      </button>
+    </div>
+  </div>
 </div>

@@ -9,13 +9,12 @@ import { connectUserDbDto } from '../../services/dbUserService';
 export class UserDb {
   private dbUserService = inject(DbUserService);
   userDbConnection = signal<any>(null);
-  databasesInServer = signal<any[]>([]);
   recentActivities = signal<any[]>([]);
+  messages = signal<any[]>([]);
   schemaExplorer = signal<{ reaponse: any[]; query: string }>({
     reaponse: [],
     query: '',
   });
-  comparisonData = signal<any[]>([]);
 
   currentQuery = signal({
     query: '',
@@ -37,31 +36,6 @@ export class UserDb {
     return this.dbUserService.connect(dto);
   }
 
-  getDatabasesInServer() {
-    return this.dbUserService.getDatabasesInServer().pipe(
-      tap((response) => {
-        this.databasesInServer.set(response);
-        return response;
-      })
-    );
-  }
-  getRecentActivities() {
-    return this.dbUserService.getRecentActivities().pipe(
-      tap((response) => {
-        this.databasesInServer.set(response);
-        return response;
-      })
-    );
-  }
-  getComparisonData() {
-    return this.dbUserService.getComparisonData().pipe(
-      take(1),
-      tap((response) => {
-        this.comparisonData.set(response);
-        return response;
-      })
-    );
-  }
   getSchemaExplorer() {
     return this.dbUserService.getSchemaExplorer().pipe(
       take(1),
@@ -76,35 +50,14 @@ export class UserDb {
       })
     );
   }
-  queryDb(prompt: string) {
-    return this.dbUserService.getAiResponse(prompt).pipe(
+
+  getRecentActivities() {
+    return this.dbUserService.getRecentActivities().pipe(
       take(1),
       tap((response) => {
+        this.recentActivities.set(response);
         return response;
       })
     );
-  }
-  readRecentActivities() {
-    return computed(() => this.recentActivities);
-  }
-
-  readDatabasesInServer() {
-    return computed(() => this.databasesInServer);
-  }
-
-  readUserDbConnection() {
-    return computed(() => this.userDbConnection);
-  }
-
-  readComparisonData() {
-    return computed(() => this.comparisonData);
-  }
-
-  readSchemaExplorer() {
-    return computed(() => this.schemaExplorer);
-  }
-
-  readCurrentQuery() {
-    return computed(() => this.currentQuery);
   }
 }

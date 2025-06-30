@@ -1,7 +1,7 @@
 import { Component, input, Signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserDb } from '../../core/user-db';
 import { format } from 'sql-formatter';
+import { UserDb } from '../../core/user-db';
 
 interface DatabaseActivity {
   pid: number;
@@ -27,12 +27,12 @@ interface DatabaseActivity {
   styleUrl: './dashboard-activities.component.css',
 })
 export class DashboardActivitiesComponent {
-  recentActivities = input<DatabaseActivity[]>([]);
+  userDb = inject(UserDb);
   private expandedQueries = new Set<number>();
+  recentActivities = computed(() => this.userDb.recentActivities());
 
   processedActivities = computed(() => {
-    const activities = this.recentActivities();
-    return activities?.map((activity) => ({
+    return this.recentActivities()?.map((activity: any) => ({
       ...activity,
       timeAgo: this.getTimeAgo(activity.query_start),
       queryPreview: this.getQueryPreview(activity.query),

@@ -18,20 +18,19 @@ export interface connectUserDbDto {
 export class DbUserService {
   private auth = inject(Auth);
   constructor(private readonly http: HttpClient) {}
-
-  getConnection() {
-    return this.http.get<connectUserDbDto>(
-      `${API_URL}/user-db/connection`,
-      this.getHeaders()
-    );
-  }
-
   private getHeaders() {
     return {
       headers: {
         Authorization: `Bearer ${this.auth.getAccessToken()}`,
       },
     };
+  }
+
+  getConnection() {
+    return this.http.get<connectUserDbDto>(
+      `${API_URL}/user-db/connection`,
+      this.getHeaders()
+    );
   }
 
   connect(dto: connectUserDbDto) {
@@ -69,14 +68,6 @@ export class DbUserService {
   getSchemaExplorer() {
     return this.http.get<any>(
       `${API_URL}/user-db/schema-explorer`,
-      this.getHeaders()
-    );
-  }
-
-  getAiResponse(prompt: string) {
-    return this.http.post<any>(
-      `${API_URL}/user-db/ai-chat`,
-      { prompt },
       this.getHeaders()
     );
   }

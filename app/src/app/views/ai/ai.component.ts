@@ -12,7 +12,7 @@ import { JsonEditorComponent } from '../../components/json-editor/json-editor.co
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ResponseTableComponent } from '../../components/response-table-component/response-table-component';
-
+import { DashboardActivitiesComponent } from '../../components/dashboard-activities/dashboard-activities.component';
 @Component({
   selector: 'app-ai',
   imports: [
@@ -30,6 +30,7 @@ import { ResponseTableComponent } from '../../components/response-table-componen
     JsonEditorComponent,
     SchemaTreeComponent,
     AiGenComponent,
+    DashboardActivitiesComponent,
   ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.css',
@@ -37,9 +38,9 @@ import { ResponseTableComponent } from '../../components/response-table-componen
 export class AiComponent {
   userDb = inject(UserDb);
   currentQuery: any = this.userDb.currentQuery();
-
   protected schemaExplorer: any = toSignal(this.userDb.getSchemaExplorer());
-
+  protected recentActivities = toSignal(this.userDb.getRecentActivities());
+  
   triggerQuery(query: string) {
     console.log(query);
   }

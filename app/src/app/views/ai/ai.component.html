@@ -1,4 +1,4 @@
-<div class="h-screen w-screen bg-[rgb(255, 30, 86)">
+<div class="h-screen w-screen bg-[#121212]">
   <nz-splitter nzLayout="horizontal" class="h-full">
     <nz-splitter-panel
       nzDefaultSize="20%"
@@ -51,7 +51,7 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-response-table [data]="currentQuery"></app-response-table>
+                <app-json-editor></app-json-editor>
               </div>
             </nz-splitter-panel>
             <nz-splitter-panel
@@ -60,7 +60,10 @@
               nzMaxSize="100%"
             >
               <div class="h-[calc(100%)]">
-                <app-json-editor></app-json-editor>
+                <app-dashboard-activities
+                  class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xl:col-span-12 h-full"
+                />
+                <app-response-table [data]="currentQuery"></app-response-table>
               </div>
             </nz-splitter-panel>
           </nz-splitter>

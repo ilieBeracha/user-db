@@ -30,9 +30,9 @@
   animation: slideInRight 0.3s ease-out;
 }
 
-/* Focus states */
+/* Enhanced focus states using design system */
 input:focus {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px var(--primary) / 0.1;
 }
 
 /* Button hover effects */
@@ -44,8 +44,117 @@ button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* Glass morphism effect */
+/* Improved glass morphism effect */
 .backdrop-blur-sm {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Custom scrollbar for chat area */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Typing indicator style */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Chat container styling */
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem;
+}
+
+/* Prompt card styling */
+.prompt-card {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.prompt-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.prompt-card:hover::before {
+  opacity: 1;
+}
+
+/* Grid responsive adjustments */
+@media (max-width: 768px) {
+  .grid-cols-1.md\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Welcome screen animations */
+.text-6xl {
+  animation: bounceIn 0.8s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Staggered animation for prompt cards */
+.prompt-card:nth-child(1) { animation: slideInUp 0.6s ease-out 0.1s both; }
+.prompt-card:nth-child(2) { animation: slideInUp 0.6s ease-out 0.2s both; }
+.prompt-card:nth-child(3) { animation: slideInUp 0.6s ease-out 0.3s both; }
+.prompt-card:nth-child(4) { animation: slideInUp 0.6s ease-out 0.4s both; }
+.prompt-card:nth-child(5) { animation: slideInUp 0.6s ease-out 0.5s both; }
+.prompt-card:nth-child(6) { animation: slideInUp 0.6s ease-out 0.6s both; }
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

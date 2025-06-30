@@ -3,8 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserDb } from "./entities/user-db.entity";
 import { UserDbConnectionManager } from "./user-db-connection.manager";
-import { GET_TABLES_WITH_COLUMNS_QUERY } from "./queries/queries";
-
+import {
+  GET_RECENT_ACTIVITY_QUERY,
+  GET_TABLES_WITH_COLUMNS_QUERY,
+} from "./queries/queries";
 @Injectable()
 export class UserDbService {
   private SENSITIVE_KEYS = [
@@ -28,13 +30,38 @@ export class UserDbService {
     return result;
   }
 
+  async getRecentActivities(userId: string) {
+    const result = await this.connManager.runSingleQuery(
+      GET_RECENT_ACTIVITY_QUERY,
+      [10],
+      userId
+    );
+    return result;
+  }
+
   async connect(database: UserDb, userId: string) {
     database.user_id = userId;
     const result = await this.userDbRepository.save(database);
     return result;
   }
 
-  async executeCustomQuery(query: string, user_id: string) {
+  async sendAiChat(query: string, user_id: string) {
+    // const result = await this.connManager.runSingleQuery(query, [], user_id);
+    // console.log("Result:", result);
+    // return result;
+  }
+
+  async getTablesWithColumns(userId: string) {
+    const result = await this.connManager.runSingleQuery(
+      GET_TABLES_WITH_COLUMNS_QUERY,
+      [],
+      userId
+    );
+    return result;
+  }
+
+  async executeAiQuery(query: string, user_id: string) {
+    console.log(query);
     const cleanQuery = query.toLowerCase().trim();
     const dangerousOperations = [
       "drop",
